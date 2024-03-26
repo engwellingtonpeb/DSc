@@ -1,3 +1,4 @@
 /03_ODE_Solvers/*.zip
 *.log
 *.asv
+*.mat
