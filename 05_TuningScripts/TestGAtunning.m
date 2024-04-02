@@ -2,8 +2,8 @@ clc
 clear all
 close all
 
-addpath('C:\Users\Wellington\Downloads\BiomechanicsModeling\DSc2023_v2\ModelTunning\Tuning_Feature')
-addpath('C:\Users\Wellington\Downloads\BiomechanicsModeling\DSc2023_v2\ODE_Solvers')
+addpath('Tuning_Feature')
+addpath('..\03_ODE_Solvers')
 
 % load('27_Oct_2023_21_23_29_GA.mat') %sintonia Hinf?
 
