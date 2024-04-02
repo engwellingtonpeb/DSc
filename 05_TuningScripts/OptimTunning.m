@@ -18,8 +18,9 @@ clear
 close all hidden
 
 import org.opensim.modeling.*
-addpath('C:\Users\Wellington\Downloads\BiomechanicsModeling\DSc2023_v2\03_ODE_Solvers')
-addpath('C:\Users\Wellington\Downloads\BiomechanicsModeling\DSc2023_v2\02_2017Coleta')
+addpath('Tuning_Feature')
+addpath('..\03_ODE_Solvers')
+addpath('..\02_Coletas')
 
 %Initial Gain Guess
 ModelParams=zeros(1,10);

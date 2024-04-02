@@ -35,17 +35,17 @@ if LinStabilityFlag
     
     %Distribuição de um paciente especíico
 % 
-%     load('distrib_tremor_paciente01.mat') % paciente 01
-%     load('2017_unifesp_01_dp.mat') %paciente 01
-%     SimuInfo.pd011=table2array(pdluis4); %usou para o artigo pdluis4 %paciente01
-    
-%     load('distrib_tremor_paciente02.mat') % paciente 02
-%     load('2017_unifesp_02_et.mat') %paciente 02
-%     SimuInfo.pd011=table2array(etmaria2);%usou para o artigo etmaria2 %paciente02
+    % load('distrib_tremor_paciente01.mat') % paciente 01
+    % load('2017_p01_65_m_pd_RA_6yr.mat') %paciente 01
+    % SimuInfo.pd011=table2array(p01_4); %usou para o artigo pdluis4 %paciente01
+    % 
+    % load('distrib_tremor_paciente02.mat') % paciente 02
+    % load('2017_p02_59_f_et_LA_20yr.mat') %paciente 02
+    % SimuInfo.pd011=table2array(p02_2);%usou para o artigo etmaria2 %paciente02
  
     load('distrib_tremor_paciente03.mat') % paciente 03
-    load('2017_unifesp_03_dp.mat') %paciente 03
-    SimuInfo.pd011=table2array(pdmariaHilda2);%usou para o artigo etmaria2 %paciente03
+    load('2017_p03_60_f_pd_RA_6yr.mat') %paciente 03
+    SimuInfo.pd011=table2array(p03_2);%usou para o artigo etmaria2 %paciente03
 
 
     SimuInfo.w_tremor=0.1;
@@ -77,7 +77,7 @@ if LinStabilityFlag
     
     SimuInfo.Setpoint=[ PhiRef, PsiRef];
   
-    osimModel=Model('C:\Users\Wellington\Downloads\BiomechanicsModeling\DSc2023_v2\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles.osim');
+    osimModel=Model('..\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles.osim');
     
     osimState=osimModel.initSystem();
     

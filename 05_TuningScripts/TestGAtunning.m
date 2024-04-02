@@ -4,6 +4,7 @@ close all
 
 addpath('Tuning_Feature')
 addpath('..\03_ODE_Solvers')
+addpath('..\02_Coletas')
 
 % load('27_Oct_2023_21_23_29_GA.mat') %sintonia Hinf?
 

@@ -1,6 +1,6 @@
 function [LinStabilityFlag, K, wc] = ControllerSynthesis(ModelParams)
 
-addpath('C:\Users\Wellington\Downloads\BiomechanicsModeling\DSc2023_v2\simulations')
+addpath('..\04_DMDc_IDTF\simulations')
 load('2023_10_15_20_08_22_DMDmodel.mat'); %  Discrete DMDc identified model
 sys=d2c(sysDMDc);
 
