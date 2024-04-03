@@ -1,6 +1,18 @@
+clc
+clear all
+close all
+
+addpath('..\Tuning_Feature')
+addpath('\Users\engwe\Desktop\DSc_v4\03_ODE_Solvers')
+addpath('\Users\engwe\Desktop\DSc_v4\02_Coletas\')
 
 SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
+
+
+%pacitente 01
+load('29_Oct_2023_20_15_55_GA.mat') % sintonia do oscilador 2 dias 
+ModelParams=x(12,:);% sintonia do oscilador 2 dias 
 %% Controller Synthesis
 
 
@@ -56,7 +68,7 @@ if LinStabilityFlag
     
     SimuInfo.Setpoint=[ PhiRef, PsiRef];
   
-    osimModel=Model('D:\06_BiomechCodeRepo\BiomechanicsModeling\DSc2023_v2\ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles.osim');
+    osimModel=Model('C:\Users\engwe\Desktop\DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
     osimState=osimModel.initSystem();
     
@@ -136,16 +148,25 @@ if LinStabilityFlag
     editableCoordSet.get('flexion').setLocked(osimState, false);
     
     
-    osimState.getY.set(42,0.01); %zera ativacao inicial ECRL
-    osimState.getY.set(44,0.01); %zera ativacao inicial ECRB
-    osimState.getY.set(46,0.01); %zera ativacao inicial ECU
-    osimState.getY.set(48,0.01); %zera ativacao inicial FCR
-    osimState.getY.set(50,0.01); %zera ativacao inicial FCU
-    osimState.getY.set(52,0.01); %zera ativacao inicial PQ
-    osimState.getY.set(54,0.01); %zera ativacao inicial SUP
+    % osimState.getY.set(42,0.01); %zera ativacao inicial ECRL
+    % osimState.getY.set(44,0.01); %zera ativacao inicial ECRB
+    % osimState.getY.set(46,0.01); %zera ativacao inicial ECU
+    % osimState.getY.set(48,0.01); %zera ativacao inicial FCR
+    % osimState.getY.set(50,0.01); %zera ativacao inicial FCU
+    % osimState.getY.set(52,0.01); %zera ativacao inicial PQ
+    % osimState.getY.set(54,0.01); %zera ativacao inicial SUP
+    % 
     
-    
-    
+    % osimModel.getMuscles().get(0).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(1).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(2).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(3).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(4).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(5).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(6).setIgnoreActivationDynamics(osimState,true)
+
+
+
     %% Prep Simulation
     osimModel.computeStateVariableDerivatives(osimState);
     osimModel.equilibrateMuscles(osimState); %solve for equilibrium similiar

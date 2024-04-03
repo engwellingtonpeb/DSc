@@ -127,11 +127,11 @@ persistent Y1
 persistent Kf
 persistent j1
 
-    B=SimuInfo.ModelParams(7); %beta
-    h=SimuInfo.ModelParams(8); %h
-    rosc=SimuInfo.ModelParams(9); %r
-    tau1=SimuInfo.ModelParams(10);%tau1
-    tau2=SimuInfo.ModelParams(19);%tau2
+    % B=SimuInfo.ModelParams(7); %beta
+    % h=SimuInfo.ModelParams(8); %h
+    % rosc=SimuInfo.ModelParams(9); %r
+    % tau1=SimuInfo.ModelParams(10);%tau1
+    % tau2=SimuInfo.ModelParams(19);%tau2
 
 
     tau1=.1;
@@ -220,13 +220,13 @@ end
 % ALPHA3=1;
 % ALPHA4=1;
 
-if t<.1 %initializing model
-    u(1)=0.1;
-    u(2)=0.00;
+if t<2 %initializing model
+    u(1)=0;
+    u(2)=1;
     u(3)=0.1;
     u(4)=0.01;
 
-elseif t<2 && t>=0.1
+elseif t<10 && t>=0.1
     u(1)=2e6*ALPHA1*u(1); %ECRL
     u(2)=1e6*ALPHA2*u(2); %FCU
     u(3)=1e6*ALPHA3*u(3); %PQ
@@ -262,7 +262,7 @@ end
 
 
 %% Update modelControls with the new values
-    osimModel.updControls(osimState).set(1,u(1)); %ECRL
+    % osimModel.updControls(osimState).set(1,u(1)); %ECRL
     osimModel.updControls(osimState).set(5,u(2)); %FCU
     osimModel.updControls(osimState).set(6,u(3)); %PQ
     osimModel.updControls(osimState).set(0,u(4)); %SUP
@@ -271,7 +271,11 @@ end
     osimModel.updControls(osimState).set(3,0.01); %ECU
     osimModel.updControls(osimState).set(4,0.01); %FCR
 
-    U=[U; u'];
+    % U=[U; u'];
+
+    
+
+
  
 %% ============  REAL TIME PLOT ===============
 persistent j
@@ -280,7 +284,7 @@ if (t==0)
 else
 
 
- if (rem(j,100)==0) && (SimuInfo.PltFlag==1)
+ if (rem(j,500)==0) && (SimuInfo.PltFlag==1)
 
     t
     subplot(4,1,1)

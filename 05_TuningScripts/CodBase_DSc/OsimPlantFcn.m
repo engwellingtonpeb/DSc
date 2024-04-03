@@ -36,9 +36,18 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     end
     
 
+    % osimModel.getMuscles().get(0).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(1).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(2).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(3).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(4).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(5).setIgnoreActivationDynamics(osimState,true)
+    % osimModel.getMuscles().get(6).setIgnoreActivationDynamics(osimState,true)
+
+
     %Update the derivative calculations in the State Variable
     osimModel.computeStateVariableDerivatives(osimState);
-
+    
 
     % Update model with control values
     SimuInfo.Xk=x;
