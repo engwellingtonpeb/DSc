@@ -220,13 +220,13 @@ end
 % ALPHA3=1;
 % ALPHA4=1;
 
-if t<2 %initializing model
-    u(1)=0;
-    u(2)=1;
-    u(3)=0.1;
+if t<.1 %initializing model
+    u(1)=.1;
+    u(2)=0;
+    u(3)=.1;
     u(4)=0.01;
 
-elseif t<10 && t>=0.1
+elseif t<2 && t>=0.1
     u(1)=2e6*ALPHA1*u(1); %ECRL
     u(2)=1e6*ALPHA2*u(2); %FCU
     u(3)=1e6*ALPHA3*u(3); %PQ
@@ -262,7 +262,7 @@ end
 
 
 %% Update modelControls with the new values
-    % osimModel.updControls(osimState).set(1,u(1)); %ECRL
+    osimModel.updControls(osimState).set(1,u(1)); %ECRL
     osimModel.updControls(osimState).set(5,u(2)); %FCU
     osimModel.updControls(osimState).set(6,u(3)); %PQ
     osimModel.updControls(osimState).set(0,u(4)); %SUP
@@ -270,6 +270,11 @@ end
     osimModel.updControls(osimState).set(2,0.01); %ECRB
     osimModel.updControls(osimState).set(3,0.01); %ECU
     osimModel.updControls(osimState).set(4,0.01); %FCR
+
+    % osimModel.getMuscles().get(1).setActivation(osimState,u(1))
+    % osimModel.getMuscles().get(5).setActivation(osimState,u(2))
+    % osimModel.getMuscles().get(6).setActivation(osimState,u(3))
+    % osimModel.getMuscles().get(0).setActivation(osimState,u(4))
 
     % U=[U; u'];
 
@@ -284,7 +289,7 @@ if (t==0)
 else
 
 
- if (rem(j,500)==0) && (SimuInfo.PltFlag==1)
+ if (rem(j,50)==0) && (SimuInfo.PltFlag==1)
 
     t
     subplot(4,1,1)
@@ -293,14 +298,14 @@ else
     drawnow;
     grid on;
     hold on;
-    
+
     subplot(4,1,2)
     plot(t,rad2deg(psi_ref),'go',t,rad2deg(psi),'k.')
     axis([t-3 t -40 60])
     drawnow;
     grid on;
     hold on;
-    
+
     subplot(4,1,3)
     plot(t,u(1),'b.',t,u(2),'r.')
     axis([t-3 t -1 1])

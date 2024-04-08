@@ -72,6 +72,12 @@ function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, in
     for i = 0:1:numVar-1
         InitStates(i+1,1) = osimState.getY().get(i); 
     end
+        
+    % adjust number of states considering activation dynamics implemented
+    % on MATLAB
+
+    activations=zeros(7,1);
+    InitStates=[InitStates;activations];
 
     % Create a anonymous handle to the OpenSim plant function.
     plantHandle = @(t,x) OsimPlantFcn(t, x, osimModel, osimState, SimuInfo);
@@ -99,7 +105,7 @@ function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, in
     OutputData.inDegrees = false;
     OutputData.labels = cell(1,OutputData.nColumns); 
     OutputData.labels{1}= 'time';
-    for j = 2:1:OutputData.nColumns
+    for j = 2:1:OutputData.nColumns-length(activations)
         OutputData.labels{j} = char(osimModel.getStateVariableNames().getitem(j-2));
     end
     

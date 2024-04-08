@@ -23,7 +23,7 @@ if LinStabilityFlag
     %% Tremor Simulation for Tunning 
 
     SimuInfo.Tend=10;
-    SimuInfo.Ts=1e-4;
+    SimuInfo.Ts=1e-3;
 
     SimuInfo.PltFlag=1;
 
@@ -93,6 +93,9 @@ if LinStabilityFlag
     for i = 1:Nstates
     states_all(i,1) = cell(osimModel.getStateVariableNames().getitem(i-1));
     end
+
+    Nstates=Nstates+7; %ativações separadas em fcn matlab
+    SimuInfo.Nstates=Nstates;
     
     SimuInfo.states_all=states_all;
     
@@ -182,6 +185,6 @@ if LinStabilityFlag
 
         tic
             motionData = IntegrateOsimPlant(osimModel,integratorName,SimuInfo,integratorOptions);
-        elapsedTime=toc;
+        elapsedTime=toc
         SimuInfo.elapsedTime=elapsedTime;
 end
