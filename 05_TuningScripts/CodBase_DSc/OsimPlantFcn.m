@@ -31,7 +31,8 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     osimState.setTime(t);
     numVar = SimuInfo.Nstates;
     UpdVar=osimState.updY();
-    for i = 0:1:numVar-1
+    % for i = 0:1:numVar-1
+    for i = 0:1:numVar-8
         UpdVar.set(i, x(i+1,1));
     end
     
@@ -56,6 +57,7 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     u=u.getAsMat();
 
 
+
     if t<.1 %initializing model
         osimModel.getMuscles().get(1).setActivation(osimState,.1)
         osimModel.getMuscles().get(5).setActivation(osimState,0.01)
@@ -70,14 +72,15 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     end
 
 
+t
+   a_dot = FirstOrderActivationDynamics(u,x); 
 
-    a_dot = FirstOrderActivationDynamics(u,x); 
-   
     %Update the derivative calculations in the State Variable
     osimModel.computeStateVariableDerivatives(osimState);
     x_dot=osimState.getYDot().getAsMat();
 
-    x_dot=[x_dot;a_dot];
+    x_dot=[x_dot;...
+           a_dot];
 end
 
 

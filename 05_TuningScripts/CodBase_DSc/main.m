@@ -1,10 +1,10 @@
 clc
 clear all
-close all
+close all hidden
 
 addpath('..\Tuning_Feature')
-addpath('\Users\engwe\Desktop\DSc_v4\03_ODE_Solvers')
-addpath('\Users\engwe\Desktop\DSc_v4\02_Coletas\')
+addpath('\02_DSc_v4\03_ODE_Solvers')
+addpath('\02_DSc_v4\02_Coletas\')
 
 SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
@@ -68,7 +68,7 @@ if LinStabilityFlag
     
     SimuInfo.Setpoint=[ PhiRef, PsiRef];
   
-    osimModel=Model('C:\Users\engwe\Desktop\DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
+    osimModel=Model('D:\02_DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
     osimState=osimModel.initSystem();
     
@@ -94,8 +94,23 @@ if LinStabilityFlag
     states_all(i,1) = cell(osimModel.getStateVariableNames().getitem(i-1));
     end
 
-    Nstates=Nstates+7; %ativações separadas em fcn matlab
-    SimuInfo.Nstates=Nstates;
+
+    % adjust number of states considering activation dynamics implemented
+    % on MATLAB
+    SimuInfo.Nstates=Nstates+7;
+
+    % Create the Initial State matrix from the Opensim state
+    numVar = osimState.getY().size();
+    InitStates = zeros(numVar,1);
+    for i = 0:1:numVar-1
+        InitStates(i+1,1) = osimState.getY().get(i); 
+    end
+      activations=zeros(7,1);
+      InitStates=[InitStates;activations];
+      SimuInfo.InitStates=InitStates;
+    
+
+  
     
     SimuInfo.states_all=states_all;
     

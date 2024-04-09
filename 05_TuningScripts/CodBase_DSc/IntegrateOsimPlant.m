@@ -67,17 +67,17 @@ function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, in
     end
 
     % Create the Initial State matrix from the Opensim state
-    numVar = osimState.getY().size();
-    InitStates = zeros(numVar,1);
-    for i = 0:1:numVar-1
-        InitStates(i+1,1) = osimState.getY().get(i); 
-    end
+    % numVar = osimState.getY().size();
+    % InitStates = zeros(numVar,1);
+    % for i = 0:1:numVar-1
+    %     InitStates(i+1,1) = osimState.getY().get(i); 
+    % end
         
     % adjust number of states considering activation dynamics implemented
     % on MATLAB
 
-    activations=zeros(7,1);
-    InitStates=[InitStates;activations];
+    % activations=zeros(7,1);
+    % InitStates=[InitStates;activations];
 
     % Create a anonymous handle to the OpenSim plant function.
     plantHandle = @(t,x) OsimPlantFcn(t, x, osimModel, osimState, SimuInfo);
@@ -89,9 +89,9 @@ function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, in
 
 
     if strcmp(integratorName,'ode113')
-        [T,Y] = integratorFunc(plantHandle, [0, SimuInfo.Tend], InitStates, integratorOptions);%,
+        [T,Y] = integratorFunc(plantHandle, [0, SimuInfo.Tend], SimuInfo.InitStates, integratorOptions);%,
     else
-        [Y] = integratorFunc(plantHandle, SimuInfo.timeSpan, InitStates);
+        [Y] = integratorFunc(plantHandle, SimuInfo.timeSpan, SimuInfo.InitStates);
         T=SimuInfo.timeSpan';
     end
     
@@ -99,15 +99,15 @@ function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, in
     
    % Create Output Data structure
     OutputData = struct();
-    OutputData.name = [char(osimModel.getName()), '_states'];
-    OutputData.nRows = size(T, 1);
-    OutputData.nColumns = size(T, 2) + size(Y, 2);
-    OutputData.inDegrees = false;
-    OutputData.labels = cell(1,OutputData.nColumns); 
-    OutputData.labels{1}= 'time';
-    for j = 2:1:OutputData.nColumns-length(activations)
-        OutputData.labels{j} = char(osimModel.getStateVariableNames().getitem(j-2));
-    end
+    % OutputData.name = [char(osimModel.getName()), '_states'];
+    % OutputData.nRows = size(T, 1);
+    % OutputData.nColumns = size(T, 2) + size(Y, 2);
+    % OutputData.inDegrees = false;
+    % OutputData.labels = cell(1,OutputData.nColumns); 
+    % OutputData.labels{1}= 'time';
+    % for j = 2:1:OutputData.nColumns-length(activations)
+    %     OutputData.labels{j} = char(osimModel.getStateVariableNames().getitem(j-2));
+    % end
     
     OutputData.data = [T, Y];
     
