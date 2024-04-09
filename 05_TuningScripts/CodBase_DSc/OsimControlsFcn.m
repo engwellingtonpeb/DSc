@@ -20,7 +20,7 @@
 % Output:
 %   outVector is an org.opensim.Modeling.Vector of the control values
 % -----------------------------------------------------------------------
-function modelControls = OsimControlsFcn(osimModel, osimState,t,SimuInfo)
+function u_control = OsimControlsFcn(osimModel, osimState,t,SimuInfo)
 
     
     % Check Size
@@ -30,7 +30,7 @@ function modelControls = OsimControlsFcn(osimModel, osimState,t,SimuInfo)
     end
 
     % Get a reference to current model controls
-    modelControls = osimModel.updControls(osimState);
+    % modelControls = osimModel.updControls(osimState);
 
 %% Read plant angles for feedback and avoid NaN 
 
@@ -38,41 +38,38 @@ global ERR_POS
 
 persistent xk1
 persistent u
-global U
+
 
 
 
    
 %% Plant control implementation 
-% if t<=2
+
     phi_ref=deg2rad(SimuInfo.Setpoint(1));
     psi_ref=deg2rad(SimuInfo.Setpoint(2));
-% elseif t>2 && t<=5
-%     phi_ref=deg2rad(10);
-%     psi_ref=deg2rad(10);
-% 
-%  elseif t>5 && t<=8
-%     phi_ref=deg2rad(-5);
-%     psi_ref=deg2rad(25);
-% 
-%  elseif t>8 && t<=10
-%     phi_ref=deg2rad(2);
-%     psi_ref=deg2rad(20);
-% end
+
 
 %references 
 r=[0.01 0.01 0.01 0.01 phi_ref psi_ref 0 0]'; % asup aecrl afcu apq phi psi phidot psidot
 
 
 % states
-asup=osimState.getY().get(54);
-aecrl=osimState.getY().get(42);
-afcu=osimState.getY().get(50);
-apq=osimState.getY().get(52);
+
 phi=osimState.getY().get(17); % wrist flexion angle (rad)
 psi=osimState.getY().get(15); % pro_sup angle (rad)
 phi_dot=osimState.getY().get(37);
 psi_dot=osimState.getY().get(35);
+
+%[a_sup a_ecrl a_ecrb a_ecu a_fcr a_fcu a_pq]
+%[Xk(48) Xk(49) Xk(50) Xk(51) Xk(52) Xk(53) Xk(54)]
+
+asup = SimuInfo.Xk(48);
+aecrl= SimuInfo.Xk(49);
+% aecrb= SimuInfo.Xk(50);
+% aecu = SimuInfo.Xk(51);
+% afcr = SimuInfo.Xk(52);
+afcu = SimuInfo.Xk(53);
+apq  = SimuInfo.Xk(54);
 
 %[osimModel.getMuscles().get('ECRL').getActivation(osimState) aecrl]
 %CHECKED OK
@@ -215,11 +212,6 @@ end
 
 %% Tremor Affected Muscle Excitation 
 
-% ALPHA1=1;
-% ALPHA2=1;
-% ALPHA3=1;
-% ALPHA4=1;
-
 if t<.1 %initializing model
     u(1)=.1;
     u(2)=0;
@@ -232,11 +224,6 @@ elseif t<2 && t>=0.1
     u(3)=1e6*ALPHA3*u(3); %PQ
     u(4)=1e6*ALPHA4*u(4); %SUP
 else
-
-%     u(1)=(1e6*ALPHA1*u(1))+SimuInfo.ModelParams(11)*d(1)+SimuInfo.ModelParams(12)*d(2); %ECRL
-%     u(2)=(1e6*ALPHA1*u(1))+SimuInfo.ModelParams(13)*d(1)+SimuInfo.ModelParams(14)*d(2); %FCU
-%     u(3)=(1e6*ALPHA1*u(1))+SimuInfo.ModelParams(15)*d(1)+SimuInfo.ModelParams(16)*d(2); %PQ
-%     u(4)=(1e6*ALPHA1*u(1))+SimuInfo.ModelParams(17)*d(1)+SimuInfo.ModelParams(18)*d(2); %SUP
 
     u(1)=(1e6*ALPHA1*u(1))+0.5*d(1)+0*d(2); %ECRL
     u(2)=(1e6*ALPHA2*u(2))+0*d(1)+.5*d(2); %FCU
@@ -261,67 +248,12 @@ for i=1:length(u)
 end
 
 
-%% Update modelControls with the new values
-    osimModel.updControls(osimState).set(1,u(1)); %ECRL
-    osimModel.updControls(osimState).set(5,u(2)); %FCU
-    osimModel.updControls(osimState).set(6,u(3)); %PQ
-    osimModel.updControls(osimState).set(0,u(4)); %SUP
+%% Control Vector (muscle excitations)
 
-    osimModel.updControls(osimState).set(2,0.01); %ECRB
-    osimModel.updControls(osimState).set(3,0.01); %ECU
-    osimModel.updControls(osimState).set(4,0.01); %FCR
+    u_control=[u(4) u(1) 0.01 0.01 0.01 u(2) u(3)]; %[u_sup u_ecrl u_ecrb u_ecu u_fcr u_fcu u_pq]
 
-    % osimModel.getMuscles().get(1).setActivation(osimState,u(1))
-    % osimModel.getMuscles().get(5).setActivation(osimState,u(2))
-    % osimModel.getMuscles().get(6).setActivation(osimState,u(3))
-    % osimModel.getMuscles().get(0).setActivation(osimState,u(4))
+  
 
-    % U=[U; u'];
-
-    
-
-
- 
-%% ============  REAL TIME PLOT ===============
-persistent j
-if (t==0)
-    j=0;
-else
-
-
- if (rem(j,50)==0) && (SimuInfo.PltFlag==1)
-
-    t
-    subplot(4,1,1)
-    plot(t,rad2deg(phi_ref),'go',t,rad2deg(phi),'r.')
-    axis([t-3 t -50 50])
-    drawnow;
-    grid on;
-    hold on;
-
-    subplot(4,1,2)
-    plot(t,rad2deg(psi_ref),'go',t,rad2deg(psi),'k.')
-    axis([t-3 t -40 60])
-    drawnow;
-    grid on;
-    hold on;
-
-    subplot(4,1,3)
-    plot(t,u(1),'b.',t,u(2),'r.')
-    axis([t-3 t -1 1])
-    drawnow;
-    grid on;
-    hold on;
-
-    subplot(4,1,4)
-    plot(t,u(3),'b.',t,u(4),'r.')
-    axis([t-3 t -1 1])
-    drawnow;
-    grid on;
-    hold on;
-
- end
- j=j+1;
 end
 
 

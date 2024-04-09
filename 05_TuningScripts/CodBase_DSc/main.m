@@ -3,8 +3,8 @@ clear all
 close all hidden
 
 addpath('..\Tuning_Feature')
-addpath('\02_DSc_v4\03_ODE_Solvers')
-addpath('\02_DSc_v4\02_Coletas\')
+addpath('\Users\engwe\Desktop\DSc_v4\02_Coletas')
+addpath('\Users\engwe\Desktop\DSc_v4\03_ODE_Solvers')
 
 SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
@@ -25,13 +25,13 @@ if LinStabilityFlag
     SimuInfo.Tend=10;
     SimuInfo.Ts=1e-3;
 
-    SimuInfo.PltFlag=1;
+    SimuInfo.PltFlag=0;
 
     SimuInfo.ModelParams=ModelParams;
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
-    integratorName = 'ode1'; %fixed step Dormand-Prince method of order 5
+    integratorName = 'ode2'; %fixed step Dormand-Prince method of order 5
     integratorOptions = odeset('RelTol', 1e-1, 'AbsTol', 1e-2, 'MaxStep', 1e-4);
     
     
@@ -63,12 +63,12 @@ if LinStabilityFlag
     SimuInfo.pd=pd;
     
     
-    PhiRef=0;%makedist('Normal','mu',0,'sigma',4);
+    PhiRef=2;%makedist('Normal','mu',0,'sigma',4);
     PsiRef=20;%makedist('Normal','mu',60,'sigma',0);
     
     SimuInfo.Setpoint=[ PhiRef, PsiRef];
   
-    osimModel=Model('D:\02_DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
+    osimModel=Model('C:\Users\engwe\Desktop\DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
     osimState=osimModel.initSystem();
     
@@ -162,7 +162,7 @@ if LinStabilityFlag
     editableCoordSet.get('deviation').setLocked(osimState, true);
     
     %editableCoordSet.get('flexion').setValue(osimState, deg2rad(phini(SimuInfo.index)));
-    editableCoordSet.get('flexion').setValue(osimState, deg2rad(-10));
+    editableCoordSet.get('flexion').setDefaultValue(-10);
     editableCoordSet.get('flexion').setLocked(osimState, false);
     
     
@@ -199,7 +199,7 @@ if LinStabilityFlag
     
 
         tic
-            motionData = IntegrateOsimPlant(osimModel,integratorName,SimuInfo,integratorOptions);
+        motionData = IntegrateOsimPlant(osimModel,integratorName,SimuInfo,integratorOptions);
         elapsedTime=toc
         SimuInfo.elapsedTime=elapsedTime;
 end

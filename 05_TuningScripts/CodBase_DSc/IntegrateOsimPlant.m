@@ -99,14 +99,22 @@ function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, in
     
    % Create Output Data structure
     OutputData = struct();
+    if SimuInfo.PltFlag
+        subplot(4,1,2)
+        legend('ecrl', 'fcu')
+
+        subplot(4,1,4)
+        legend('sup', 'pq')
+    end
+
     % OutputData.name = [char(osimModel.getName()), '_states'];
     % OutputData.nRows = size(T, 1);
     % OutputData.nColumns = size(T, 2) + size(Y, 2);
     % OutputData.inDegrees = false;
     % OutputData.labels = cell(1,OutputData.nColumns); 
     % OutputData.labels{1}= 'time';
-    % for j = 2:1:OutputData.nColumns-length(activations)
-    %     OutputData.labels{j} = char(osimModel.getStateVariableNames().getitem(j-2));
+    % for j = 1:1:OutputData.nColumns-7
+    %     OutputData.labels{j} = char(osimModel.getStateVariableNames().getitem(j));
     % end
     
     OutputData.data = [T, Y];

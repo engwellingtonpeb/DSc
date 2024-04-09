@@ -37,14 +37,6 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     end
     
 
-    % osimModel.getMuscles().get(0).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(1).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(2).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(3).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(4).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(5).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(6).setIgnoreActivationDynamics(osimState,true)
-
 
     %Update the derivative calculations in the State Variable
     osimModel.computeStateVariableDerivatives(osimState);
@@ -53,32 +45,27 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     % Update model with control values
     SimuInfo.Xk=x;
     u = OsimControlsFcn(osimModel,osimState,t,SimuInfo); %control effort
-    %osimModel.setControls(osimState, u);
-    u=u.getAsMat();
+    %[u_sup u_ecrl u_ecrb u_ecu u_fcr u_fcu u_pq]
 
 
 
-    if t<.1 %initializing model
-        osimModel.getMuscles().get(1).setActivation(osimState,.1)
-        osimModel.getMuscles().get(5).setActivation(osimState,0.01)
-        osimModel.getMuscles().get(6).setActivation(osimState,.1)
-        osimModel.getMuscles().get(0).setActivation(osimState,0.01)
+    osimModel.getMuscles().get(0).setActivation(osimState,x(48))
+    osimModel.getMuscles().get(1).setActivation(osimState,x(49))
+    osimModel.getMuscles().get(5).setActivation(osimState,x(53))
+    osimModel.getMuscles().get(6).setActivation(osimState,x(54))
+    
 
-    else
-        osimModel.getMuscles().get(1).setActivation(osimState,u(2))
-        osimModel.getMuscles().get(5).setActivation(osimState,u(6))
-        osimModel.getMuscles().get(6).setActivation(osimState,u(7))
-        osimModel.getMuscles().get(0).setActivation(osimState,u(1))
-    end
+    % Plotting Results
+    OsimPlotFcn(t,x,u,SimuInfo)
 
 
-t
-   a_dot = FirstOrderActivationDynamics(u,x); 
-
+   
     %Update the derivative calculations in the State Variable
     osimModel.computeStateVariableDerivatives(osimState);
     x_dot=osimState.getYDot().getAsMat();
+    a_dot = FirstOrderActivationDynamics(u,x); %[a_sup a_ecrl a_ecrb a_ecu a_fcr a_fcu a_pq]
 
+    t
     x_dot=[x_dot;...
            a_dot];
 end
