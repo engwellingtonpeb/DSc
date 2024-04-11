@@ -27,13 +27,13 @@ if (t==0)
 else
 
 
- if (rem(j,50)==0) && (SimuInfo.PltFlag==1)
+ if (rem(j,20)==0) && (SimuInfo.PltFlag==1)
 
 
     subplot(4,1,1)
     plot(t,phi_ref,'go',t,rad2deg(phi),'r.')
     axis([t-3 t -50 50])
-    drawnow;
+    %drawnow;
     grid on;
     hold on;
 
@@ -42,7 +42,7 @@ else
     plot(t,u(2),'b.',t,u(6),'r.')
     %legend('ecrl', 'fcu')
     axis([t-3 t -1 1])
-    drawnow;
+    %drawnow;
     grid on;
     hold on;
     
@@ -50,13 +50,13 @@ else
     subplot(4,1,3)
     plot(t,psi_ref,'go',t,rad2deg(psi),'k.')
     axis([t-3 t -40 60])
-    drawnow;
+    %drawnow;
     grid on;
     hold on;
 
     subplot(4,1,4)
-    %plot(t,u(1),'b.',t,u(7),'r.')
-    plot(t,SimuInfo.du(1),'b.',t,SimuInfo.du(2),'r.')
+    plot(t,u(1),'b.',t,u(7),'r.')
+    %plot(t,SimuInfo.du(1),'b.',t,SimuInfo.du(2),'r.') %%VER OSCILADOR
     %legend('sup', 'pq')
     axis([t-3 t -1 1])
     drawnow;

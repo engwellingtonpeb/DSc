@@ -37,8 +37,8 @@ v1=SimuInfo.Xk(56);
 x2=SimuInfo.Xk(57);
 v2=SimuInfo.Xk(58);
 
-tau1=.1;
-tau2=.1;
+tau1=.01;
+tau2=.01;
 B=2.5;
 A=5;
 h=2.5;
@@ -46,7 +46,7 @@ rosc=1;
 
 if (t==0)
     j1=0;
-    Kf=2;
+    Kf=4;
 
     x1=normrnd(.5,0.25);
     x2=normrnd(.5,0.25); %valor inicial [0,1]
@@ -58,6 +58,7 @@ elseif (rem(j1,1000)==0)
     P=randsample(SimuInfo.P,1);
     Kf=(1/(2*pi*P))*sqrt(1/(tau1*tau2)); 
 
+
 end
     j1=j1+1;
 
@@ -68,10 +69,10 @@ s2=0;
 
 
 x1dot=(1/(Kf*tau1))*(-x1-B*v1-h*y2+A*s1+rosc);
-v1dot=-v1+y1;
+v1dot=(1/(Kf*tau2))*(-v1+y1);
 
-x2dot=(1/(Kf*tau2))*(-x2-B*v2-h*y1+A*s2+rosc);
-v2dot=-v2+y2;
+x2dot=(1/(Kf*tau1))*(-x2-B*v2-h*y1-A*s2+rosc);
+v2dot=(1/(Kf*tau2))*(-v2+y2);
 
 
 xosc_dot=[x1dot;...

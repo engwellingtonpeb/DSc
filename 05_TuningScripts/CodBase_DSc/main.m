@@ -24,7 +24,6 @@ if LinStabilityFlag
 
     SimuInfo.Tend=10;
     SimuInfo.Ts=1e-3;
-
     SimuInfo.PltFlag=1;
 
     SimuInfo.ModelParams=ModelParams;
