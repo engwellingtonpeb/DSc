@@ -25,13 +25,13 @@ if LinStabilityFlag
     SimuInfo.Tend=10;
     SimuInfo.Ts=1e-3;
 
-    SimuInfo.PltFlag=0;
+    SimuInfo.PltFlag=1;
 
     SimuInfo.ModelParams=ModelParams;
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
-    integratorName = 'ode2'; %fixed step Dormand-Prince method of order 5
+    integratorName = 'ode1'; %fixed step Dormand-Prince method of order 5
     integratorOptions = odeset('RelTol', 1e-1, 'AbsTol', 1e-2, 'MaxStep', 1e-4);
     
     
@@ -97,7 +97,7 @@ if LinStabilityFlag
 
     % adjust number of states considering activation dynamics implemented
     % on MATLAB
-    SimuInfo.Nstates=Nstates+7;
+    SimuInfo.Nstates=Nstates+11;
 
     % Create the Initial State matrix from the Opensim state
     numVar = osimState.getY().size();
@@ -106,7 +106,11 @@ if LinStabilityFlag
         InitStates(i+1,1) = osimState.getY().get(i); 
     end
       activations=zeros(7,1);
-      InitStates=[InitStates;activations];
+      oscillator=zeros(4,1);
+      InitStates=[InitStates;...
+                  activations;...
+                  oscillator];
+      
       SimuInfo.InitStates=InitStates;
     
 

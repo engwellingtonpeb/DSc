@@ -34,13 +34,13 @@ function u_control = OsimControlsFcn(osimModel, osimState,t,SimuInfo)
 
 %% Read plant angles for feedback and avoid NaN 
 
-global ERR_POS
+persistent ERR_POS
 
 persistent xk1
 persistent u
 
 
-
+d=SimuInfo.du;
 
    
 %% Plant control implementation 
@@ -113,101 +113,6 @@ ALPHA3=(0.5*((exp(eps_psi)-exp(-eps_psi))/((exp(eps_psi))+exp(-eps_psi))))+.5;
 ALPHA4=(-0.5*((exp(eps_psi)-exp(-eps_psi))/((exp(eps_psi))+exp(-eps_psi))))+0.5;
 
 
-%% Tremor CPG
-
-
-persistent X
-persistent V
-persistent Y1
-
-
-persistent Kf
-persistent j1
-
-    % B=SimuInfo.ModelParams(7); %beta
-    % h=SimuInfo.ModelParams(8); %h
-    % rosc=SimuInfo.ModelParams(9); %r
-    % tau1=SimuInfo.ModelParams(10);%tau1
-    % tau2=SimuInfo.ModelParams(19);%tau2
-
-
-    tau1=.1;
-    tau2=.1;
-    B=2.5;
-     A=5;
-    h=2.5;
-    rosc=1;
-
-if (t==0)
-    j1=0;
-    Kf=2;
-
-else
-
-if (rem(j1,1000)==0)
-        P=randsample(SimuInfo.P,1);
-%         Tosc=1/P;
-%         Kf=(Tosc)/.1051;
-        Kf=(1/(2*pi*P))*sqrt(1/(tau1*tau2)); % Zhang, Dingguo, et al. "Neural 
-        % oscillator based control for pathological tremor suppression via 
-        % functional electrical stimulation." Control Engineering Practice 19.1 (2011): 74-88.
-     
-end
-    j1=j1+1;
- 
-end
-    
-
-
-
-
-
-    %dh=0.0001;
-    dh=SimuInfo.Ts;
-    s1=0;%osimModel.getMuscles().get('ECRL').getActivation(osimState); %activation
-    s2=0;%osimModel.getMuscles().get('FCU').getActivation(osimState);%activation
-
-    if (t==0)
-        x_osc=[normrnd(.5,0.25) normrnd(.5,0.25)]; %valor inicial [0,1]
-        v_osc=[normrnd(.5,0.25) normrnd(.5,0.25)];
-        X=[x_osc(1,1);x_osc(1,2)];
-        V=[v_osc(1,1);v_osc(1,2)];
-    end
-
-
-    %%Implemented as (Zhang, Dingguo, et al. "Neural oscillator based control for 
-    % pathological tremor suppression via functional electrical stimulation." 
-    % Control Engineering Practice 19.1 (2011): 74-88.)
-
-    x1=X(1,end)+dh*((1/(Kf*tau1))*((-X(1,end))-B*V(1,end)-h*max(X(2,end),0)+A*s1+rosc));
-    y1=max(x1,0);
-    v1=V(1,end)+dh*((1/(Kf*tau2))*(-V(1,end)+max(X(1,end),0)));
-
-    x2= X(2,end)+dh*((1/(Kf*tau1))*((-X(2,end))-B*V(2,end)-h*max(X(1,end),0)-A*s2+rosc));
-    y2=max(x2,0);
-    v2=V(2,end)+dh*((1/(Kf*tau2))*(-V(2,end)+max(X(2,end),0)));
-
-
-    X=[x1;x2];
-    V=[v1;v2];
-    Y1=[y1;y2];
-
-
-    d(1)=Y1(1,end);
-    d(2)=Y1(2,end);
-
-
-
-
-
-
-
-
-
-
-%     du = ode1(@MatsuOscillator,[t t+SimuInfo.Ts],xosc_0,SimuInfo);
-%     xosc_0=du(end,:);
-%     d=[max(0,xosc_0(1)) max(0,xosc_0(2))];
 
 
 %% Tremor Affected Muscle Excitation 
@@ -225,10 +130,10 @@ elseif t<2 && t>=0.1
     u(4)=1e6*ALPHA4*u(4); %SUP
 else
 
-    u(1)=(1e6*ALPHA1*u(1))+0.5*d(1)+0*d(2); %ECRL
-    u(2)=(1e6*ALPHA2*u(2))+0*d(1)+.5*d(2); %FCU
-    u(3)=(1e6*ALPHA3*u(3))+.5*d(1)+0*d(2); %PQ
-    u(4)=(1e6*ALPHA4*u(4))+0*d(1)+.5*d(2); %SUP
+    u(1)=(1e6*ALPHA1*u(1))+0.15*d(1)+0*d(2); %ECRL
+    u(2)=(1e6*ALPHA2*u(2))+0*d(1)+.15*d(2); %FCU
+    u(3)=(1e6*ALPHA3*u(3))+.15*d(1)+0*d(2); %PQ
+    u(4)=(1e6*ALPHA4*u(4))+0*d(1)+.15*d(2); %SUP
 
 end
 

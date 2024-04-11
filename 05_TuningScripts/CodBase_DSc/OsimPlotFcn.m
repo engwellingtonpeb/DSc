@@ -55,7 +55,8 @@ else
     hold on;
 
     subplot(4,1,4)
-    plot(t,u(1),'b.',t,u(7),'r.')
+    %plot(t,u(1),'b.',t,u(7),'r.')
+    plot(t,SimuInfo.du(1),'b.',t,SimuInfo.du(2),'r.')
     %legend('sup', 'pq')
     axis([t-3 t -1 1])
     drawnow;
