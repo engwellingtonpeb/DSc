@@ -66,7 +66,6 @@ if LinStabilityFlag
     
     SimuInfo.Setpoint=[PhiRef, PsiRef];
   
-    osimModel=Model('C:\Users\engwe\Desktop\DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
     osimState=osimModel.initSystem();
     

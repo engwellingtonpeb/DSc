@@ -25,12 +25,18 @@ if name == 'ENGWELLPC'
     addpath('\Users\engwe\Desktop\DSc_v4\03_ODE_Solvers')
     addpath('\Users\engwe\Desktop\DSc_v4\04_DMDc_IDTF\simulations')
 
+    osimModel=Model('C:\Users\engwe\Desktop\DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
+    
+
 elseif name=='MARCOPOLO'
 
     addpath('..\Tuning_Feature')
     addpath('\Users\Wellington\Desktop\DSc_v4\02_Coletas\')
     addpath('\Users\Wellington\Desktop\DSc_v4\03_ODE_Solvers\')
+    addpath('\Users\Wellington\Desktop\DSc_v4\04_DMDc_IDTF\simulations\')
 
+    osimModel=Model('C:\Users\Wellington\Desktop\DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
+    
 
 elseif name=='ENGWELLSURFACE'
 
@@ -38,4 +44,7 @@ elseif name=='ENGWELLSURFACE'
     addpath('\02_DSc_v4\02_Coletas\')
     addpath('\02_DSc_v4\03_ODE_Solvers\')
     addpath('\02_DSc_v4\04_DMDc_IDTF\simulations\')
+
+    osimModel=Model('D:\02_DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
+    
 end
