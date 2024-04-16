@@ -19,7 +19,7 @@ import org.opensim.modeling.*
 name = getenv('COMPUTERNAME'); 
 
 
-if name == 'ENGWELLPC'
+if strcmp(name,'ENGWELLPC')
 
     addpath('..\Tuning_Feature')
     addpath('\Users\engwe\Desktop\DSc_v4\02_Coletas')
@@ -29,7 +29,7 @@ if name == 'ENGWELLPC'
     osimModel=Model('C:\Users\engwe\Desktop\DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
 
-elseif name=='MARCOPOLO'
+elseif strcmp(name,'MARCOPOLO')
 
     addpath('..\Tuning_Feature')
     addpath('\Users\Wellington\Desktop\DSc_v4\02_Coletas\')
@@ -39,7 +39,7 @@ elseif name=='MARCOPOLO'
     osimModel=Model('C:\Users\Wellington\Desktop\DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
 
-elseif name=='ENGWELLSURFACE'
+elseif strcmp(name,'ENGWELLSURFACE')
 
     addpath('..\Tuning_Feature')
     addpath('\02_DSc_v4\02_Coletas\')

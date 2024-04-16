@@ -27,7 +27,7 @@ if (t==0)
 else
 
 
- if (rem(j,20)==0) && (SimuInfo.PltFlag==1)
+ if (rem(j,100)==0) && (SimuInfo.PltFlag==1)
 
 
     subplot(4,1,1)
