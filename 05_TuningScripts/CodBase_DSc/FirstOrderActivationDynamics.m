@@ -17,12 +17,21 @@
 %Contractions in Older Adults (https://doi.org/10.1115/1.1531112)         %
 %                                                                         %
 %[3] https://opensimconfluence.atlassian.net/wiki/spaces/OpenSim/pages/   %
-% 53090590/First-Order+Activation+Dynamics                                %                                         %
+% 53090590/First-Order+Activation+Dynamics                                %
+%                                                                         %
+%[4] Pandy, M. G. (2001). Computer Modeling and Simulation of Human       %
+% Movement. Annual Review of Biomedical Engineering, 3(1), 245–273.       %
 %=========================================================================%
 
 function [a_dot] = FirstOrderActivationDynamics(u,x)
 
-t_act  = 10e-3; %[ms]
+% Pandy, M. G. (2001). Computer Modeling and Simulation of Human Movement. 
+% Annual Review of Biomedical Engineering, 3(1), 245–273.
+
+% "Values of these constants range from 12–20 ms for rise
+% time, τrise, and from 24–200 ms for relaxation time."
+
+t_act  = 12e-3; %[ms]
 t_deact= 40e-3; %[ms]
 
 

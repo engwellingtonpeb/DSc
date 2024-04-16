@@ -2,9 +2,7 @@ clc
 clear all
 close all hidden
 
-addpath('..\Tuning_Feature')
-addpath('\Users\engwe\Desktop\DSc_v4\02_Coletas')
-addpath('\Users\engwe\Desktop\DSc_v4\03_ODE_Solvers')
+pathconfig
 
 SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
@@ -40,10 +38,11 @@ if LinStabilityFlag
     load('distrib_tremor_paciente01.mat') % paciente
     SimuInfo.w_tremor=0.1;
     
-    %Distribuição Genérica de frequências do tremor
+% Distribuição Genérica de frequências do tremor
 %     X = makedist('Normal','mu',5.6,'sigma',1);%generico
 %     P=[];
 %     N=570;
+%     
 %     for i=1:N
 %         P(i)=random(X,1,1);
 %     end
@@ -62,10 +61,10 @@ if LinStabilityFlag
     SimuInfo.pd=pd;
     
     
-    PhiRef=2;%makedist('Normal','mu',0,'sigma',4);
+    PhiRef=0;%makedist('Normal','mu',0,'sigma',4);
     PsiRef=20;%makedist('Normal','mu',60,'sigma',0);
     
-    SimuInfo.Setpoint=[ PhiRef, PsiRef];
+    SimuInfo.Setpoint=[PhiRef, PsiRef];
   
     osimModel=Model('C:\Users\engwe\Desktop\DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
@@ -147,27 +146,27 @@ if LinStabilityFlag
     editableCoordSet = osimModel.updCoordinateSet();
     editableCoordSet.get('elv_angle').setValue(osimState, deg2rad(60));
     editableCoordSet.get('elv_angle').setLocked(osimState, true);
-    
+
     editableCoordSet.get('shoulder_elv').setValue(osimState, 0);
     editableCoordSet.get('shoulder_elv').setLocked(osimState, true);
-    
+
     editableCoordSet.get('shoulder_rot').setValue(osimState, 0);
     editableCoordSet.get('shoulder_rot').setLocked(osimState, true);
-    
+
     editableCoordSet.get('elbow_flexion').setValue(osimState, deg2rad(90));
     editableCoordSet.get('elbow_flexion').setLocked(osimState, true);
-    
+
     %editableCoordSet.get('pro_sup').setValue(osimState, deg2rad(psini(SimuInfo.index)));
     editableCoordSet.get('pro_sup').setValue(osimState, deg2rad(30));
     editableCoordSet.get('pro_sup').setLocked(osimState, false);
-    
+
     editableCoordSet.get('deviation').setValue(osimState, 0);
     editableCoordSet.get('deviation').setLocked(osimState, true);
-    
+
     %editableCoordSet.get('flexion').setValue(osimState, deg2rad(phini(SimuInfo.index)));
     editableCoordSet.get('flexion').setDefaultValue(-10);
     editableCoordSet.get('flexion').setLocked(osimState, false);
-    
+
     
     % osimState.getY.set(42,0.01); %zera ativacao inicial ECRL
     % osimState.getY.set(44,0.01); %zera ativacao inicial ECRB
