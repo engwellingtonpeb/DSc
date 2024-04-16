@@ -14,6 +14,7 @@ clear all
 clc
 close all
 
+import org.opensim.modeling.*
 
 name = getenv('COMPUTERNAME'); 
 
