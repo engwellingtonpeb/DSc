@@ -45,24 +45,47 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     SimuInfo.Xk=x;
     % Inner loop (physiological muscle control)
     %[u_sup u_ecrl u_ecrb u_ecu u_fcr u_fcu u_pq]
-    u0 = OsimControlsFcn(osimModel,osimState,t,SimuInfo); 
-
-    osimModel.getMuscles().get(0).setActivation(osimState,x(48));
-    osimModel.getMuscles().get(1).setActivation(osimState,x(49));
-    osimModel.getMuscles().get(5).setActivation(osimState,x(53));
-    osimModel.getMuscles().get(6).setActivation(osimState,x(54));
+    u0 = OsimControlsFcn(osimModel,osimState,t,SimuInfo);
 
 
-    %Update the derivative calculations in the State Variable
+    %-----activations and fatigue------------
+    switch SimuInfo.SimuType
+        case 'noFES'
+            a0 = x(48:54,1);% physiologic base activation perturbed by oscillator
+            a=a0;
+        case 'FES'
+            a0 = x(48:54,1); % physiologic base activation perturbed by oscillator
+            ae = x(59:65,1); % activation due to electrical stimulation
+            p  = x(66:72,1); % fatigue weighting function
+
+            aes=ae.*p;
+        
+            a=aes+a0;
+    end
+    
+    %Saturation Block
+    a(a>1)=1;
+    a(a<0)=0;
+    %----------------------------------------
+
+    osimModel.getMuscles().get(0).setActivation(osimState,a(1));%sup
+    osimModel.getMuscles().get(1).setActivation(osimState,a(2));%ecrl
+    osimModel.getMuscles().get(2).setActivation(osimState,a(3));%ecrb
+    osimModel.getMuscles().get(3).setActivation(osimState,a(4));%ecu
+    osimModel.getMuscles().get(4).setActivation(osimState,a(5));%fcr
+    osimModel.getMuscles().get(5).setActivation(osimState,a(6));%fcu
+    osimModel.getMuscles().get(6).setActivation(osimState,a(7));%pq
+
+
+    % Update the derivative calculations in the State Variable
     osimModel.computeStateVariableDerivatives(osimState);
     x_dot=osimState.getYDot().getAsMat();
-    %a0_dot = FirstOrderActivationDynamics(u0,x); %[a_sup a_ecrl a_ecrb a_ecu a_fcr a_fcu a_pq]
+
     ues=[];
-    [a0_dot, ae_dot, p_dot] = AugmentedActivationDynamics(x,u0,ues, SimuInfo.SimuType);    
+    [a0_dot, ae_dot, p_dot] = AugmentedActivationDynamics(x,u0,ues, SimuInfo);    
     xosc_dot = MatsuokaOscilator(t,SimuInfo);
 
-    % ae_dot=zeros(7,1);
-    % p_dot=zeros(7,1);
+
 
     % Derivatives Vector
     x_dot=[x_dot;...
