@@ -23,13 +23,13 @@ if LinStabilityFlag
     SimuInfo.Tend=10;
     SimuInfo.Ts=1e-3;
     SimuInfo.PltFlag=1;
-
+    SimuInfo.SimuType='noFES'; %[noFES | FES]
     SimuInfo.ModelParams=ModelParams;
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
-    integratorName = 'ode1'; %fixed step Dormand-Prince method of order 5
-    integratorOptions = odeset('RelTol', 1e-2, 'AbsTol', 1e-2, 'MaxStep', 1e-2);
+    integratorName = 'ode23'; %fixed step Dormand-Prince method of order 5
+    integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3, 'MaxStep', 1e-2);
     
     
     
@@ -94,7 +94,7 @@ if LinStabilityFlag
 
     % adjust number of states considering activation dynamics implemented
     % on MATLAB
-    SimuInfo.Nstates=Nstates+11;
+    SimuInfo.Nstates=Nstates+25;
 
     % Create the Initial State matrix from the Opensim state
     numVar = osimState.getY().size();
@@ -104,9 +104,15 @@ if LinStabilityFlag
     end
       activations=zeros(7,1);
       oscillator=zeros(4,1);
+      activationsFES=zeros(7,1);
+      fatigueDynamics=zeros(7,1);
+
+
       InitStates=[InitStates;...
                   activations;...
-                  oscillator];
+                  oscillator;...
+                  activationsFES;...
+                  fatigueDynamics];
       
       SimuInfo.InitStates=InitStates;
     
@@ -187,8 +193,8 @@ if LinStabilityFlag
 
 
     %% Prep Simulation
-    % osimModel.computeStateVariableDerivatives(osimState);
-    % osimModel.equilibrateMuscles(osimState); %solve for equilibrium similiar
+    osimModel.computeStateVariableDerivatives(osimState);
+    osimModel.equilibrateMuscles(osimState); %solve for equilibrium similiar
     
     %Controls function
     controlsFuncHandle = @OsimControlsFcn;
