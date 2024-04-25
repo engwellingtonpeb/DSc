@@ -73,16 +73,7 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
 
 
 
-    if SimuInfo.PltFlag == 1
-        if rem(t,1)==0
-            percent=(t/SimuInfo.Tend)*100;
-            msg_status=['Simulation Running:', num2str(percent) ,'%'];
-            disp(msg_status)
-        end
-        
-    else
-            t
-    end
+
 
 
 

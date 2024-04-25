@@ -29,7 +29,7 @@ if LinStabilityFlag
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
     integratorName = 'ode23'; %fixed step Dormand-Prince method of order 5
-    integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3, 'MaxStep', 1e-2);
+    integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3, 'MaxStep', 1e-1);
     
     
     
