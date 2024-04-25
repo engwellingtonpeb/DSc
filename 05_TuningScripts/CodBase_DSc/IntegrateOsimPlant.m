@@ -88,7 +88,7 @@ function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, in
 
 
 
-    if strcmp(integratorName,'ode113')
+    if strcmp(integratorName,'ode45')
         [T,Y] = integratorFunc(plantHandle, [0, SimuInfo.Tend], SimuInfo.InitStates, integratorOptions);%,
     else
         [Y] = integratorFunc(plantHandle, SimuInfo.timeSpan, SimuInfo.InitStates);

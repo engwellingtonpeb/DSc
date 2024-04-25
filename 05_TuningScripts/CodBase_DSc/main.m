@@ -29,7 +29,7 @@ if LinStabilityFlag
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
     integratorName = 'ode1'; %fixed step Dormand-Prince method of order 5
-    integratorOptions = odeset('RelTol', 1e-1, 'AbsTol', 1e-2, 'MaxStep', 1e-4);
+    integratorOptions = odeset('RelTol', 1e-2, 'AbsTol', 1e-2, 'MaxStep', 1e-2);
     
     
     
@@ -142,29 +142,29 @@ if LinStabilityFlag
     
     
     
-    editableCoordSet = osimModel.updCoordinateSet();
-    editableCoordSet.get('elv_angle').setValue(osimState, deg2rad(60));
-    editableCoordSet.get('elv_angle').setLocked(osimState, true);
-
-    editableCoordSet.get('shoulder_elv').setValue(osimState, 0);
-    editableCoordSet.get('shoulder_elv').setLocked(osimState, true);
-
-    editableCoordSet.get('shoulder_rot').setValue(osimState, 0);
-    editableCoordSet.get('shoulder_rot').setLocked(osimState, true);
-
-    editableCoordSet.get('elbow_flexion').setValue(osimState, deg2rad(90));
-    editableCoordSet.get('elbow_flexion').setLocked(osimState, true);
-
-    %editableCoordSet.get('pro_sup').setValue(osimState, deg2rad(psini(SimuInfo.index)));
-    editableCoordSet.get('pro_sup').setValue(osimState, deg2rad(30));
-    editableCoordSet.get('pro_sup').setLocked(osimState, false);
-
-    editableCoordSet.get('deviation').setValue(osimState, 0);
-    editableCoordSet.get('deviation').setLocked(osimState, true);
-
-    %editableCoordSet.get('flexion').setValue(osimState, deg2rad(phini(SimuInfo.index)));
-    editableCoordSet.get('flexion').setDefaultValue(-10);
-    editableCoordSet.get('flexion').setLocked(osimState, false);
+    % editableCoordSet = osimModel.updCoordinateSet();
+    % editableCoordSet.get('elv_angle').setValue(osimState, deg2rad(60));
+    % editableCoordSet.get('elv_angle').setLocked(osimState, true);
+    % 
+    % editableCoordSet.get('shoulder_elv').setValue(osimState, 0);
+    % editableCoordSet.get('shoulder_elv').setLocked(osimState, true);
+    % 
+    % editableCoordSet.get('shoulder_rot').setValue(osimState, 0);
+    % editableCoordSet.get('shoulder_rot').setLocked(osimState, true);
+    % 
+    % editableCoordSet.get('elbow_flexion').setValue(osimState, deg2rad(90));
+    % editableCoordSet.get('elbow_flexion').setLocked(osimState, true);
+    % 
+    % %editableCoordSet.get('pro_sup').setValue(osimState, deg2rad(psini(SimuInfo.index)));
+    % editableCoordSet.get('pro_sup').setValue(osimState, deg2rad(30));
+    % editableCoordSet.get('pro_sup').setLocked(osimState, false);
+    % 
+    % editableCoordSet.get('deviation').setValue(osimState, 0);
+    % editableCoordSet.get('deviation').setLocked(osimState, true);
+    % 
+    % %editableCoordSet.get('flexion').setValue(osimState, deg2rad(phini(SimuInfo.index)));
+    % editableCoordSet.get('flexion').setDefaultValue(-10);
+    % editableCoordSet.get('flexion').setLocked(osimState, false);
 
     
     % osimState.getY.set(42,0.01); %zera ativacao inicial ECRL
@@ -187,8 +187,8 @@ if LinStabilityFlag
 
 
     %% Prep Simulation
-    osimModel.computeStateVariableDerivatives(osimState);
-    osimModel.equilibrateMuscles(osimState); %solve for equilibrium similiar
+    % osimModel.computeStateVariableDerivatives(osimState);
+    % osimModel.equilibrateMuscles(osimState); %solve for equilibrium similiar
     
     %Controls function
     controlsFuncHandle = @OsimControlsFcn;
