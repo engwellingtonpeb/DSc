@@ -86,14 +86,20 @@ function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, in
     integratorFunc = str2func(integratorName);
     
 
+    switch integratorName
+        case {'ode45', 'ode23', 'ode113', 'ode78','ode89','ode15s','ode23s','ode23t', 'ode23tb', 'ode15i'}
 
-
-    if strcmp(integratorName,'ode45')
-        [T,Y] = integratorFunc(plantHandle, [0, SimuInfo.Tend], SimuInfo.InitStates, integratorOptions);%,
-    else
-        [Y] = integratorFunc(plantHandle, SimuInfo.timeSpan, SimuInfo.InitStates);
-        T=SimuInfo.timeSpan';
+            [T,Y] = integratorFunc(plantHandle, [0, SimuInfo.Tend], SimuInfo.InitStates, integratorOptions);
+        
+        otherwise
+            [Y] = integratorFunc(plantHandle, SimuInfo.timeSpan, SimuInfo.InitStates);
+            T=SimuInfo.timeSpan';
     end
+
+
+
+
+
     
 
     

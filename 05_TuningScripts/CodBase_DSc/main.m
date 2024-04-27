@@ -23,13 +23,13 @@ if LinStabilityFlag
     SimuInfo.Tend=10;
     SimuInfo.Ts=1e-3;
     SimuInfo.PltFlag=1;
-    SimuInfo.SimuType='FES'; %[noFES | FES]
+    SimuInfo.SimuType='noFES'; %[noFES | FES]
     SimuInfo.ModelParams=ModelParams;
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
-    integratorName = 'ode1'; %fixed step Dormand-Prince method of order 5
-    integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3, 'MaxStep', 1e-1);
+    integratorName = 'ode89'; %fixed step Dormand-Prince method of order 5
+    integratorOptions = odeset('RelTol', 1e-2, 'AbsTol', 1e-2,'MaxStep', 1e-1);
     
     
     

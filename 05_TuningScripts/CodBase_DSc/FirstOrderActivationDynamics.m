@@ -53,10 +53,10 @@ u(u<0)=0;
     
         if ui>ai
             tau_au=t_act*(0.5+1.5*ai);
-        end
         
-        if ui<=ai
+        elseif ui<=ai
             tau_au=t_deact/(0.5+1.5*ai);
+       
         end
 
         a_dot(i)=(ui-ai)/tau_au;
