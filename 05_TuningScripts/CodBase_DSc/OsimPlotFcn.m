@@ -10,7 +10,7 @@
 %=========================================================================%
 
 
-function OsimPlotFcn(t,x,u,SimuInfo)
+function OsimPlotFcn(t,x,u,a,a0,ae,p,SimuInfo)
 
 persistent j
 phi=x(18);
@@ -34,7 +34,7 @@ if SimuInfo.PltFlag == 1
         elseif (rem(j,100)==0) && (SimuInfo.PltFlag==1)
         
         
-            subplot(4,1,1)
+            subplot(5,1,1)
             plot(t,phi_ref,'go',t,rad2deg(phi),'r.')
             axis([t-3 t -50 50])
             %drawnow;
@@ -42,8 +42,8 @@ if SimuInfo.PltFlag == 1
             hold on;
         
         
-            subplot(4,1,2)
-            plot(t,u(2),'b.',t,u(6),'r.')
+            subplot(5,1,2)
+            plot(t,a(2),'b.',t,a(6),'r.')
             %legend('ecrl', 'fcu')
             axis([t-3 t -1 1])
             %drawnow;
@@ -51,29 +51,33 @@ if SimuInfo.PltFlag == 1
             hold on;
             
         
-            subplot(4,1,3)
+            subplot(5,1,3)
             plot(t,psi_ref,'go',t,rad2deg(psi),'k.')
             axis([t-3 t -40 60])
             %drawnow;
             grid on;
             hold on;
         
-            subplot(4,1,4)
-            plot(t,u(1),'b.',t,u(7),'r.')
+            subplot(5,1,4)
+            plot(t,a(1),'b.',t,a(7),'r.')
             %plot(t,SimuInfo.du(1),'b.',t,SimuInfo.du(2),'r.') %%VER OSCILADOR
             %legend('sup', 'pq')
             axis([t-3 t -1 1])
             drawnow;
             grid on;
             hold on;
-            
-        
+
+            subplot(5,1,5)
+            plot(t,ae(1),'b.',t,p(1),'r.')
+            axis([t-3 t -1 1])
+            drawnow;
+            grid on;
+            hold on;
          end
          j=j+1;
 
 
 
-   
 else
         t
 end

@@ -46,24 +46,28 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     % Inner loop (physiological muscle control)
     %[u_sup u_ecrl u_ecrb u_ecu u_fcr u_fcu u_pq]
     u0 = OsimControlsFcn(osimModel,osimState,t,SimuInfo);
-
+    %Outter loop (Electrical Stimulation Control)
+    ues = ElectricalStimulationController(SimuInfo,t);
 
     %-----activations and fatigue------------
-    switch SimuInfo.SimuType
-        case 'noFES'
+    switch SimuInfo.FES
+        case 'off'
             a0 = x(48:54,1);% physiologic base activation perturbed by oscillator
             a=a0;
-        case 'FES'
+        case 'on'
             a0 = x(48:54,1); % physiologic base activation perturbed by oscillator
             ae = x(59:65,1); % activation due to electrical stimulation
             p  = x(66:72,1); % fatigue weighting function
 
-            aes=ae.*p;
+            p=p-.25; %offset voluntaries with pathological tremor already presents
         
+            aes=ae.*p;
             a=aes+a0;
+            a(1)
+
     end
     
-    %Saturation Block
+    %----Saturation Block--------------------
     a(a>1)=1;
     a(a<0)=0;
     %----------------------------------------
@@ -80,9 +84,9 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     % Update the derivative calculations in the State Variable
     osimModel.computeStateVariableDerivatives(osimState);
     x_dot=osimState.getYDot().getAsMat();
-
-    ues=[];
-    [a0_dot, ae_dot, p_dot] = AugmentedActivationDynamics(x,u0,ues, SimuInfo);    
+    
+    
+    [a0_dot, ae_dot, p_dot] = AugmentedActivationDynamics(t,x,u0,ues,SimuInfo);    
     xosc_dot = MatsuokaOscilator(t,SimuInfo);
 
 
@@ -101,7 +105,7 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
 
 
     % Plotting Results
-    OsimPlotFcn(t,x,u0,SimuInfo)
+    OsimPlotFcn(t,x,u0,a,a0,ae,p,SimuInfo)
 end
 
 

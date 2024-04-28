@@ -1,44 +1,43 @@
-%-------------------------------------------------------------------------%
-%                  Federal University of Rio de Janeiro                   %
-%                 Biomedical Engineering Program - COPPE                  %
+%=========================================================================%
+%                   Federal University of Rio de Janeiro                  %
+%                  Biomedical Engineering Program - COPPE                 %
+%                   https://www.peb.ufrj.br/index.php/pt/                 %
 %                                                                         %
-%  Author: Wellington Cássio Pinheiro, MSc.                               %
-%  Advisor: Luciano Luporini Menegaldo                                    %         
-%  Date: 04/10/2023                                                       %
-%  Last Update: DSc - Version 2.0                                         %
-%-------------------------------------------------------------------------%                       
-% OutputData = IntegrateOpenSimPlant(osimModel, controlsFuncHandle,...
-%    timeSpan, integratorName, integratorOptions)
-%
-%   IntegrateOpenSimPlant is a function for integrating a
-%   OpenSim model using one of Matlab's integrator routines.
-%
-% Input:
-%   osimModel: An OpenSim Model object
-%   controlsFuncHandle: an optional function handle which can be used to 
-%       calculate the controls applied to actuators at each time step.
-%   timeSpan: A row matrix of time ranges for the integrator. This can be
-%       timeRange = [timeInitial timeFinal] or [t1, t2, t3 ... timeFinal].
-%   integratorName: A char array of the specific integrator to use
-%   integratorOptions: a set of integrator options generated with odeset
-%   (for defaults, pass an empty array).
-%
-% Output:
-%   The output of this script is a Matlab structure named OutputData. The
-%   format of this structure can be passed to PlotOpenSimFunction.m for
-%   plotting.
-%
-%   The stucture fields are:
-%       name: A char array identifier of the data
-%       nRows: the number of rows of data in the data field
-%       nColumns: the number of columns of data in the data field
-%       labels: an array of char arrays of data names from the header file
-%       data: a nRows by nColumnss matrix of data values
-%
-% Usage:
-% outputDataStructure = IntegrateOpenSimPlant(osimModel, osimState, ...
-% timeSpan, integratorName, integratorOptions);
-% -----------------------------------------------------------------------
+% Advisor: Prof. Dr. Luciano L. Menegaldo                                 %
+% Doctoral Candidate: Wellington C. Pinheiro MSc.                         %
+%                                                                         %
+% OutputData = IntegrateOpenSimPlant(osimModel, controlsFuncHandle,...    %
+%    timeSpan, integratorName, integratorOptions)                         %
+%                                                                         %
+%   IntegrateOpenSimPlant is a function for integrating a                 %
+%   OpenSim model using one of Matlab's integrator routines.              %
+%                                                                         %
+% Input:                                                                  %
+%   osimModel: An OpenSim Model object                                    %
+%   controlsFuncHandle: an optional function handle which can be used to  %
+%       calculate the controls applied to actuators at each time step.    %
+%   timeSpan: A row matrix of time ranges for the integrator. This can be %
+%       timeRange = [timeInitial timeFinal] or [t1, t2, t3 ... timeFinal].%
+%   integratorName: A char array of the specific integrator to use        %
+%   integratorOptions: a set of integrator options generated with odeset  %
+%   (for defaults, pass an empty array).                                  %
+%                                                                         %
+% Output:                                                                 %
+%   The output of this script is a Matlab structure named OutputData. The %
+%   format of this structure can be passed to PlotOpenSimFunction.m for   %
+%   plotting.                                                             %
+%                                                                         %
+%   The stucture fields are:                                              %
+%     name: A char array identifier of the data                           %
+%     nRows: the number of rows of data in the data field                 %
+%     nColumns: the number of columns of data in the data field           %
+%     labels: an array of char arrays of data names from the header file  %
+%     data: a nRows by nColumnss matrix of data values                    %
+%                                                                         %
+% Usage:                                                                  %
+% outputDataStructure = IntegrateOpenSimPlant(osimModel, osimState, ...   %
+% timeSpan, integratorName, integratorOptions);                           %
+% -------------------------------------------------------------------------
 function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, integratorOptions)
     
     % Import Java libraries
@@ -106,10 +105,10 @@ function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, in
    % Create Output Data structure
     OutputData = struct();
     if SimuInfo.PltFlag
-        subplot(4,1,2)
+        subplot(5,1,2)
         legend('ecrl', 'fcu')
 
-        subplot(4,1,4)
+        subplot(5,1,4)
         legend('sup', 'pq')
     end
 
