@@ -57,10 +57,10 @@ switch StatusFES
     case 'on'
    %------ parameters------------------------------------ 
         % Electrical Stimulated Activation
-        % z=ues(1,2); % ues (Ncontrols x 3) vector [Amp pw freq]
+        % pw0=ues(1,2); % ues (Ncontrols x 3) vector [Amp pw freq]
         % f=ues(1,3);
 
-        % z=200e-6; %Developing...
+        % pw0=200e-6; %Developing...
         % f=20; %Developing...
         
      
@@ -71,11 +71,13 @@ switch StatusFES
         pwd=100e-6; %[microsec]
         pws=500e-6; %[microsec]
     
-        tau_fat=1.0; %[ms]
-        tau_rec=2.0; %[ms]
+        tau_fat=18e-3; %[ms]
+        tau_rec=40e-3; %[ms]
     
 
         beta=0.6;%[dimensionless]
+        It=10e-3; %[mA]
+        Is=40e-3; %[mA]
    %-----------------------------------------------------
 
 
@@ -103,16 +105,16 @@ switch StatusFES
         while i<=SimuInfo.Ncontrols
             
             % ues (Ncontrols x 3) vector [Amp pw freq]
-            z=ues(i,2);
+            pw0=ues(i,2);
             f=ues(i,3);
             a=ae(i);
             
             % Pulse Width Characteristic
-            if z<=pwd
+            if pw0<=pwd
                 ar=0;
-            elseif (pwd<z) && (z<pws)
-                ar= (1/(pws-pwd))*(z-pwd);
-            else % z>= pws
+            elseif (pwd<pw0) && (pw0<pws)
+                ar= (1/(pws-pwd))*(pw0-pwd);
+            else % pw0>= pws
                 ar=1;
             end
 
@@ -142,7 +144,7 @@ switch StatusFES
             % end
             % 
             % ae_dot(i)=(ui-ai)/tau_au;
-
+            I=It+u*(Is-It)
 
             a0_dot = FirstOrderActivationDynamics(u0,xk);
 
