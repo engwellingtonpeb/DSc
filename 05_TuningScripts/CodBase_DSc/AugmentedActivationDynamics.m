@@ -144,7 +144,7 @@ switch StatusFES
             % end
             % 
             % ae_dot(i)=(ui-ai)/tau_au;
-            I=It+u*(Is-It)
+            I=It+u*(Is-It);
 
             a0_dot = FirstOrderActivationDynamics(u0,xk);
 

@@ -45,7 +45,7 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     SimuInfo.Xk=x;
     % Inner loop (physiological muscle control)
     %[u_sup u_ecrl u_ecrb u_ecu u_fcr u_fcu u_pq]
-    u0 = OsimControlsFcn(osimModel,osimState,t,SimuInfo);
+    u0 = OsimControlsFcn(osimState,t,SimuInfo);
     %Outter loop (Electrical Stimulation Control)
     ues = ElectricalStimulationController(SimuInfo,t);
 

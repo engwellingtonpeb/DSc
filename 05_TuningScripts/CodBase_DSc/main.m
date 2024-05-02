@@ -22,14 +22,14 @@ if LinStabilityFlag
 
     SimuInfo.Tend=10;
     SimuInfo.Ts=1e-3;
-    SimuInfo.PltFlag=1;
+    SimuInfo.PltFlag=0;
     SimuInfo.FES='on'; %[on | off]
     SimuInfo.Tremor='off' %[on | off]
     SimuInfo.ModelParams=ModelParams;
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
-    integratorName = 'ode2'; %fixed step Dormand-Prince method of order 5
+    integratorName = 'ode1'; %fixed step Dormand-Prince method of order 5
     integratorOptions = odeset('RelTol', 1e-2, 'AbsTol', 1e-2,'MaxStep', 1e-1);
     
     

@@ -12,47 +12,46 @@
 %=========================================================================%
 function [ues] = ElectricalStimulationController(SimuInfo,t)
 
-
-    % if t>2.5 && t<=4
-    %     ues=[1 250e-6 1.5];
-    % elseif   t>4 && t<=6
-    %     ues=[1 250e-6 10];
-    % elseif   t>6 && t<=7    
-    %     ues=[1 250e-6 5];
-    % else
-    %     ues=[1 100e-6 20];
-    % end
-
+    if t==0
+        pyenv('Version', 'C:\Users\engwe\anaconda3\envs\mat_py\python.exe');
+    end
 
     A=zeros(7,1);
 
     freq=20; %Hz
     f=freq*ones(7,1);
-    
-    if t<2
-        pw=[250e-6;... %sup
-            100e-6;... %ecrl
-            100e-6;... %ecrb
-            100e-6;... %ecu
-            100e-6;... %fcr
-            100e-6;... %fcu
-            100e-6];   %pq
-
-    else
-        pw=[100e-6;... %sup
-            100e-6;... %ecrl
-            100e-6;... %ecrb
-            100e-6;... %ecu
-            100e-6;... %fcr
-            100e-6;... %fcu
-            100e-6];   %pq
-
-    
-    end
-
-
+    % 
+    % if t<2
+    %     pw=[250e-6;... %sup
+    %         100e-6;... %ecrl
+    %         100e-6;... %ecrb
+    %         100e-6;... %ecu
+    %         100e-6;... %fcr
+    %         100e-6;... %fcu
+    %         100e-6];   %pq
+    % 
+    % else
+    %     pw=[100e-6;... %sup
+    %         100e-6;... %ecrl
+    %         100e-6;... %ecrb
+    %         100e-6;... %ecu
+    %         100e-6;... %fcr
+    %         100e-6;... %fcu
+    %         100e-6];   %pq
+    % 
+    % 
+    % end
 
 
-    ues=[A, pw, f];
+    Xk=SimuInfo.Xk;
+
+    Xk_py=py.numpy.array(Xk);
+    time=t;
+
+    [result]=pyrunfile("MPCteste.py", "ReturnList", xk=Xk_py, time=t);
+    class(result);
+
+
+    ues=[A, double(result{1})', f];
 
 end

@@ -20,7 +20,7 @@
 % Output:
 %   outVector is an org.opensim.Modeling.Vector of the control values
 % -----------------------------------------------------------------------
-function u_control = OsimControlsFcn(osimModel, osimState,t,SimuInfo)
+function u_control = OsimControlsFcn(osimState,t,SimuInfo)
 
     
     % Check Size
