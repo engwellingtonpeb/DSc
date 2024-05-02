@@ -33,6 +33,4 @@ def PulseGenerator(time):
 
 
 pw= PulseGenerator(time)
-
-
 ReturnList=[pw]

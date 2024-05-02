@@ -22,7 +22,7 @@ if LinStabilityFlag
 
     SimuInfo.Tend=10;
     SimuInfo.Ts=1e-3;
-    SimuInfo.PltFlag=0;
+    SimuInfo.PltFlag=1;
     SimuInfo.FES='on'; %[on | off]
     SimuInfo.Tremor='off' %[on | off]
     SimuInfo.ModelParams=ModelParams;
@@ -143,55 +143,6 @@ if LinStabilityFlag
     
     SimuInfo.Coord_all=Coord_all;
     
-    %% Setup Joint angles 
-    % phini=[5,10,15,-5,-10,-15];
-    % psini=[85, 80, 70, 65, 60, 55];
-    
-    
-    
-    % editableCoordSet = osimModel.updCoordinateSet();
-    % editableCoordSet.get('elv_angle').setValue(osimState, deg2rad(60));
-    % editableCoordSet.get('elv_angle').setLocked(osimState, true);
-    % 
-    % editableCoordSet.get('shoulder_elv').setValue(osimState, 0);
-    % editableCoordSet.get('shoulder_elv').setLocked(osimState, true);
-    % 
-    % editableCoordSet.get('shoulder_rot').setValue(osimState, 0);
-    % editableCoordSet.get('shoulder_rot').setLocked(osimState, true);
-    % 
-    % editableCoordSet.get('elbow_flexion').setValue(osimState, deg2rad(90));
-    % editableCoordSet.get('elbow_flexion').setLocked(osimState, true);
-    % 
-    % %editableCoordSet.get('pro_sup').setValue(osimState, deg2rad(psini(SimuInfo.index)));
-    % editableCoordSet.get('pro_sup').setValue(osimState, deg2rad(30));
-    % editableCoordSet.get('pro_sup').setLocked(osimState, false);
-    % 
-    % editableCoordSet.get('deviation').setValue(osimState, 0);
-    % editableCoordSet.get('deviation').setLocked(osimState, true);
-    % 
-    % %editableCoordSet.get('flexion').setValue(osimState, deg2rad(phini(SimuInfo.index)));
-    % editableCoordSet.get('flexion').setDefaultValue(-10);
-    % editableCoordSet.get('flexion').setLocked(osimState, false);
-
-    
-    % osimState.getY.set(42,0.01); %zera ativacao inicial ECRL
-    % osimState.getY.set(44,0.01); %zera ativacao inicial ECRB
-    % osimState.getY.set(46,0.01); %zera ativacao inicial ECU
-    % osimState.getY.set(48,0.01); %zera ativacao inicial FCR
-    % osimState.getY.set(50,0.01); %zera ativacao inicial FCU
-    % osimState.getY.set(52,0.01); %zera ativacao inicial PQ
-    % osimState.getY.set(54,0.01); %zera ativacao inicial SUP
-    % 
-    
-    % osimModel.getMuscles().get(0).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(1).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(2).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(3).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(4).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(5).setIgnoreActivationDynamics(osimState,true)
-    % osimModel.getMuscles().get(6).setIgnoreActivationDynamics(osimState,true)
-
-
 
     %% Prep Simulation
     osimModel.computeStateVariableDerivatives(osimState);
@@ -201,7 +152,7 @@ if LinStabilityFlag
     controlsFuncHandle = @OsimControlsFcn;
     
     
-    
+
     
     %% Run Simulation
         tic

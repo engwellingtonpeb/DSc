@@ -26,16 +26,21 @@
 %=========================================================================%
 function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
 
-
     % Update state with current values  
     osimState.setTime(t);
     numVar = SimuInfo.Nstates;
+    
+    %opção 01 
+
     UpdVar=osimState.updY();
     % for i = 0:1:numVar-1
     for i = 0:1:numVar-26
         UpdVar.set(i, x(i+1,1));
     end
-    
+      
+
+
+
 
     SimuInfo.du=[max(x(55),0) max(x(57),0)];
 

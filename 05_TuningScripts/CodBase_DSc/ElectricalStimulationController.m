@@ -20,7 +20,7 @@ function [ues] = ElectricalStimulationController(SimuInfo,t)
 
     freq=20; %Hz
     f=freq*ones(7,1);
-    % 
+    % % 
     % if t<2
     %     pw=[250e-6;... %sup
     %         100e-6;... %ecrl
@@ -41,17 +41,13 @@ function [ues] = ElectricalStimulationController(SimuInfo,t)
     % 
     % 
     % end
+    % ues=[A, pw, f];
 
 
-    Xk=SimuInfo.Xk;
 
-    Xk_py=py.numpy.array(Xk);
-    time=t;
-
+ % Python Parsing data
+    Xk_py=py.numpy.array(SimuInfo.Xk);
     [result]=pyrunfile("MPCteste.py", "ReturnList", xk=Xk_py, time=t);
-    class(result);
-
-
     ues=[A, double(result{1})', f];
 
 end
