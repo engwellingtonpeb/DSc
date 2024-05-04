@@ -36,6 +36,7 @@ elseif strcmp(name,'MARCOPOLO')
     addpath('\Users\Wellington\Desktop\DSc_v4\02_Coletas\')
     addpath('\Users\Wellington\Desktop\DSc_v4\03_ODE_Solvers\')
     addpath('\Users\Wellington\Desktop\DSc_v4\04_DMDc_IDTF\simulations\')
+    addpath('C:\Users\Wellington\.conda\envs\mat_py\')
 
     osimModel=Model('C:\Users\Wellington\Desktop\DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
