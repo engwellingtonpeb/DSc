@@ -12,42 +12,62 @@
 %=========================================================================%
 function [ues] = ElectricalStimulationController(SimuInfo,t)
 
+
     if t==0
         pyenv('Version', 'C:\Users\engwe\anaconda3\envs\mat_py\python.exe');
     end
 
-    A=zeros(7,1);
+ 
 
-    freq=20; %Hz
+    freq=40; %Hz
     f=freq*ones(7,1);
-    % % 
-    % if t<2
-    %     pw=[250e-6;... %sup
-    %         100e-6;... %ecrl
-    %         100e-6;... %ecrb
-    %         100e-6;... %ecu
-    %         100e-6;... %fcr
-    %         100e-6;... %fcu
-    %         100e-6];   %pq
-    % 
-    % else
-    %     pw=[100e-6;... %sup
-    %         100e-6;... %ecrl
-    %         100e-6;... %ecrb
-    %         100e-6;... %ecu
-    %         100e-6;... %fcr
-    %         100e-6;... %fcu
-    %         100e-6];   %pq
-    % 
-    % 
-    % end
-    % ues=[A, pw, f];
+    %% 
+    if t<2
+
+        A=[ .1e-3;... %sup
+            40e-3;... %ecrl
+            40e-3;... %ecrb
+            .1e-3;... %ecu
+            .1e-3;... %fcr
+            .1e-3;... %fcu
+            .1e-3];   %pq
+
+
+
+        pw=[100e-6;... %sup
+            400e-6;... %ecrl
+            400e-6;... %ecrb
+            100e-6;... %ecu
+            100e-6;... %fcr
+            100e-6;... %fcu
+            100e-6];   %pq
+
+    else
+
+        A=[ 0;... %sup
+            0;... %ecrl
+            0;... %ecrb
+            0;... %ecu
+            0;... %fcr
+            0;... %fcu
+            0];   %pq
+
+        pw=[100e-6;... %sup
+            100e-6;... %ecrl
+            100e-6;... %ecrb
+            100e-6;... %ecu
+            100e-6;... %fcr
+            100e-6;... %fcu
+            100e-6];   %pq
+
+
+    end
+    ues=[A, pw, f];
 
 
 
  % Python Parsing data
-    Xk_py=py.numpy.array(SimuInfo.Xk);
-    [result]=pyrunfile("MPCteste.py", "ReturnList", xk=Xk_py, time=t);
-    ues=[A, double(result{1})', f];
-
+    % Xk_py=py.numpy.array(SimuInfo.Xk);
+    % [result]=pyrunfile("MPCteste.py", "ReturnList", xk=Xk_py, time=t);
+    % ues=[A, double(result{1})', f];
 end

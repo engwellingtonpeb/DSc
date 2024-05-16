@@ -56,13 +56,7 @@ switch StatusFES
 
     case 'on'
    %------ parameters------------------------------------ 
-        % Electrical Stimulated Activation
-        % pw0=ues(1,2); % ues (Ncontrols x 3) vector [Amp pw freq]
-        % f=ues(1,3);
-
-        % pw0=200e-6; %Developing...
-        % f=20; %Developing...
-        
+       
      
         tau_ac=40e-3;   %[ms]
         tau_da=70e-3; %[ms]
@@ -76,8 +70,8 @@ switch StatusFES
     
 
         beta=0.6;%[dimensionless]
-        It=10e-3; %[mA]
-        Is=40e-3; %[mA]
+   
+        Imax=40e-3; %[mA]
    %-----------------------------------------------------
 
 
@@ -105,15 +99,17 @@ switch StatusFES
         while i<=SimuInfo.Ncontrols
             
             % ues (Ncontrols x 3) vector [Amp pw freq]
+            I=ues(i,1);
             pw0=ues(i,2);
             f=ues(i,3);
             a=ae(i);
             
+            Ibar=I/Imax;
             % Pulse Width Characteristic
             if pw0<=pwd
                 ar=0;
             elseif (pwd<pw0) && (pw0<pws)
-                ar= (1/(pws-pwd))*(pw0-pwd);
+                ar= Ibar*(1/(pws-pwd))*(pw0-pwd);
             else % pw0>= pws
                 ar=1;
             end
@@ -123,7 +119,7 @@ switch StatusFES
 
             % Muscle Fatigue
             lambda=1-beta+beta*(f/100)^2;
-           
+            
             p_dot=(((pmin-p)*a*lambda)/tau_fat)+((1-p)*(1-a*lambda))/tau_rec;
 
             % Calcium Dynamics 
@@ -144,7 +140,7 @@ switch StatusFES
             % end
             % 
             % ae_dot(i)=(ui-ai)/tau_au;
-            I=It+u*(Is-It);
+            % I=It+u*(Is-It);
 
             a0_dot = FirstOrderActivationDynamics(u0,xk);
 

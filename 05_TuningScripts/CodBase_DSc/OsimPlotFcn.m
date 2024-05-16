@@ -68,7 +68,7 @@ if SimuInfo.PltFlag == 1
             hold on;
 
             subplot(5,1,5)
-            plot(t,ae(1),'b.',t,p(1),'r.')
+            plot(t,ae(3),'b.',t,p(3),'r.')
             axis([t-3 t -1 1])
             drawnow;
             grid on;
