@@ -22,15 +22,17 @@ def PulseGenerator(time):
     # Pulse width   
 
     if time<2:
+         
+         # stim = [1x7 Amplitudes | 1x1 pulse width| 1x1 frequency]
+         
+         stimu = [0, 40e-3, 40e-3, 0, 0, 0, 0, 250e-6, 30]
 
-        pw=np.array([250e-6, 100e-6, 100e-6, 100e-6, 100e-6, 100e-6,100e-6])
 
     else:
-
-        pw=np.array([100e-6, 100e-6, 100e-6, 100e-6, 100e-6, 100e-6, 100e-6])
-
-    return pw
+        stimu = [0, 0, 0, 0, 0, 0, 0, 250e-6, 30]
 
 
-pw= PulseGenerator(time)
-ReturnList=[pw]
+    return stimu
+
+
+ReturnList = PulseGenerator(time)

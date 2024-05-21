@@ -68,7 +68,7 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
         
             aes=ae.*p;
             a=aes+a0;
-            [a0,ae,p]
+            %[a0,ae,p]
 
     end
     
