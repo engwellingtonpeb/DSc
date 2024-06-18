@@ -19,7 +19,10 @@ phi_ref=SimuInfo.Setpoint(1);
 psi=x(16);
 psi_ref=SimuInfo.Setpoint(2);
 
-if SimuInfo.PltFlag == 1
+
+switch SimuInfo.PltFlag
+
+    case 'on'
         if rem(t,1)==0
             percent=(t/SimuInfo.Tend)*100;
             msg_status=['Simulation Running:', num2str(percent) ,'%'];
@@ -31,7 +34,7 @@ if SimuInfo.PltFlag == 1
         if (t==0)
             j=0;
 
-        elseif (rem(j,100)==0) && (SimuInfo.PltFlag==1)
+        elseif (rem(j,100)==0) && strcmp(SimuInfo.PltFlag,'on')
         
         
             subplot(5,1,1)
@@ -78,8 +81,8 @@ if SimuInfo.PltFlag == 1
 
 
 
-else
-        t
+    otherwise
+            t
 end
 
 

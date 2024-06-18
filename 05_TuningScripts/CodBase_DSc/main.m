@@ -22,9 +22,9 @@ if LinStabilityFlag
 
     SimuInfo.Tend=10;
     SimuInfo.Ts=1e-3;
-    SimuInfo.PltFlag=1;
-    SimuInfo.FES='on'; %[on | off]
-    SimuInfo.Tremor='off' %[on | off]
+    SimuInfo.PltFlag='on'; %[on | off]
+    SimuInfo.FES='off'; %[on | off]
+    SimuInfo.Tremor='on' %[on | off]
     SimuInfo.ModelParams=ModelParams;
     
     %Config Simulations using Matlab Integrator

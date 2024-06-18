@@ -77,13 +77,18 @@ apq  = SimuInfo.Xk(54);
 
 x=[asup aecrl afcu apq phi psi phi_dot psi_dot]';
 
+if any(isnan(x))
+    disp('state feedback error')
+    pause(20)
+end
+
 e=r-x;
 
-err_pos=[phi_ref-phi ; psi_ref-psi];
 
 
-eps_phi=rad2deg(err_pos(1));
-eps_psi=rad2deg(err_pos(2));
+
+eps_phi=rad2deg(e(5));
+eps_psi=rad2deg(e(6));
 
 ERR_POS=[ERR_POS; [eps_phi eps_psi]];
 
@@ -98,7 +103,7 @@ xplus=(SimuInfo.Ak*xk1)+(SimuInfo.Bk*e); % based on J. Ji and Y. Liu, "H-infinit
 u=SimuInfo.Ck*xk1+SimuInfo.Dk*e;
 xk1=xplus;
 if any(isnan(u))
-    disp('ERRO AQUI')
+    disp('ERRO 101')
     u(isnan(u))=0;
     xk1=zeros(length(SimuInfo.Ak),1);
 end
@@ -119,7 +124,7 @@ ALPHA4=(-0.5*((exp(eps_psi)-exp(-eps_psi))/((exp(eps_psi))+exp(-eps_psi))))+0.5;
 
 if t<.1 %initializing model
     u(1)=.1;
-    u(2)=0;
+    u(2)=0.01;
     u(3)=.1;
     u(4)=0.01;
 
@@ -142,23 +147,15 @@ end
 %% Actuators saturation (muscle excitation limits 0<=u<=1)
 
 
-for i=1:length(u)
-    if u(i)>=1
-        u(i)=1;
-    end
-    
-    if u(i)<0
-        u(i)=0;
-    end
-end
+    u(u>1)=1;
+    u(u<0)=0;
 
 
 %% Control Vector (muscle excitations)
 
     u_control=[u(4) u(1) 0.01 0.01 0.01 u(2) u(3)]; %[u_sup u_ecrl u_ecrb u_ecu u_fcr u_fcu u_pq]
 
-  
-
+    
 end
 
 

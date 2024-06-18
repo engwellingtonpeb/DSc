@@ -56,7 +56,14 @@ switch StatusFES
 
     case 'on'
    %------ parameters------------------------------------ 
-       
+       if any(isnan(u0))
+            disp('Problema U0')
+       end
+
+
+       if any(isnan(ues))
+            disp('Problema UES')
+       end
      
         tau_ac=40e-3;   %[ms]
         tau_da=70e-3; %[ms]
@@ -104,7 +111,7 @@ switch StatusFES
             f=ues(i,3);
             a=ae(i);
             
-            Ibar=I/Imax;
+            Ibar=1;%I/Imax;
             % Pulse Width Characteristic
             if pw0<=pwd
                 ar=0;
@@ -126,27 +133,17 @@ switch StatusFES
             u=ar*q;
             ae_dot(i)=(1/tau_ac)*(u^2-u*a)+(1/tau_da)*(u-a); %[2] Pandy, M. G. (2001).
             
-            % t_act  = 12e-3; %[ms]
-            % t_deact= 40e-3; %[ms]
-            % ui=u;
-            % ai=ae(i);
-            % 
-            % if ui>ai
-            %     tau_au=t_act*(0.5+1.5*ai);
-            % 
-            % elseif ui<=ai
-            %     tau_au=t_deact/(0.5+1.5*ai);
-            % 
-            % end
-            % 
-            % ae_dot(i)=(ui-ai)/tau_au;
-            % I=It+u*(Is-It);
 
             a0_dot = FirstOrderActivationDynamics(u0,xk);
 
             i=i+1;
         end
 
+
+
+       if any(isnan(a0_dot))
+            disp('Problema a0_dot')
+       end
 
 end
 
