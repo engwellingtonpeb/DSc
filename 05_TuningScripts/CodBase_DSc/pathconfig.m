@@ -45,10 +45,11 @@ elseif strcmp(name,'MARCOPOLO')
 elseif strcmp(name,'ENGWELLSURFACE')
 
     addpath('..\Tuning_Feature')
-    addpath('\02_DSc_v4\02_Coletas\')
-    addpath('\02_DSc_v4\03_ODE_Solvers\')
-    addpath('\02_DSc_v4\04_DMDc_IDTF\simulations\')
+   
+    addpath('\02_DSc_v5\DSc\02_Coletas\')
+    addpath('\02_DSc_v5\DSc\03_ODE_Solvers\')
+    addpath('\02_DSc_v5\DSc\04_DMDc_IDTF\simulations\')
 
-    osimModel=Model('D:\02_DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
+    osimModel=Model('D:\02_DSc_v5\DSc\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
 end
