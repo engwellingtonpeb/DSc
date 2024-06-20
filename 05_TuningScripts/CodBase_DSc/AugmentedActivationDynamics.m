@@ -58,6 +58,7 @@ switch StatusFES
    %------ parameters------------------------------------ 
        if any(isnan(u0))
             disp('Problema U0')
+            t
        end
 
 
@@ -133,6 +134,16 @@ switch StatusFES
             u=ar*q;
             ae_dot(i)=(1/tau_ac)*(u^2-u*a)+(1/tau_da)*(u-a); %[2] Pandy, M. G. (2001).
             
+            
+
+            if any(isnan(u0))
+                disp('Problema U0 140')
+            end
+
+
+            if any(isnan(u0))
+                disp('Problema xk 140')
+            end
 
             a0_dot = FirstOrderActivationDynamics(u0,xk);
 

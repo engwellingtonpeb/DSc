@@ -62,7 +62,7 @@ function [ues] = ElectricalStimulationController(SimuInfo,t)
 
 
     end
-    ues=[A, pw, f];
+    ues=[A, 0.*pw, f];
 
 
 

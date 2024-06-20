@@ -20,17 +20,19 @@ ModelParams=x(12,:);% sintonia do oscilador 2 dias
 if LinStabilityFlag
     %% Tremor Simulation for Tunning 
 
+
+
     SimuInfo.Tend=10;
-    SimuInfo.Ts=1e-3;
+    SimuInfo.Ts=4e-3;
     SimuInfo.PltFlag='on'; %[on | off]
-    SimuInfo.FES='off'; %[on | off]
+    SimuInfo.FES='on'; %[on | off]
     SimuInfo.Tremor='on' %[on | off]
     SimuInfo.ModelParams=ModelParams;
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
-    integratorName = 'ode1'; %fixed step Dormand-Prince method of order 5
-    integratorOptions = odeset('RelTol', 1e-2, 'AbsTol', 1e-2,'MaxStep', 1e-1);
+    integratorName = 'ode45'; %fixed step Dormand-Prince method of order 5
+    integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3,'MaxStep', 10e-3);
     
     
     

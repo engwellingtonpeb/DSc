@@ -51,6 +51,10 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     % Inner loop (physiological muscle control)
     %[u_sup u_ecrl u_ecrb u_ecu u_fcr u_fcu u_pq]
     u0 = OsimControlsFcn(osimState,t,SimuInfo);
+    if isnan(u0)
+        disp('u0 fault - line 55 OsimPlantFcn')
+    end
+
     %Outter loop (Electrical Stimulation Control)
     ues = ElectricalStimulationController(SimuInfo,t);
 
@@ -92,10 +96,9 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     osimModel.computeStateVariableDerivatives(osimState);
     x_dot=osimState.getYDot().getAsMat();
     
-    if isnan(x_dot)
-        disp('problema retorno')
-    end
 
+    % [t, u0]
+    % pause
     [a0_dot, ae_dot, p_dot] = AugmentedActivationDynamics(t,x,u0,ues,SimuInfo);    
     xosc_dot = MatsuokaOscilator(t,SimuInfo);
 

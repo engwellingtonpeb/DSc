@@ -71,15 +71,15 @@ aecrl= SimuInfo.Xk(49);
 afcu = SimuInfo.Xk(53);
 apq  = SimuInfo.Xk(54);
 
-%[osimModel.getMuscles().get('ECRL').getActivation(osimState) aecrl]
-%CHECKED OK
+
 
 
 x=[asup aecrl afcu apq phi psi phi_dot psi_dot]';
 
+
+
 if any(isnan(x))
-    disp('state feedback error')
-    pause(20)
+    disp('state feedback error - OsimControlsFcn l80')
 end
 
 e=r-x;
@@ -107,13 +107,14 @@ if any(isnan(u))
     u(isnan(u))=0;
     xk1=zeros(length(SimuInfo.Ak),1);
 end
-    %
+
+
+
 
 %% Reciprocal Inhibition
 
 ALPHA1=((-0.5*((exp(eps_phi)-exp(-eps_phi))/((exp(eps_phi))+exp(-eps_phi))))+0.5);
 ALPHA2=(0.5*((exp(eps_phi)-exp(-eps_phi))/((exp(eps_phi))+exp(-eps_phi))))+0.5;
-
 ALPHA3=(0.5*((exp(eps_psi)-exp(-eps_psi))/((exp(eps_psi))+exp(-eps_psi))))+.5;
 ALPHA4=(-0.5*((exp(eps_psi)-exp(-eps_psi))/((exp(eps_psi))+exp(-eps_psi))))+0.5;
 
@@ -133,6 +134,7 @@ elseif t<2 && t>=0.1
     u(2)=1e6*ALPHA2*u(2); %FCU
     u(3)=1e6*ALPHA3*u(3); %PQ
     u(4)=1e6*ALPHA4*u(4); %SUP
+
 else
 
     u(1)=(1e6*ALPHA1*u(1))+0.15*d(1)+0*d(2); %ECRL
