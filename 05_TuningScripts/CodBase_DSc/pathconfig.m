@@ -23,12 +23,12 @@ name = getenv('COMPUTERNAME');
 if strcmp(name,'ENGWELLPC')
 
     addpath('..\Tuning_Feature')
-    addpath('\Users\engwe\Desktop\DSc_v4\02_Coletas')
-    addpath('\Users\engwe\Desktop\DSc_v4\03_ODE_Solvers')
-    addpath('\Users\engwe\Desktop\DSc_v4\04_DMDc_IDTF\simulations')
+    addpath('\Users\engwe\Desktop\DSc_v5\DSc\02_Coletas')
+    addpath('\Users\engwe\Desktop\DSc_v5\DSc\03_ODE_Solvers')
+    addpath('\Users\engwe\Desktop\DSc_v5\DSc\04_DMDc_IDTF\simulations')
     addpath('C:\Users\engwe\anaconda3\envs\mat_py')
     
-    osimModel=Model('C:\Users\engwe\Desktop\DSc_v4\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
+    osimModel=Model('C:\Users\engwe\Desktop\DSc_v5\DSc\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
 
 elseif strcmp(name,'MARCOPOLO')

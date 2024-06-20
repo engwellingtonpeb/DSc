@@ -20,11 +20,12 @@ pathconfig
 import org.opensim.modeling.*
 
 prompt="Select an operation mode:\n" + ...
-    "(1) - Individualized Tremor Model Tuning \n" + ...
-    "(2) - Individualized Tremor Model Simulation \n" + ...
+    "(1) - Individualized Tremor Model Simulation \n" + ...
+    "(2) - Individualized Tremor Model Tuning \n" + ...
     "(3) - Open-Loop e-stim Simulation \n" + ...
-    "(4) - e-stim RL controller Training \n" + ...
-    "(5) - e-stim MPC/RL controller design \n \n" + ...
+    "(4) - Pathological Tremor / ES - Identification \n"+...
+    "(5) - e-stim RL controller Training and Simulation \n" + ...
+    "(6) - e-stim MPC/RL controller design and Simulation \n \n" + ...
     "Option:";
 
 opt=input(prompt);
@@ -33,8 +34,16 @@ opt=input(prompt);
 switch opt
 
     case 1 
-    %Individualized Tremor Model TUNING
+    %Individualized Tremor Model SIMULATION
+        % set patient parameters or use a dummy parameter vector
+        setOnlyTremorSimulationParams;
 
+        % run only tremor simulation without ES inputs
+        runIndividualizedTremorSimulation;
+        
+
+    case 2 
+    % Individualized Tremor Model TUNING
         % get and prepare patient data
         getPatientSignals;
 
@@ -44,23 +53,23 @@ switch opt
         % save results
         saveTunedPTModel;
 
-    case 2 
-    %Individualized Tremor Model SIMULATION
-
-        % get patient parameters or use a dummy parameter vector
-        getSimulationParams;
-
-        % run only tremor simulation without ES inputs
-        runIndividualizedTremorSimulation;
 
     case 3 
     %OPEN LOOP e-stim Simulation
 
-        % run only tremor simulation PRESET ES inputs
-        runIndividualizedTremorSimulationwithES;
+        % set patient parameters for e-stim
+        setFESParamsSimulation;
 
-    case 4 
-    %e-stim RL CONTROLLER TRAINNING
+        % run only tremor simulation PRESET ES inputs
+        runFESOLSimulation;
+
+    case 4
+    % Tremor/FES - Identification Dynamics
+
+
+
+    case 5 
+    %e-stim RL CONTROL LAW TRAINNING
 
         %get patient parameters or use a dummy parameter vector
         getSimulationParams;
@@ -70,7 +79,7 @@ switch opt
 
 
 
-    case 5
+    case 6
 
         disp('Module still being developed...')
         disp('   ')

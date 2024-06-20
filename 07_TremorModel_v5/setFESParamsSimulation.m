@@ -1,9 +1,21 @@
+%=========================================================================%
+%                   Federal University of Rio de Janeiro                  %
+%                  Biomedical Engineering Program - COPPE                 %
+%                                                                         %
+% Advisor: Prof. Dr. Luciano L. Menegaldo                                 %
+% Doctoral Candidate: Wellington C. Pinheiro MSc.                         %
+%                                                                         %
+% This script sets all parameters to run a FD simulation of               %
+% individualized tremor handling OpenSim as a control theory plant        %
+% and applying E-Stim to selected muscles                                 %
+%=========================================================================%
+
+
 clc
 clear all
 close all hidden
 
 pathconfig
-
 SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
 
@@ -11,6 +23,7 @@ import org.opensim.modeling.*
 %pacitente 01
 load('29_Oct_2023_20_15_55_GA.mat') % sintonia do oscilador 2 dias 
 ModelParams=x(12,:);% sintonia do oscilador 2 dias 
+
 %% Controller Synthesis
 
 
@@ -27,12 +40,13 @@ if LinStabilityFlag
     SimuInfo.PltFlag='on'; %[on | off]
     SimuInfo.PltResolution=100;
     SimuInfo.FES='on'; %[on | off]
+    SimuInfo.FESProtocol='cc' %[cc - O.L. co-contraction| op - O.L. out-of-phase]
     SimuInfo.Tremor='on' %[on | off]
     SimuInfo.ModelParams=ModelParams;
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
-    integratorName = 'ode1'; %fixed step Dormand-Prince method of order 5
+    integratorName = 'ode1'; 
     integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3,'MaxStep', 10e-3);
     
     
@@ -41,17 +55,9 @@ if LinStabilityFlag
     %Distribuição de um paciente especíico
     load('distrib_tremor_paciente01.mat') % paciente
     SimuInfo.w_tremor=0.1;
-    
-% Distribuição Genérica de frequências do tremor
-%     X = makedist('Normal','mu',5.6,'sigma',1);%generico
-%     P=[];
-%     N=570;
-%     
-%     for i=1:N
-%         P(i)=random(X,1,1);
-%     end
-    
-    SimuInfo.Kz=c2d(K,SimuInfo.Ts);
+
+
+        SimuInfo.Kz=c2d(K,SimuInfo.Ts);
     
     [Ak,Bk,Ck,Dk]=ssdata(SimuInfo.Kz);
     
@@ -129,8 +135,8 @@ if LinStabilityFlag
     Muscles = osimModel.getMuscles();  
     controls_all = cell(Ncontrols,1);
     for i = 1:Ncontrols
-    currentMuscle = Muscles.get(i-1);
-    controls_all(i,1) = cell(currentMuscle.getName());
+        currentMuscle = Muscles.get(i-1);
+        controls_all(i,1) = cell(currentMuscle.getName());
     end
     
     SimuInfo.controls_all=controls_all;
@@ -140,8 +146,8 @@ if LinStabilityFlag
     Coord = osimModel.getCoordinateSet();
     Coord_all = cell(Ncoord,1);
     for i = 1:Ncoord
-    currentCoord = Coord.get(i-1);
-    Coord_all(i,1) = cell(currentCoord.getName());
+        currentCoord = Coord.get(i-1);
+        Coord_all(i,1) = cell(currentCoord.getName());
     end
     
     SimuInfo.Coord_all=Coord_all;
@@ -153,13 +159,5 @@ if LinStabilityFlag
     
     %Controls function
     controlsFuncHandle = @OsimControlsFcn;
-    
-    
 
-    
-    %% Run Simulation
-        tic
-        motionData = IntegrateOsimPlant(osimModel,integratorName,SimuInfo,integratorOptions);
-        elapsedTime=toc
-        SimuInfo.elapsedTime=elapsedTime;
 end
