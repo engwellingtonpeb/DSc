@@ -33,16 +33,26 @@ ModelParams=x(12,:);% sintonia do oscilador 2 dias
 if LinStabilityFlag
     %% Tremor Simulation for Tunning 
 
-
-
-    SimuInfo.Tend=10;
+    %Time
     SimuInfo.Ts=1e-3;
+    SimuInfo.Tend=10;
+
+
+    %Plotting 
     SimuInfo.PltFlag='on'; %[on | off]
     SimuInfo.PltResolution=100;
+    
+    %Params tuned by optimization
+    SimuInfo.ModelParams=ModelParams;
+
+    %Tremor
+    SimuInfo.Tremor='on' %[on | off]
+
+    %Electrical Stimulation
     SimuInfo.FES='on'; %[on | off]
     SimuInfo.FESProtocol='cc' %[cc - O.L. co-contraction| op - O.L. out-of-phase]
-    SimuInfo.Tremor='on' %[on | off]
-    SimuInfo.ModelParams=ModelParams;
+    
+    %sliderapp()
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];

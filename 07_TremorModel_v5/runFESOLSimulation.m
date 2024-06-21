@@ -6,8 +6,8 @@
 % Doctoral Candidate: Wellington C. Pinheiro MSc.                         %
 %                                                                         %
 % This script runs FD simulation of individualized tremor handling        %
-% OpenSim as a control theory plant and applying E-Stim to selected       %
-% muscles                                                                 %
+% OpenSim as a control theory plant and applying OPEN-LOOP E-Stim         %
+% to selected muscles                                                     %
 %                                                                         %
 %=========================================================================%
 

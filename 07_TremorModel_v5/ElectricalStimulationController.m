@@ -13,11 +13,11 @@
 function [ues] = ElectricalStimulationController(SimuInfo,t)
 
 
-    if t==0
-        pyenv('Version', 'C:\Users\engwe\anaconda3\envs\mat_py\python.exe');
-    end
+    % if t==0
+    %     pyenv('Version', 'C:\Users\engwe\anaconda3\envs\mat_py\python.exe');
+    % end
 
- 
+
 
     freq=40; %Hz
     f=freq*ones(7,1);
@@ -34,13 +34,7 @@ function [ues] = ElectricalStimulationController(SimuInfo,t)
 
 
 
-        pw=[100e-6;... %sup
-            400e-6;... %ecrl
-            400e-6;... %ecrb
-            100e-6;... %ecu
-            100e-6;... %fcr
-            100e-6;... %fcu
-            100e-6];   %pq
+        pw=200e-6;
 
     else
 
@@ -52,17 +46,11 @@ function [ues] = ElectricalStimulationController(SimuInfo,t)
             0;... %fcu
             0];   %pq
 
-        pw=[100e-6;... %sup
-            100e-6;... %ecrl
-            100e-6;... %ecrb
-            100e-6;... %ecu
-            100e-6;... %fcr
-            100e-6;... %fcu
-            100e-6];   %pq
+        pw=
 
 
     end
-    ues=[A, pw, f];
+    ues=[A, ones(7,1)*pw, f];
 
 
 

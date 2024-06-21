@@ -58,14 +58,19 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     %Outter loop (Electrical Stimulation Control)
     ues = ElectricalStimulationController(SimuInfo,t);
 
-    %-----activations and fatigue------------
     switch SimuInfo.FES
         case 'off'
+
+
+    %-----activations and fatigues------------
             a0 = x(48:54,1);% physiologic base activation perturbed by oscillator
             ae = x(59:65,1); % activation due to electrical stimulation
             p  = x(66:72,1); % fatigue weighting function
             a=a0;
         case 'on'
+
+
+    %-----activations and fatigues------------
             a0 = x(48:54,1); % physiologic base activation perturbed by oscillator
             ae = x(59:65,1); % activation due to electrical stimulation
             p  = x(66:72,1); % fatigue weighting function

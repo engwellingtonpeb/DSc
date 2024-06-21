@@ -65,7 +65,15 @@ switch opt
 
     case 4
     % Tremor/FES - Identification Dynamics
+        
 
+        %DMDc
+
+
+        %SINDYc
+
+
+        %Save model
 
 
     case 5 
