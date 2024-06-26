@@ -46,7 +46,7 @@ function [ues] = ElectricalStimulationController(SimuInfo,t)
             0;... %fcu
             0];   %pq
 
-        pw=
+        pw=0;
 
 
     end
