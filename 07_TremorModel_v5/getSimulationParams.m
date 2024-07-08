@@ -174,13 +174,17 @@ if LinStabilityFlag
 
 %% Environment for RL Training
 
+
+eStimInputs=6; % parameter number of electrical stimulator
+numStatesFromPatient=3; % number of states from biomechanical model or voluntary+observer
+
 %Observation Info
-obsInfo= rlNumericSpec([3 1]);
+obsInfo= rlNumericSpec([numStatesFromPatient 1]);
 obsInfo.Name = 'observation';
 obsInfo.Description = 'Phi, error, error_int';
 
 %Action Info
-actInfo=rlNumericSpec([6 1], 'LowerLimit', [10; 100e-6; 4e-3; 4e-3; 4e-3;4e-3;],...
+actInfo=rlNumericSpec([eStimInputs 1], 'LowerLimit', [10; 100e-6; 4e-3; 4e-3; 4e-3;4e-3;],...
                              'UpperLimit', [50; 500e-6; 40e-3; 40e-3; 40e-3; 40e-3;]);
 actInfo.Name = 'action';
 actInfo.Description = 'f, pw, I_ch1, I_ch2, I_ch3, I_ch4';
@@ -201,8 +205,11 @@ numAct = actInfo.Dimension(1);
 
 %CRITIC NETWORK
 L = 5; % number of neurons
+
+
+
 statePath = [
-    featureInputLayer(3,'Normalization','none','Name','observation')
+    featureInputLayer(numStatesFromPatient,'Normalization','none','Name','observation')
     fullyConnectedLayer(L,'Name','fc1')
     reluLayer('Name','relu1')
     fullyConnectedLayer(L,'Name','fc2')
@@ -213,7 +220,7 @@ statePath = [
     fullyConnectedLayer(1,'Name','fc4')];
 
 actionPath = [
-    featureInputLayer(3,'Normalization','none','Name','action')
+    featureInputLayer(eStimInputs,'Normalization','none','Name','action')
     fullyConnectedLayer(L, 'Name', 'fc5')];
 
 criticNetwork = layerGraph(statePath);
@@ -221,7 +228,7 @@ criticNetwork = addLayers(criticNetwork, actionPath);
     
 criticNetwork = connectLayers(criticNetwork,'fc5','add/in2');
 
-plot(criticNetwork)
+%plot(criticNetwork)
 
 criticOptions = rlRepresentationOptions('LearnRate',1e-3,'GradientThreshold',1,'L2RegularizationFactor',1e-4,'UseDevice',"gpu");
 
@@ -232,14 +239,14 @@ critic = rlQValueRepresentation(criticNetwork,obsInfo,actInfo,...
 
 
 actorNetwork = [
-    featureInputLayer(3,'Normalization','none','Name','observation')
+    featureInputLayer(numStatesFromPatient,'Normalization','none','Name','observation')
     fullyConnectedLayer(L,'Name','fc1')
     reluLayer('Name','relu1')
     fullyConnectedLayer(L,'Name','fc2')
     reluLayer('Name','relu2')
     fullyConnectedLayer(L,'Name','fc3')
     reluLayer('Name','relu3')
-    fullyConnectedLayer(2,'Name','fc4')
+    fullyConnectedLayer(eStimInputs,'Name','fc4')
     tanhLayer('Name','tanh1')
     scalingLayer('Name','ActorScaling1','Scale',(max(actInfo.UpperLimit)),'Bias',.5)];
 
@@ -287,5 +294,5 @@ trainOpts = rlTrainingOptions(...
     'SaveAgentValue',1e5,...
     'SaveAgentDirectory', pwd + "\Agents");
 
-
+close all hidden
 end

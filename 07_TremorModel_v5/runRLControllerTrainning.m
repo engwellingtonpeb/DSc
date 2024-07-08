@@ -16,5 +16,5 @@ trainingStats = train(agent,env,trainOpts);
 
 
 %%
-simOptions = rlSimulationOptions('MaxSteps',200000);
-experience = sim(env,agent,simOptions);
+% simOptions = rlSimulationOptions('MaxSteps',200000);
+% experience = sim(env,agent,simOptions);
