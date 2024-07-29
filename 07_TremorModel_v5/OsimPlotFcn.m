@@ -39,7 +39,7 @@ switch SimuInfo.PltFlag
         
             subplot(5,1,1)
             plot(t,phi_ref,'go',t,rad2deg(phi),'r.')
-            axis([t-3 t -50 50])
+            axis([t-3 t -20 20])
             %drawnow;
             grid on;
             hold on;
@@ -56,7 +56,7 @@ switch SimuInfo.PltFlag
         
             subplot(5,1,3)
             plot(t,psi_ref,'go',t,rad2deg(psi),'k.')
-            axis([t-3 t -40 60])
+            axis([t-3 t 0 40])
             %drawnow;
             grid on;
             hold on;
@@ -71,7 +71,7 @@ switch SimuInfo.PltFlag
             hold on;
 
             subplot(5,1,5)
-            plot(t,ae(3),'b.',t,p(3),'r.')
+            plot(t,ae(2),'b.',t,p(2),'r.')
             axis([t-3 t -1 1])
             drawnow;
             grid on;

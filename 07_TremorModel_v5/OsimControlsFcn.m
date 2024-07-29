@@ -53,12 +53,33 @@ d=SimuInfo.du;
 r=[0.01 0.01 0.01 0.01 phi_ref psi_ref 0 0]'; % asup aecrl afcu apq phi psi phidot psidot
 
 
-% states
+% states (this version was tested based on the numerical derivative)
 
 phi=osimState.getY().get(17); % wrist flexion angle (rad)
 psi=osimState.getY().get(15); % pro_sup angle (rad)
-phi_dot=osimState.getY().get(37);
-psi_dot=osimState.getY().get(35);
+
+phi_dot=osimState.getY().get(37);% wrist flexion velocity (rad/s)
+psi_dot=osimState.getY().get(35);% pro_sup velocity (rad/s)
+
+%finding position and velocities on state vector
+% persistent PhiVec
+% if t==0
+%     PhiVec=[];
+% end
+% 
+% PhiVec=[PhiVec; rad2deg(osimState.getY().get(15))];
+% 
+% if t>0.01
+%     phiDOT=(PhiVec(end)-PhiVec(end-2))/SimuInfo.Ts;
+% else
+%     phiDOT=0;
+% end
+% 
+% 
+% 
+% 
+% [rad2deg(osimState.getY().get(15)) rad2deg(osimState.getY().get(35)) phiDOT]
+
 
 %[a_sup a_ecrl a_ecrb a_ecu a_fcr a_fcu a_pq]
 %[Xk(48) Xk(49) Xk(50) Xk(51) Xk(52) Xk(53) Xk(54)]
@@ -137,10 +158,10 @@ elseif t<2 && t>=0.1
 
 else
 
-    u(1)=(1e6*ALPHA1*u(1))+0.15*d(1)+0*d(2); %ECRL
-    u(2)=(1e6*ALPHA2*u(2))+0*d(1)+.15*d(2); %FCU
-    u(3)=(1e6*ALPHA3*u(3))+.15*d(1)+0*d(2); %PQ
-    u(4)=(1e6*ALPHA4*u(4))+0*d(1)+.15*d(2); %SUP
+    u(1)=(1e6*ALPHA1*u(1))+.1*d(1)+0*d(2); %ECRL
+    u(2)=(1e6*ALPHA2*u(2))+0*d(1)+.1*d(2); %FCU
+    u(3)=(1e6*ALPHA3*u(3))+.1*d(1)+0*d(2); %PQ
+    u(4)=(1e6*ALPHA4*u(4))+0*d(1)+.1*d(2); %SUP
 
 end
 

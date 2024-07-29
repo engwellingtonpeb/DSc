@@ -67,6 +67,7 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
             ae = x(59:65,1); % activation due to electrical stimulation
             p  = x(66:72,1); % fatigue weighting function
             a=a0;
+            
         case 'on'
 
 

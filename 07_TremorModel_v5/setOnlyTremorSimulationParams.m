@@ -38,8 +38,8 @@ if LinStabilityFlag
     SimuInfo.Tend=10;
 
     %Plotting
-    SimuInfo.PltFlag='on'; %[on | off]
-    SimuInfo.PltResolution=100;
+    SimuInfo.PltFlag='off'; %[on | off]
+    SimuInfo.PltResolution=50;
     
     %Tremor
     SimuInfo.Tremor='on' %[on | off]
@@ -53,7 +53,7 @@ if LinStabilityFlag
     integratorName = 'ode1'; %fixed step Dormand-Prince method of order 5
     integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3,'MaxStep', 10e-3);
     
-    
+    SimuInfo.RLTraining='off';
     
     
     %Distribuição de um paciente especíico

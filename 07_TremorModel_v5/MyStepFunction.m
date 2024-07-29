@@ -1,10 +1,20 @@
+%=========================================================================%
+%                   Federal University of Rio de Janeiro                  %
+%                  Biomedical Engineering Program - COPPE                 %
+%                   https://www.peb.ufrj.br/index.php/pt/                 %
+%                                                                         %
+% Advisor: Prof. Dr. Luciano L. Menegaldo                                 %
+% Doctoral Candidate: Wellington C. Pinheiro MSc.                         %
+%=========================================================================%
+%                                                                         %
+% This fuction works as step function of RL environment                   %
+%                                                                         %
+%=========================================================================%
 function [NextObs,Reward,IsDone,LoggedSignals,SimuInfo] = MyStepFunction(Action,LoggedSignals,SimuInfo,osimModel,osimState)
 import org.opensim.modeling.*
 global episode
 global n
-persistent ErrorVec
-persistent ErrorInt
-persistent u
+
 Ts=SimuInfo.Ts;
 t=n*Ts;
 
@@ -14,32 +24,43 @@ if t==0
     States=SimuInfo.InitStates;
 end
  
-% call plant
+% e-stim parameter by RL parsing to pulse generator
 SimuInfo.Action=Action;
-%[x_dot, controlValues] = OpenSimPlantFunction(t,States,osimModel,osimState,SimuInfo);
+SimuInfo.RLTraining='on'; %[on | off]
 
 
 % ODE Solver
-
 % Create a anonymous handle to the OpenSim plant function.
-    plantHandle = @(t,x) OsimPlantFcn(t, x, osimModel, osimState, SimuInfo);
+plantHandle = @(t,x) OsimPlantFcn(t, x, osimModel, osimState, SimuInfo);
 
-    [LoggedSignals.State]=ode4(plantHandle, [t t+Ts], States);
-
-    
-
-
+[LoggedSignals.State]=ode1(plantHandle, [t t+Ts], States);
 States=LoggedSignals.State(end,:)';
 
-NextObs=[0; 0; 0];
+NextObs=[States(18); States(16); States(38); States(36)]; % [Phi[rad]; Psi[rad]; Phidot[rad/s]; Psidot[rad/s]]
+
+
+phi_ref=deg2rad(SimuInfo.Setpoint(1));
+psi_ref=deg2rad(SimuInfo.Setpoint(2));
+
+%references 
+r=[phi_ref psi_ref 0 0]';
+erro=r-NextObs;
 
 % Reward
-if (t>=10)
-    Reward = 1;
+divergencePHI=logical(abs(rad2deg(States(18)))>=20);
+divergencePSI=logical(rad2deg(States(16))>=35 || rad2deg(States(16))<=10);
+BoundFlag= logical(divergencePHI || divergencePSI) ;
+[divergencePHI divergencePSI];
+
+Beta=.1;
+Q=eye(4);
+
+Reward=-Beta*(erro'*Q*erro)-1000*BoundFlag
+
+if (t>=10 || (BoundFlag && t>3))
     IsDone=1;
     episode=episode+1;
 else
-    Reward = -1;
     IsDone=0;
 end
 

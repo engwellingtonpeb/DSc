@@ -14,7 +14,7 @@
 %=========================================================================%
 
 clc
-clear all
+clear
 close all hidden
 pathconfig
 import org.opensim.modeling.*
@@ -35,6 +35,7 @@ switch opt
 
     case 1 
     %Individualized Tremor Model SIMULATION
+        
         % set patient parameters or use a dummy parameter vector
         setOnlyTremorSimulationParams;
 
@@ -44,6 +45,7 @@ switch opt
 
     case 2 
     % Individualized Tremor Model TUNING
+        
         % get and prepare patient data
         getPatientSignals;
 

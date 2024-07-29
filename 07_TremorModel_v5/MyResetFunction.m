@@ -97,7 +97,7 @@ n=0;
 
 % Return initial environment state variables as logged signals.
 LoggedSignal.State = InitStates;
-InitialObservation = [-10;0;0];
+InitialObservation = [-10;0;0;0];
 
 
 close all

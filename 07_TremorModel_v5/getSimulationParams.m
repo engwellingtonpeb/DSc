@@ -37,7 +37,7 @@ if LinStabilityFlag
 
 
     %Plotting 
-    SimuInfo.PltFlag='on'; %[on | off]
+    SimuInfo.PltFlag='off'; %[on | off]
     SimuInfo.PltResolution=100;
     
     %Params tuned by optimization
@@ -176,16 +176,16 @@ if LinStabilityFlag
 
 
 eStimInputs=6; % parameter number of electrical stimulator
-numStatesFromPatient=3; % number of states from biomechanical model or voluntary+observer
+numStatesFromPatient=4; % number of states from biomechanical model or voluntary+observer
 
 %Observation Info
 obsInfo= rlNumericSpec([numStatesFromPatient 1]);
 obsInfo.Name = 'observation';
-obsInfo.Description = 'Phi, error, error_int';
+obsInfo.Description = 'Phi, Psi, error_int';
 
 %Action Info
 actInfo=rlNumericSpec([eStimInputs 1], 'LowerLimit', [10; 100e-6; 4e-3; 4e-3; 4e-3;4e-3;],...
-                             'UpperLimit', [50; 500e-6; 40e-3; 40e-3; 40e-3; 40e-3;]);
+                                       'UpperLimit', [40; 500e-6; 40e-3; 40e-3; 40e-3; 40e-3;]);
 actInfo.Name = 'action';
 actInfo.Description = 'f, pw, I_ch1, I_ch2, I_ch3, I_ch4';
 
@@ -277,7 +277,7 @@ agent = rlDDPGAgent(actor,critic,agentOpts);
 
 
 
-% load('Agent109.mat')
+
 %% Treinamento
 
 % training the agent 
@@ -294,5 +294,5 @@ trainOpts = rlTrainingOptions(...
     'SaveAgentValue',1e5,...
     'SaveAgentDirectory', pwd + "\Agents");
 
-close all hidden
+%close all hidden
 end
