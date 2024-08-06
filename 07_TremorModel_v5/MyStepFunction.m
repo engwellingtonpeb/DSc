@@ -55,7 +55,11 @@ BoundFlag= logical(divergencePHI || divergencePSI) ;
 Beta=.1;
 Q=eye(4);
 
-Reward=-Beta*(erro'*Q*erro)-1000*BoundFlag
+if t>=3
+    Reward=-Beta*(erro'*Q*erro)-1000*BoundFlag
+else
+    Reward=0;
+end
 
 if (t>=10 || (BoundFlag && t>3))
     IsDone=1;
