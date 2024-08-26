@@ -82,7 +82,7 @@ switch SimuInfo.PltFlag
 
 
     otherwise
-            t
+            t;
 end
 
 

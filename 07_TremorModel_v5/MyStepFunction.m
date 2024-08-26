@@ -52,11 +52,12 @@ divergencePSI=logical(rad2deg(States(16))>=35 || rad2deg(States(16))<=10);
 BoundFlag= logical(divergencePHI || divergencePSI) ;
 [divergencePHI divergencePSI];
 
-Beta=.1;
-Q=eye(4);
+Beta=1;
+Q=diag([1,1,1,1]);
 
 if t>=3
     Reward=-Beta*(erro'*Q*erro)-1000*BoundFlag
+    SimuInfo.Action
 else
     Reward=0;
 end
