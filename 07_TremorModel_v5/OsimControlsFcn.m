@@ -93,8 +93,6 @@ afcu = SimuInfo.Xk(53);
 apq  = SimuInfo.Xk(54);
 
 
-
-
 x=[asup aecrl afcu apq phi psi phi_dot psi_dot]';
 
 
@@ -114,6 +112,13 @@ eps_psi=rad2deg(e(6));
 ERR_POS=[ERR_POS; [eps_phi eps_psi]];
 
 
+
+%% Energy Phi and Psi on Tremor range of Freq.
+
+global E
+[E] = SlidingWindowEnergies(x, SimuInfo)
+
+%SimuInfo.TremorEnergy=E;
 %% Control Signal Generation    
 
 if length(xk1)<(length(SimuInfo.Ak))
@@ -156,12 +161,19 @@ elseif t<2 && t>=0.1
     u(3)=1e6*ALPHA3*u(3); %PQ
     u(4)=1e6*ALPHA4*u(4); %SUP
 
-else
+elseif t>2 && t<=7
 
     u(1)=(1e6*ALPHA1*u(1))+.1*d(1)+0*d(2); %ECRL
     u(2)=(1e6*ALPHA2*u(2))+0*d(1)+.1*d(2); %FCU
     u(3)=(1e6*ALPHA3*u(3))+.1*d(1)+0*d(2); %PQ
     u(4)=(1e6*ALPHA4*u(4))+0*d(1)+.1*d(2); %SUP
+
+else
+
+    u(1)=2e6*ALPHA1*u(1); %ECRL
+    u(2)=1e6*ALPHA2*u(2); %FCU
+    u(3)=1e6*ALPHA3*u(3); %PQ
+    u(4)=1e6*ALPHA4*u(4); %SUP
 
 end
 

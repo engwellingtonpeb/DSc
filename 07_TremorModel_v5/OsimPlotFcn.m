@@ -69,9 +69,10 @@ switch SimuInfo.PltFlag
             drawnow;
             grid on;
             hold on;
-
+            
+            global E
             subplot(5,1,5)
-            plot(t,ae(2),'b.',t,p(2),'r.')
+            plot(t,E(1)+E(2),'b.')
             axis([t-3 t -1 1])
             drawnow;
             grid on;

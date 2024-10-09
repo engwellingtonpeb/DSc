@@ -38,7 +38,7 @@ if LinStabilityFlag
     SimuInfo.Tend=10;
 
     %Plotting
-    SimuInfo.PltFlag='off'; %[on | off]
+    SimuInfo.PltFlag='on'; %[on | off]
     SimuInfo.PltResolution=50;
     
     %Tremor
@@ -55,6 +55,7 @@ if LinStabilityFlag
     
     SimuInfo.RLTraining='off';
     
+    SimuInfo.TremorEnergy=[];
     
     %Distribuição de um paciente especíico
     load('distrib_tremor_paciente01.mat') % paciente
