@@ -38,6 +38,9 @@ States=LoggedSignals.State(end,:)';
 
 NextObs=[States(18); States(16); States(38); States(36)]; % [Phi[rad]; Psi[rad]; Phidot[rad/s]; Psidot[rad/s]]
 
+if any(isnan(NextObs)) || any(isinf(NextObs))
+    error('Invalid values detected in NextObs');
+end
 
 phi_ref=deg2rad(SimuInfo.Setpoint(1));
 psi_ref=deg2rad(SimuInfo.Setpoint(2));

@@ -6,9 +6,10 @@
 % Advisor: Prof. Dr. Luciano L. Menegaldo                                 %
 % Doctoral Candidate: Wellington C. Pinheiro MSc.                         %
 %                                                                         %
-% This function implements the control law for FES tremor suppression     %
+% This function selects the control law for FES tremor suppression        %
 %                                                                         %
-%                                                                         %
+% It also includes the cross-coupled stimulation dynamics among           %
+% electrodes                                                              %
 %=========================================================================%
 function [ues] = ElectricalStimulationController(SimuInfo,t)
 
@@ -44,6 +45,12 @@ switch SimuInfo.RLTraining
           
         end
 
+    case 'ESC'
+        [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo)
+
+
+
+
     otherwise
         % if t==0
         %     pyenv('Version', 'C:\Users\engwe\anaconda3\envs\mat_py\python.exe');
@@ -52,7 +59,7 @@ switch SimuInfo.RLTraining
         freq=40; %Hz
 
     
-        if t<3
+        if t<3 % it avoids electrical stimulation starts almost simultaneously to tremor. 
     
             A=[ 0;... %sup
                 0;... %ecrl

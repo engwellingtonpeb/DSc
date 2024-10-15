@@ -47,7 +47,7 @@ function [E] = SlidingWindowEnergies(newData, SimuInfo)
     end
 
 
-E=bandpower(lastOneSecondSignal,1/SimuInfo.Ts,[3.5 8]);
+E=bandpower(lastOneSecondSignal,1/SimuInfo.Ts,[4 8]);
 
 end
 
