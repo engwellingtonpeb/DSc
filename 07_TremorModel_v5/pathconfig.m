@@ -16,6 +16,7 @@ clc
 close all
 
 import org.opensim.modeling.*
+opengl('save', 'software');
 
 name = getenv('COMPUTERNAME'); 
 

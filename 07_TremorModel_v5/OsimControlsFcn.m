@@ -20,7 +20,7 @@
 % Output:
 %   outVector is an org.opensim.Modeling.Vector of the control values
 % -----------------------------------------------------------------------
-function u_control = OsimControlsFcn(osimState,t,SimuInfo)
+function [u_control] = OsimControlsFcn(osimState,t,SimuInfo)
 
     
     % Check Size
@@ -35,7 +35,6 @@ function u_control = OsimControlsFcn(osimState,t,SimuInfo)
 %% Read plant angles for feedback and avoid NaN 
 
 persistent ERR_POS
-
 persistent xk1
 persistent u
 
@@ -114,11 +113,10 @@ ERR_POS=[ERR_POS; [eps_phi eps_psi]];
 
 
 %% Energy Phi and Psi on Tremor range of Freq.
-
 global E
+
 [E] = SlidingWindowEnergies(x, SimuInfo);
 
-%SimuInfo.TremorEnergy=E;
 %% Control Signal Generation    
 
 if length(xk1)<(length(SimuInfo.Ak))

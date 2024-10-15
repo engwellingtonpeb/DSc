@@ -14,7 +14,8 @@ clear all
 close all hidden
 
 pathconfig
-opengl('save', 'software');
+
+global SimuInfo
 SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
 
@@ -50,8 +51,10 @@ if LinStabilityFlag
     %Electrical Stimulation
     SimuInfo.FES='on'; %[on | off]
     SimuInfo.FESProtocol='RL' %[cc - O.L. co-contraction | op - O.L. out-of-phase...
-    %                            RL - Reinforcement Learning]
+    %                      RL - Reinforcement Learning]
     
+    SimuInfo.TremorEnergy=[];
+
     %sliderapp()
     
     %Config Simulations using Matlab Integrator
