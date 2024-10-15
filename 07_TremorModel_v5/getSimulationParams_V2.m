@@ -14,6 +14,7 @@ clear all
 close all hidden
 
 pathconfig
+opengl('save', 'software');
 SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
 
@@ -203,96 +204,92 @@ numObs = obsInfo.Dimension(1);
 actInfo =getActionInfo(env);
 numAct = actInfo.Dimension(1);
 
-%CRITIC NETWORK
-L = 5; % number of neurons
+% Optimized Number of Neurons per Layer
+L = 128; % Increase number of neurons per layer for more expressive capacity
 
-
-
+% CRITIC NETWORK
 statePath = [
-    featureInputLayer(numStatesFromPatient,'Normalization','none','Name','observation')
-    fullyConnectedLayer(L,'Name','fc1')
-    reluLayer('Name','relu1')
-    fullyConnectedLayer(L,'Name','fc2')
-    additionLayer(2,'Name','add')
-    reluLayer('Name','relu2')
-    fullyConnectedLayer(L,'Name','fc3')
-    reluLayer('Name','relu3')
-    fullyConnectedLayer(1,'Name','fc4')];
+    featureInputLayer(numStatesFromPatient, 'Normalization', 'none', 'Name', 'observation')
+    fullyConnectedLayer(L, 'Name', 'fc1')
+    reluLayer('Name', 'relu1')
+    fullyConnectedLayer(L, 'Name', 'fc2')
+    reluLayer('Name', 'relu2')
+    fullyConnectedLayer(L, 'Name', 'fc3')
+    additionLayer(2, 'Name', 'add')
+    reluLayer('Name', 'relu3')
+    fullyConnectedLayer(1, 'Name', 'fc4')];
 
 actionPath = [
-    featureInputLayer(eStimInputs,'Normalization','none','Name','action')
+    featureInputLayer(eStimInputs, 'Normalization', 'none', 'Name', 'action')
     fullyConnectedLayer(L, 'Name', 'fc5')];
 
 criticNetwork = layerGraph(statePath);
 criticNetwork = addLayers(criticNetwork, actionPath);
-    
-criticNetwork = connectLayers(criticNetwork,'fc5','add/in2');
+criticNetwork = connectLayers(criticNetwork, 'fc5', 'add/in2');
 
-%plot(criticNetwork)
+% Critic Representation Options
+criticOptions = rlRepresentationOptions('LearnRate', 5e-4, ... % Reduced learning rate for better stability
+                                        'GradientThreshold', 5, ... % Increased gradient threshold
+                                        'L2RegularizationFactor', 5e-4, ... % Increased regularization to avoid overfitting
+                                        'UseDevice', "cpu"); % Use CPU for now to avoid GPU issues
 
-criticOptions = rlRepresentationOptions('LearnRate',1e-3,'GradientThreshold',1,'L2RegularizationFactor',1e-4,'UseDevice',"cpu");
+critic = rlQValueRepresentation(criticNetwork, obsInfo, actInfo, ...
+    'Observation', {'observation'}, 'Action', {'action'}, criticOptions);
 
-critic = rlQValueRepresentation(criticNetwork,obsInfo,actInfo,...
-    'Observation',{'observation'},'Action',{'action'},criticOptions);
-
-% ACTOR
-
-
+% ACTOR NETWORK
 actorNetwork = [
-    featureInputLayer(numStatesFromPatient,'Normalization','none','Name','observation')
-    fullyConnectedLayer(L,'Name','fc1')
-    reluLayer('Name','relu1')
-    fullyConnectedLayer(L,'Name','fc2')
-    reluLayer('Name','relu2')
-    fullyConnectedLayer(L,'Name','fc3')
-    reluLayer('Name','relu3')
-    fullyConnectedLayer(eStimInputs,'Name','fc4')
-    tanhLayer('Name','tanh1')
-    scalingLayer('Name','ActorScaling1','Scale',(max(actInfo.UpperLimit)),'Bias',.5)];
+    featureInputLayer(numStatesFromPatient, 'Normalization', 'none', 'Name', 'observation')
+    fullyConnectedLayer(L, 'Name', 'fc1')
+    reluLayer('Name', 'relu1')
+    fullyConnectedLayer(L, 'Name', 'fc2')
+    reluLayer('Name', 'relu2')
+    fullyConnectedLayer(L, 'Name', 'fc3')
+    reluLayer('Name', 'relu3')
+    fullyConnectedLayer(eStimInputs, 'Name', 'fc4')
+    tanhLayer('Name', 'tanh1')
+    scalingLayer('Name', 'ActorScaling1', 'Scale', (actInfo.UpperLimit - actInfo.LowerLimit) / 2, 'Bias', (actInfo.UpperLimit + actInfo.LowerLimit) / 2)];
+
+% Actor Representation Options
+actorOptions = rlRepresentationOptions('LearnRate', 1e-4, ... % Lower learning rate to improve convergence stability
+                                       'GradientThreshold', 5, ... % Increased gradient threshold
+                                       'L2RegularizationFactor', 5e-4, ... % Increased regularization to prevent overfitting
+                                       'UseDevice', "cpu"); % Use CPU for now to avoid GPU issues
+
+actor = rlDeterministicActorRepresentation(actorNetwork, obsInfo, actInfo, ...
+    'Observation', {'observation'}, 'Action', {'ActorScaling1'}, actorOptions);
 
 
-
-actorOptions = rlRepresentationOptions('LearnRate',1e-3,'GradientThreshold',1,'L2RegularizationFactor',1e-4,'UseDevice',"cpu");
-actor = rlDeterministicActorRepresentation(actorNetwork,obsInfo,actInfo,...
-    'Observation',{'observation'},'Action',{'ActorScaling1'},actorOptions);
-
-
-
-
-
-% 3) DDPG algorithm for learning
-     
+% DDPG Agent Options for Faster Convergence
 agentOpts = rlDDPGAgentOptions(...
-    'SampleTime',SimuInfo.Ts,...
-    'TargetSmoothFactor',1e-1,...
-    'ExperienceBufferLength',1e6,...
-    'DiscountFactor',0.95,...
-    'NumStepsToLookAhead',4,...
-    'MiniBatchSize',32);
-agentOpts.NoiseOptions.Variance   = .1 ;
-agentOpts.NoiseOptions.VarianceDecayRate   = 1e-6;
+    'SampleTime', SimuInfo.Ts, ...
+    'TargetSmoothFactor', 1e-2, ... % Lower value for smoother target network updates
+    'ExperienceBufferLength', 2e6, ... % Increase buffer size to improve learning from past experiences
+    'DiscountFactor', 0.99, ... % Increased discount factor to prioritize long-term rewards
+    'MiniBatchSize', 128, ... % Larger batch size for better gradient estimation
+    'NumStepsToLookAhead', 5, ... % Increase lookahead steps to better estimate future rewards
+    'ResetExperienceBufferBeforeTraining', false); % Avoid resetting buffer to keep accumulated experiences
 
-% effectively creating the agent
-agent = rlDDPGAgent(actor,critic,agentOpts);
+% Adjust Noise for Exploration-Exploitation Balance
+agentOpts.NoiseOptions.Variance = 0.2; % Increased initial noise for better exploration
+agentOpts.NoiseOptions.VarianceDecayRate = 1e-4; % Faster decay rate to encourage more exploitation over time
 
+% Creating the DDPG Agent
+agent = rlDDPGAgent(actor, critic, agentOpts);
 
-
-
-%% Treinamento
-
-% training the agent 
-
+% Training Options for Optimized Convergence
 trainOpts = rlTrainingOptions(...
-    'MaxEpisodes', 5000, ...
-    'MaxStepsPerEpisode', 2e6, ...
+    'MaxEpisodes', 3000, ... % Reduced max episodes for faster training cycles
+    'MaxStepsPerEpisode', 1e4, ... % Reduced steps per episode for more frequent updates
     'Verbose', true, ...
-    'Plots','none',...
-    'StopTrainingCriteria','AverageReward',...
-    'StopTrainingValue',66e6,...
-    'UseParallel',0,...
-    'SaveAgentCriteria',"EpisodeReward",...
-    'SaveAgentValue',1e5,...
+    'Plots', 'training-progress', ... % Enable training plot to monitor progress
+    'StopTrainingCriteria', 'AverageReward', ...
+    'StopTrainingValue', 1e5, ... % Adjusted stop value for convergence criteria
+    'UseParallel', false, ... % Disable parallel for now, can enable after stability
+    'SaveAgentCriteria', "EpisodeReward", ...
+    'SaveAgentValue', 1e4, ... % Lower threshold to save agents with good performance
     'SaveAgentDirectory', pwd + "\Agents");
 
-%close all hidden
+% Start Training
+trainingResults = train(agent, env, trainOpts);
+
 end

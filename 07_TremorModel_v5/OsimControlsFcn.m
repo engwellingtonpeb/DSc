@@ -116,7 +116,7 @@ ERR_POS=[ERR_POS; [eps_phi eps_psi]];
 %% Energy Phi and Psi on Tremor range of Freq.
 
 global E
-[E] = SlidingWindowEnergies(x, SimuInfo)
+[E] = SlidingWindowEnergies(x, SimuInfo);
 
 %SimuInfo.TremorEnergy=E;
 %% Control Signal Generation    

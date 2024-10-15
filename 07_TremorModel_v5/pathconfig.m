@@ -53,7 +53,7 @@ elseif strcmp(name,'MARCOPOLO')
 
 elseif strcmp(name,'ENGWELLSURFACE')
 
-    addpath('..\Tuning_Feature')
+    addpath('\02_DSc_v5\DSc\07_TremorModel_v5\Tuning_Feature')
    
     addpath('\02_DSc_v5\DSc\02_Coletas\')
     addpath('\02_DSc_v5\DSc\03_ODE_Solvers\')

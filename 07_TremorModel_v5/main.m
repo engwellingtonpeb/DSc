@@ -82,7 +82,7 @@ switch opt
     %e-stim RL CONTROL LAW TRAINNING
 
         %get patient parameters or use a dummy parameter vector
-        getSimulationParams;
+        getSimulationParams_V2;
 
         %RL Controller Trainning
         runRLControllerTrainning
