@@ -1,4 +1,4 @@
-%=========================================================================%
+=========================================================================%
 %                   Federal University of Rio de Janeiro                  %
 %                  Biomedical Engineering Program - COPPE                 %
 %                   https://www.peb.ufrj.br/index.php/pt/                 %
