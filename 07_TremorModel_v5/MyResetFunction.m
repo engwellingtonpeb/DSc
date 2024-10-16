@@ -1,4 +1,6 @@
 function [InitialObservation, LoggedSignal] = MyResetFunction(osimModel,osimState)
+clearvars -except agent env trainOpts osimModel osimState
+
 
 global States
 global n

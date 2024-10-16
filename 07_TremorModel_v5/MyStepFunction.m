@@ -62,8 +62,8 @@ Beta=1;
 Q1=diag([1,1,1,1]);
 Q2=diag([1,1,1,1]);
 if t>=3
-    Reward=-(erro'*Q1*erro+E*Q2*E'+100*BoundFlag)
-    SimuInfo.Action
+    Reward=-(E*Q2*E'+100*BoundFlag);
+    SimuInfo.Action;
 else
     Reward=0;
 end
