@@ -14,11 +14,14 @@ function [NextObs,Reward,IsDone,LoggedSignals,SimuInfo] = MyStepFunction(Action,
 import org.opensim.modeling.*
 global episode
 global n
+global States
+
+global E
 
 Ts=SimuInfo.Ts;
 t=n*Ts;
 
-global States
+
 
 if t==0
     States=SimuInfo.InitStates;
@@ -56,11 +59,11 @@ BoundFlag= logical(divergencePHI || divergencePSI) ;
 [divergencePHI divergencePSI];
 
 Beta=1;
-Q=diag([1,1,1,1]);
-
+Q1=diag([1,1,1,1]);
+Q2=diag([1,1,1,1]);
 if t>=3
-    Reward=-Beta*(erro'*Q*erro)-1000*BoundFlag
-    SimuInfo.Action
+    Reward=-(E*Q2*E'+100*BoundFlag);
+    SimuInfo.Action;
 else
     Reward=0;
 end

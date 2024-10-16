@@ -14,11 +14,11 @@
 %=========================================================================%
 
 clc
-clear
+clearvars
 close all hidden
 pathconfig
 import org.opensim.modeling.*
-
+datestr(now)
 prompt="Select an operation mode:\n" + ...
     "(1) - Individualized Tremor Model Simulation \n" + ...
     "(2) - Individualized Tremor Model Tuning \n" + ...

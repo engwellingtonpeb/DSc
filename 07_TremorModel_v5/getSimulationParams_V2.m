@@ -10,11 +10,12 @@
 %=========================================================================%
 
 clc
-clear all
+clearvars
 close all hidden
 
 pathconfig
-opengl('save', 'software');
+
+datestr(now)
 SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
 
@@ -50,8 +51,10 @@ if LinStabilityFlag
     %Electrical Stimulation
     SimuInfo.FES='on'; %[on | off]
     SimuInfo.FESProtocol='RL' %[cc - O.L. co-contraction | op - O.L. out-of-phase...
-    %                            RL - Reinforcement Learning]
+    %                      RL - Reinforcement Learning]
     
+    SimuInfo.TremorEnergy=[];
+
     %sliderapp()
     
     %Config Simulations using Matlab Integrator
@@ -205,7 +208,7 @@ actInfo =getActionInfo(env);
 numAct = actInfo.Dimension(1);
 
 % Optimized Number of Neurons per Layer
-L = 128; % Increase number of neurons per layer for more expressive capacity
+L = 64; % Increase number of neurons per layer for more expressive capacity
 
 % CRITIC NETWORK
 statePath = [
@@ -231,7 +234,7 @@ criticNetwork = connectLayers(criticNetwork, 'fc5', 'add/in2');
 criticOptions = rlRepresentationOptions('LearnRate', 5e-4, ... % Reduced learning rate for better stability
                                         'GradientThreshold', 5, ... % Increased gradient threshold
                                         'L2RegularizationFactor', 5e-4, ... % Increased regularization to avoid overfitting
-                                        'UseDevice', "cpu"); % Use CPU for now to avoid GPU issues
+                                        'UseDevice', "gpu"); % Use CPU for now to avoid GPU issues
 
 critic = rlQValueRepresentation(criticNetwork, obsInfo, actInfo, ...
     'Observation', {'observation'}, 'Action', {'action'}, criticOptions);
@@ -253,7 +256,7 @@ actorNetwork = [
 actorOptions = rlRepresentationOptions('LearnRate', 1e-4, ... % Lower learning rate to improve convergence stability
                                        'GradientThreshold', 5, ... % Increased gradient threshold
                                        'L2RegularizationFactor', 5e-4, ... % Increased regularization to prevent overfitting
-                                       'UseDevice', "cpu"); % Use CPU for now to avoid GPU issues
+                                       'UseDevice', "gpu"); % Use CPU for now to avoid GPU issues
 
 actor = rlDeterministicActorRepresentation(actorNetwork, obsInfo, actInfo, ...
     'Observation', {'observation'}, 'Action', {'ActorScaling1'}, actorOptions);
@@ -265,7 +268,7 @@ agentOpts = rlDDPGAgentOptions(...
     'TargetSmoothFactor', 1e-2, ... % Lower value for smoother target network updates
     'ExperienceBufferLength', 2e6, ... % Increase buffer size to improve learning from past experiences
     'DiscountFactor', 0.99, ... % Increased discount factor to prioritize long-term rewards
-    'MiniBatchSize', 128, ... % Larger batch size for better gradient estimation
+    'MiniBatchSize', 64, ... % Larger batch size for better gradient estimation
     'NumStepsToLookAhead', 5, ... % Increase lookahead steps to better estimate future rewards
     'ResetExperienceBufferBeforeTraining', false); % Avoid resetting buffer to keep accumulated experiences
 
@@ -281,12 +284,12 @@ trainOpts = rlTrainingOptions(...
     'MaxEpisodes', 3000, ... % Reduced max episodes for faster training cycles
     'MaxStepsPerEpisode', 1e4, ... % Reduced steps per episode for more frequent updates
     'Verbose', true, ...
-    'Plots', 'training-progress', ... % Enable training plot to monitor progress
+    'Plots', 'none', ... % Enable training plot to monitor progress
     'StopTrainingCriteria', 'AverageReward', ...
     'StopTrainingValue', 1e5, ... % Adjusted stop value for convergence criteria
     'UseParallel', false, ... % Disable parallel for now, can enable after stability
     'SaveAgentCriteria', "EpisodeReward", ...
-    'SaveAgentValue', 1e4, ... % Lower threshold to save agents with good performance
+    'SaveAgentValue', -50, ... % Lower threshold to save agents with good performance
     'SaveAgentDirectory', pwd + "\Agents");
 
 % Start Training
