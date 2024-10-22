@@ -51,7 +51,7 @@ else
             pw=Upw;
             
             A=[ 0*Ua(1);... %sup
-                2*Ua(2);... %ecrl
+                Ua(2);... %ecrl
                 0;... %ecrb
                 0;... %ecu
                 0*Ua(3);... %fcr
