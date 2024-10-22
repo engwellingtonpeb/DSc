@@ -29,7 +29,7 @@ end
  
 % e-stim parameter by RL parsing to pulse generator
 SimuInfo.Action=Action;
-SimuInfo.RLTraining='on'; %[on | off]
+% SimuInfo.RLTraining='on'; %[on | off]
 
 
 % ODE Solver

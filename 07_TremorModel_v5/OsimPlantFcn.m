@@ -26,6 +26,7 @@
 %=========================================================================%
 function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
 
+    global E
     % Update state with current values  
     osimState.setTime(t);
     numVar = SimuInfo.Nstates;
@@ -48,15 +49,16 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
     osimModel.computeStateVariableDerivatives(osimState);
     % Update model with control values
     SimuInfo.Xk=x;
+
     % Inner loop (physiological muscle control)
-    %[u_sup u_ecrl u_ecrb u_ecu u_fcr u_fcu u_pq]
+        %[u_sup u_ecrl u_ecrb u_ecu u_fcr u_fcu u_pq]
     u0 = OsimControlsFcn(osimState,t,SimuInfo);
     if isnan(u0)
         disp('u0 fault - line 55 OsimPlantFcn')
     end
 
     %Outter loop (Electrical Stimulation Control)
-    ues = ElectricalStimulationController(SimuInfo,t);
+    ues = ElectricalStimulationController(E,SimuInfo,t);
 
     switch SimuInfo.FES
         case 'off'
