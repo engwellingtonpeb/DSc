@@ -178,14 +178,13 @@ if LinStabilityFlag
 
 %% Environment for RL Training
 
-
 eStimInputs=6; % parameter number of electrical stimulator
 numStatesFromPatient=4; % number of states from biomechanical model or voluntary+observer
 
 %Observation Info
 obsInfo= rlNumericSpec([numStatesFromPatient 1]);
 obsInfo.Name = 'observation';
-obsInfo.Description = 'Phi, Psi, error_int';
+obsInfo.Description = 'Phi, Psi, Phidot, Psidot';
 
 %Action Info
 actInfo=rlNumericSpec([eStimInputs 1], 'LowerLimit', [10; 100e-6; 4e-3; 4e-3; 4e-3;4e-3;],...
@@ -289,7 +288,7 @@ trainOpts = rlTrainingOptions(...
     'StopTrainingValue', 1e5, ... % Adjusted stop value for convergence criteria
     'UseParallel', false, ... % Disable parallel for now, can enable after stability
     'SaveAgentCriteria', "EpisodeReward", ...
-    'SaveAgentValue', -50, ... % Lower threshold to save agents with good performance
+    'SaveAgentValue', -104, ... % Lower threshold to save agents with good performance
     'SaveAgentDirectory', pwd + "\Agents");
 
 % Start Training

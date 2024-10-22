@@ -22,14 +22,13 @@ Ts=SimuInfo.Ts;
 t=n*Ts;
 
 
-
 if t==0
     States=SimuInfo.InitStates;
 end
  
 % e-stim parameter by RL parsing to pulse generator
 SimuInfo.Action=Action;
-SimuInfo.RLTraining='on'; %[on | off]
+% SimuInfo.RLTraining='on'; %[on | off]
 
 
 % ODE Solver
@@ -61,19 +60,28 @@ BoundFlag= logical(divergencePHI || divergencePSI) ;
 Beta=1;
 Q1=diag([1,1,1,1]);
 Q2=diag([1,1,1,1]);
-if t>=3
-    Reward=-(E*Q2*E'+100*BoundFlag);
-    SimuInfo.Action;
-else
-    Reward=0;
-end
 
-if (t>=10 || (BoundFlag && t>3))
+
+
+if t<3
+    Reward=0;
+    IsDone=0;
+
+elseif(t>=3 && ~BoundFlag)
+    Reward=-(E*Q2*E');
+    IsDone=0;
+    
+elseif(t>=3 && BoundFlag) 
+    Reward=-1e3;
     IsDone=1;
     episode=episode+1;
-else
-    IsDone=0;
+
+elseif (t>=10)
+    Reward=1e2;
+    IsDone=1;
 end
+
+
 
 
 n=n+1;
