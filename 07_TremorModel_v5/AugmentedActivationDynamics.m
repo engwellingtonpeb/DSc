@@ -112,14 +112,18 @@ switch StatusFES
             f=ues(i,3);
             a=ae(i);
             
-            Ibar=1;%I/Imax;
+            Ibar=I/Imax;
             % Pulse Width Characteristic
             if pw0<=pwd
                 ar=0;
             elseif (pwd<pw0) && (pw0<pws)
                 ar= Ibar*(1/(pws-pwd))*(pw0-pwd);
             else % pw0>= pws
-                ar=1;
+                if Ibar==1
+                    ar=1;
+                else
+                    ar=Ibar;
+                end
             end
 
             % Frequency Characteristic
@@ -134,7 +138,7 @@ switch StatusFES
             u=ar*q;
             ae_dot(i)=(1/tau_ac)*(u^2-u*a)+(1/tau_da)*(u-a); %[2] Pandy, M. G. (2001).
             
-            
+            %[ar q u I pw0 f]
 
             if any(isnan(u0))
                 disp('Problema U0 140')

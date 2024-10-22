@@ -19,13 +19,16 @@ close all hidden
 pathconfig
 import org.opensim.modeling.*
 datestr(now)
+
+
 prompt="Select an operation mode:\n" + ...
     "(1) - Individualized Tremor Model Simulation \n" + ...
     "(2) - Individualized Tremor Model Tuning \n" + ...
     "(3) - Open-Loop e-stim Simulation \n" + ...
     "(4) - Pathological Tremor / ES - Identification \n"+...
     "(5) - e-stim RL controller Training and Simulation \n" + ...
-    "(6) - e-stim MPC/RL controller design and Simulation \n \n" + ...
+    "(6) - e-stim MPC/RL controller design and Simulation \n" + ...
+    "(7) - e-stim ESC controller \n \n" + ...
     "Option:";
 
 opt=input(prompt);
@@ -93,6 +96,13 @@ switch opt
 
         disp('Module still being developed...')
         disp('   ')
+
+
+    case 7
+        %e-stim ESC CONTROL LAW 
+
+        setFESParamsSimulation
+        runFESCLSimulation
 
 end
 

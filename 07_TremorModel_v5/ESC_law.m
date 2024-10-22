@@ -1,90 +1,81 @@
-%=========================================================================%
-%                   Federal University of Rio de Janeiro                  %
-%                  Biomedical Engineering Program - COPPE                 %
-%                   https://www.peb.ufrj.br/index.php/pt/                 %
-%                                                                         %
-% Advisor: Prof. Dr. Luciano L. Menegaldo                                 %
-% Doctoral Candidate: Wellington C. Pinheiro MSc.                         %
-%                                                                         %
-% This function implements Extremum Seeking Control Law to the electrical %
-% stimulation protocol. Manipulating amplitudes, pulse width and freq to  %
-% minimize tremor Energy                                                  %
-%                                                                         %
-%                                                                         %
-%=========================================================================%
-
-
 function [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo)
-%Ua - Amplitudes
-%Upw - pulse widths
-%Uf - frequency
-    
-    if t=0
-        % Inicialização dos parâmetros
-        amp = zeros(4,1); % Amplitudes iniciais [amp1; amp2; amp3; amp4]
-        pw = 0;           % Largura de pulso inicial
-        freq = 0;         % Frequência inicial
-    
 
+persistent amp_history pw_history counter freq_history J_history a k omega amp pw freq phase_shift_amp
 
-        % Parâmetros do controlador
-        omega = [1; 1; 1; 1; 1; 1]; % Frequências das perturbações (rad/s)
-        k = 0.1;                    % Ganho do controlador
-        % Sinais de perturbação
-        a = 0.01; % Amplitude das perturbações
-    
-        % Inicialização dos registros
-        N = length(t);
-        amp_history = zeros(4,N);
-        pw_history = zeros(1,N);
-        freq_history = zeros(1,N);
-        J_history = zeros(1,N);
-    
-        % Inicialização das variáveis filtradas
-        grad_amp_filt = zeros(4,1);
-        grad_pw_filt = 0;
-        grad_freq_filt = 0;
-
-    end
-
-        % Sinais de perturbação
-        d_amp = a * sin(omega(1:4) * t(i));
-        d_pw = a * sin(omega(5) * t(i));
-        d_freq = a * sin(omega(6) * t(i));
+    if t == SimuInfo.TStim_ON
+        counter = 0;
         
-        % Parâmetros perturbados
-        amp_perturbed = amp + d_amp;
-        pw_perturbed = pw + d_pw;
-        freq_perturbed = freq + d_freq;
-
-    % Demodulação
-    y = E; % Supondo que J é escalar
-    for j = 1:4
-        grad_amp(j) = y * sin(omega(j) * t(i));
+        % Inicialização dos parâmetros
+        amp = 20e-3.*ones(4,1);  % Amplitudes iniciais [amp1; amp2; amp3; amp4] [mA]
+        pw = 200e-6;             % Largura de pulso inicial [microsegundos]
+        freq = 20;               % Frequência inicial [Hz]
+        
+        % Parâmetros do controlador (ajustados)
+        omega = [1 1 1 1 1 1];  % Frequências de perturbação ajustadas
+        k = [0.1 0.5 0.5];                 % Ganho do controlador ajustado
+        a = [1e-3 10e-6 0.5];                % Amplitude das perturbações ajustadas
+        
+        % Inicialização das defasagens (fase) para cada amplitude
+        phase_shift_amp = [0 0 0 0];    % Defasagem inicial de 0 para cada amplitude
     end
-    grad_pw = y * sin(omega(5) * t(i));
-    grad_freq = y * sin(omega(6) * t(i));
     
-    % Filtragem (opcional)
-    % if i > 1
-    %     grad_amp_filt = filter(b, a_filt, grad_amp);
-    %     grad_pw_filt = filter(b, a_filt, grad_pw);
-    %     grad_freq_filt = filter(b, a_filt, grad_freq);
-    % else
-        grad_amp_filt = grad_amp;
-        grad_pw_filt = grad_pw;
-        grad_freq_filt = grad_freq;
-    % end
+    % Inicialização das variáveis filtradas
+    grad_amp_filt = zeros(4,1);
+    grad_pw_filt = 0;
+    grad_freq_filt = 0;
 
-    % Atualização dos parâmetros (integração)
-    amp = amp - k * grad_amp_filt * dt;
-    pw = pw - k * grad_pw_filt * dt;
-    freq = freq - k * grad_freq_filt * dt;
+    % Perturbações com defasagem independente para cada amplitude
+    d_amp(1) = a(1) * sin(omega(1) * t + phase_shift_amp(1));
+    d_amp(2) = a(1) * sin(omega(2) * t + phase_shift_amp(2));
+    d_amp(3) = a(1) * sin(omega(3) * t + phase_shift_amp(3));
+    d_amp(4) = a(1) * sin(omega(4) * t + phase_shift_amp(4));
+
+    d_pw = a(2) * sin(omega(5) * t);
+    d_freq = a(3) * sin(omega(6) * t);
     
-    % Armazenamento dos dados
-    amp_history(:,i) = amp;
-    pw_history(i) = pw;
-    freq_history(i) = freq;
-    J_history(i) = J;
+    % Atualização de parâmetros com perturbações
+    amp_perturbed = amp + d_amp';
+    pw_perturbed = pw + d_pw;
+    freq_perturbed = freq + d_freq;
+
+    % Função de custo unificada que combina energia do tremor e erro de setpoint
+    Q1 = diag([1e3, 1e3, 1e3, 1e3]);
+    Q2 = diag([1e3, 1e3, 1e3, 1e3]);
+    tremor_cost = E(1:4) * Q1 * E(1:4)';          % Custo baseado na energia do tremor
+    error_cost = E(5:end) * Q2 * E(5:end)';       % Custo baseado no erro de setpoint
+    J = tremor_cost + error_cost;                 % Função de custo combinada
+
+    % Cálculo dos gradientes de forma independente para cada amplitude
+    for j = 1:4
+        grad_amp(j) = J * sin(omega(j) * t);
+        
+        % Modulação da defasagem de forma independente para cada amplitude
+        phase_shift_amp(j) = phase_shift_amp(j) + grad_amp(j) * SimuInfo.Ts;
+    end
+    grad_pw = J * sin(omega(5) * t);
+    grad_freq = J * sin(omega(6) * t);
+
+    % Aplicação de filtragem para suavizar os gradientes
+    alpha = 0.8;  % Constante de filtragem
+    grad_amp_filt = alpha * grad_amp_filt + (1 - alpha) * grad_amp';
+    grad_pw_filt = alpha * grad_pw_filt + (1 - alpha) * grad_pw;
+    grad_freq_filt = alpha * grad_freq_filt + (1 - alpha) * grad_freq;
+
+    % Atualização dos parâmetros de controle de forma independente
+    amp = amp - k(1) * grad_amp_filt * SimuInfo.Ts;
+    pw = pw - k(2) * grad_pw_filt * SimuInfo.Ts;
+    freq = freq - k(3) * grad_freq_filt * SimuInfo.Ts;
+    
+    % Saturação para garantir que os sinais de controle não sejam negativos ou excedam os limites
+    amp = max(min(amp, 40e-3), 0);    % Saturação das amplitudes entre 0 e 40 mA
+    pw = max(min(pw, 500e-6), 0);     % Saturação da largura de pulso entre 0 e 500 µs
+    freq = max(min(freq, 50), 0);     % Saturação da frequência entre 0 e 50 Hz
+
+    % Saídas de controle
+    Ua = amp;  % Amplitudes independentes
+    Uf = freq;
+    Upw = pw;
+
+    counter = counter + 1;
 
 end

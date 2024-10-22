@@ -11,14 +11,26 @@
 % It also includes the cross-coupled stimulation dynamics among           %
 % electrodes                                                              %
 %=========================================================================%
-function [ues] = ElectricalStimulationController(SimuInfo,t)
+function [ues] = ElectricalStimulationController(E,SimuInfo,t)
 
 
+if t<SimuInfo.TStim_ON % it avoids electrical stimulation starts almost simultaneously to tremor. 
 
-switch SimuInfo.RLTraining
+    freq=40; %Hz
+    A=[ 0;... %sup
+        0;... %ecrl
+        0;... %ecrb
+        0;... %ecu
+        0;... %fcr
+        0;... %fcu
+        0];   %pq
+    
+    pw=0;
 
-    case 'on'
-        if t>=3
+else
+    switch SimuInfo.FESProtocol
+        
+        case 'RL'
 
             freq=SimuInfo.Action(1);
             pw=SimuInfo.Action(2);
@@ -30,71 +42,65 @@ switch SimuInfo.RLTraining
                 SimuInfo.Action(4);... %fcr
                 0;... %fcu
                 SimuInfo.Action(5)];   %pq
-        else
 
-            A=[ 0;... %sup
-                0;... %ecrl
+
+        case 'ESC'
+            [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo);
+
+            freq=Uf;
+            pw=Upw;
+            
+            A=[ 0*Ua(1);... %sup
+                2*Ua(2);... %ecrl
                 0;... %ecrb
                 0;... %ecu
-                0;... %fcr
+                0*Ua(3);... %fcr
                 0;... %fcu
-                0];   %pq
-    
-            pw=0;
-            freq=40; %Hz
-          
-        end
+                0*Ua(4)];   %pq
 
-    case 'ESC'
-        [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo)
+        case 'MPC'
+            [Ua, Upw, Uf] = MPC_law(t, E, SimuInfo);
 
-
-
-
-    otherwise
-        % if t==0
-        %     pyenv('Version', 'C:\Users\engwe\anaconda3\envs\mat_py\python.exe');
-        % end
-
-        freq=40; %Hz
-
-    
-        if t<3 % it avoids electrical stimulation starts almost simultaneously to tremor. 
-    
-            A=[ 0;... %sup
-                0;... %ecrl
+                        freq=Uf;
+            pw=Upw;
+            
+            A=[ Ua(1);... %sup
+                Ua(2);... %ecrl
                 0;... %ecrb
                 0;... %ecu
-                0;... %fcr
+                Ua(3);... %fcr
                 0;... %fcu
-                0];   %pq
-    
-            pw=0;
-    
-        else
-    
-            A=[ 0;... %sup
-                0;... %ecrl
-                0;... %ecrb
-                0;... %ecu
-                0;... %fcr
-                0;... %fcu
-                0];   %pq
-    
-            pw=0;
-    
-    
-        end
+                Ua(4)];   %pq
+
+    end
+
 
 end
 
 
 
-    ues=[A, pw*ones(7,1), freq*ones(7,1)];
+
+
+        
+        
+        
+        % if t==0
+        %     pyenv('Version', 'C:\Users\engwe\anaconda3\envs\mat_py\python.exe');
+        % end
+
+        
+
+    
 
 
 
- % Python Parsing data
+
+
+
+    
+
+    ues=[A, pw*ones(7,1), freq*ones(7,1)]
+    % Python Parsing data
     % Xk_py=py.numpy.array(SimuInfo.Xk);
     % [result]=pyrunfile("MPCteste.py", "ReturnList", xk=Xk_py, time=t);
     % StimuliCommand=double(result)';
