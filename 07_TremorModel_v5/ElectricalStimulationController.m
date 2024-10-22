@@ -50,13 +50,13 @@ else
             freq=Uf;
             pw=Upw;
             
-            A=[ 0*Ua(1);... %sup
+            A=[ Ua(1);... %sup
                 Ua(2);... %ecrl
                 0;... %ecrb
                 0;... %ecu
-                0*Ua(3);... %fcr
+                Ua(3);... %fcr
                 0;... %fcu
-                0*Ua(4)];   %pq
+                Ua(4)];   %pq
 
         case 'MPC'
             [Ua, Upw, Uf] = MPC_law(t, E, SimuInfo);
