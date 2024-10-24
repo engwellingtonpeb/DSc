@@ -234,7 +234,7 @@ criticNetwork = connectLayers(criticNetwork, 'fc5', 'add/in2');
 criticOptions = rlRepresentationOptions('LearnRate', 5e-4, ... % Reduced learning rate for better stability
                                         'GradientThreshold', 5, ... % Increased gradient threshold
                                         'L2RegularizationFactor', 5e-4, ... % Increased regularization to avoid overfitting
-                                        'UseDevice', "gpu"); % Use CPU for now to avoid GPU issues
+                                        'UseDevice', "cpu"); % Use CPU for now to avoid GPU issues
 
 critic = rlQValueRepresentation(criticNetwork, obsInfo, actInfo, ...
     'Observation', {'observation'}, 'Action', {'action'}, criticOptions);
@@ -256,7 +256,7 @@ actorNetwork = [
 actorOptions = rlRepresentationOptions('LearnRate', 1e-4, ... % Lower learning rate to improve convergence stability
                                        'GradientThreshold', 5, ... % Increased gradient threshold
                                        'L2RegularizationFactor', 5e-4, ... % Increased regularization to prevent overfitting
-                                       'UseDevice', "gpu"); % Use CPU for now to avoid GPU issues
+                                       'UseDevice', "cpu"); % Use CPU for now to avoid GPU issues
 
 actor = rlDeterministicActorRepresentation(actorNetwork, obsInfo, actInfo, ...
     'Observation', {'observation'}, 'Action', {'ActorScaling1'}, actorOptions);

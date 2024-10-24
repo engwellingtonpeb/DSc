@@ -68,7 +68,7 @@ if t<3
     IsDone=0;
 
 elseif(t>=3 && ~BoundFlag)
-    Reward=-(E*Q2*E');
+    Reward=-(E(1:4)*Q2*E(1:4)');
     IsDone=0;
     
 elseif(t>=3 && BoundFlag) 

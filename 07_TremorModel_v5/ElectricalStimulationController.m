@@ -99,7 +99,7 @@ end
 
     
 
-    ues=[A, pw*ones(7,1), freq*ones(7,1)]
+    ues=[A, pw*ones(7,1), freq*ones(7,1)];
     % Python Parsing data
     % Xk_py=py.numpy.array(SimuInfo.Xk);
     % [result]=pyrunfile("MPCteste.py", "ReturnList", xk=Xk_py, time=t);
