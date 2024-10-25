@@ -11,6 +11,7 @@
 %                                                                         %
 %=========================================================================%
 function [NextObs,Reward,IsDone,LoggedSignals,SimuInfo] = MyStepFunction(Action,LoggedSignals,SimuInfo,osimModel,osimState)
+import org.opensim.modeling.*
 
 global episode
 global n

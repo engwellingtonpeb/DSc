@@ -14,9 +14,9 @@
 function [ues] = ElectricalStimulationController(E,SimuInfo,t)
 
 
-if t<SimuInfo.TStim_ON % it avoids electrical stimulation starts almost simultaneously to tremor. 
+if t<SimuInfo.TStim_ON || strcmp(SimuInfo.FESProtocol,'none') % it avoids electrical stimulation starts almost simultaneously to tremor. 
 
-    freq=40; %Hz
+    freq=0; %Hz
     A=[ 0;... %sup
         0;... %ecrl
         0;... %ecrb

@@ -12,6 +12,7 @@
 %      environment for RL agent training. RL agent will control           %
 %      electrical stimulator                                              %
 %=========================================================================%
+opengl('save', 'software');
 
 clc
 clearvars
@@ -27,8 +28,9 @@ prompt="Select an operation mode:\n" + ...
     "(3) - Open-Loop CC e-stim Simulation \n" + ...
     "(4) - Pathological Tremor / ES - Identification \n"+...
     "(5) - e-stim RL controller Training and Simulation \n" + ...
-    "(6) - e-stim MPC/RL controller design and Simulation \n" + ...
-    "(7) - e-stim ESC controller \n \n" + ...
+    "(6) - e-stim RL controller TEST and Simulation \n" + ...
+    "(7) - e-stim MPC/RL controller design and Simulation \n" + ...
+    "(8) - e-stim ESC controller \n \n" + ...
     "Option:";
 
 opt=input(prompt);
@@ -90,15 +92,24 @@ switch opt
         %RL Controller Trainning
         runRLControllerTrainning
 
+    case 6 
+    %e-stim RL CONTROL LAW TESTING
+
+        %get patient parameters or use a dummy parameter vector
+        getSimulationParams;
+
+        %RL Controller Testing
+        runRLControllerTesting
 
 
-    case 6
+
+    case 7
 
         disp('Module still being developed...')
         disp('   ')
 
 
-    case 7
+    case 8
         %e-stim ESC CONTROL LAW 
 
         setFESParamsSimulation
