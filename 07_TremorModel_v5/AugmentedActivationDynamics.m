@@ -138,7 +138,7 @@ switch StatusFES
             u=ar*q;
             ae_dot(i)=(1/tau_ac)*(u^2-u*a)+(1/tau_da)*(u-a); %[2] Pandy, M. G. (2001).
             
-            %[ar q u I pw0 f]
+            [ar q u I pw0 f]
 
             if any(isnan(u0))
                 disp('Problema U0 140')

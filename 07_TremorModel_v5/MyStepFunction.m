@@ -13,6 +13,7 @@
 function [NextObs,Reward,IsDone,LoggedSignals,SimuInfo] = MyStepFunction(Action,LoggedSignals,SimuInfo,osimModel,osimState)
 import org.opensim.modeling.*
 
+
 global episode
 global n
 global States
@@ -36,10 +37,15 @@ SimuInfo.Action=Action;
 % Create a anonymous handle to the OpenSim plant function.
 plantHandle = @(t,x) OsimPlantFcn(t, x, osimModel, osimState, SimuInfo);
 
-[LoggedSignals.State]=ode1(plantHandle, [t t+Ts], States);
+[LoggedSignals.State]=ode2(plantHandle, [t t+Ts], States);
+
+%[LoggedSignals.State]=IntegrateOsimPlant(osimModel,integratorName,SimuInfo,integratorOptions);
+
 States=LoggedSignals.State(end,:)';
 
 NextObs=[States(18); States(16); States(38); States(36)]; % [Phi[rad]; Psi[rad]; Phidot[rad/s]; Psidot[rad/s]]
+
+
 
 if any(isnan(NextObs)) || any(isinf(NextObs))
     error('Invalid values detected in NextObs');

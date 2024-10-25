@@ -51,7 +51,7 @@ if LinStabilityFlag
 
     %Electrical Stimulation
     SimuInfo.FES='on'; %[on | off]
-    SimuInfo.FESProtocol='OF' %[cc - O.L. co-contraction | op - O.L. out-of-phase]
+    SimuInfo.FESProtocol='ESC' %[cc - O.L. co-contraction | op - O.L. out-of-phase]
     
     %sliderapp()
     

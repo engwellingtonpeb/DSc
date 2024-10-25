@@ -34,7 +34,7 @@ else
    end
 
    % Simulation options
-   simOptions = rlSimulationOptions('MaxSteps', 200000);
+   simOptions =rlSimulationOptions('MaxSteps', 200000);
    
    % Run the simulation
    experience = sim(env, agent, simOptions);

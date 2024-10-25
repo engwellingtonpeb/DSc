@@ -37,10 +37,10 @@ else
     
             A=[ SimuInfo.Action(6);... %sup
                 SimuInfo.Action(3);... %ecrl
-                0;... %ecrb
+                SimuInfo.Action(3);... %ecrb
                 0;... %ecu
                 SimuInfo.Action(4);... %fcr
-                0;... %fcu
+                SimuInfo.Action(4);... %fcu
                 SimuInfo.Action(5)];   %pq
 
 
