@@ -1,5 +1,6 @@
 function [InitialObservation, LoggedSignal] = MyResetFunction(osimModel,osimState)
 clearvars -except agent env trainOpts osimModel osimState
+import org.opensim.modeling.*
 
 
 global States

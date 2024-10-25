@@ -41,7 +41,7 @@
 function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, integratorOptions)
     
     % Import Java libraries
-    %import org.opensim.modeling.*;
+    import org.opensim.modeling.*;
     
 
     

@@ -1,3 +1,17 @@
+%=========================================================================%
+%                   Federal University of Rio de Janeiro                  %
+%                  Biomedical Engineering Program - COPPE                 %
+%                   https://www.peb.ufrj.br/index.php/pt/                 %
+%                                                                         %
+% Advisor: Prof. Dr. Luciano L. Menegaldo                                 %
+% Doctoral Candidate: Wellington C. Pinheiro MSc.                         %
+%                                                                         %
+% This function implements Extremum Seeking Control Law to the electrical %
+% stimulation protocol. Manipulating amplitudes, pulse width and freq to  %
+% minimize tremor Energy                                                  %
+%                                                                         %
+%                                                                         %
+%=========================================================================%
 function [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo)
 
 persistent amp_history pw_history counter freq_history J_history a k omega amp pw freq phase_shift_amp
@@ -7,13 +21,13 @@ persistent amp_history pw_history counter freq_history J_history a k omega amp p
         
         % Inicialização dos parâmetros
         amp = 20e-3.*ones(4,1);  % Amplitudes iniciais [amp1; amp2; amp3; amp4] [mA]
-        pw = 200e-6;             % Largura de pulso inicial [microsegundos]
+        pw = 250e-6;             % Largura de pulso inicial [microsegundos]
         freq = 20;               % Frequência inicial [Hz]
         
         % Parâmetros do controlador (ajustados)
         omega = [1 1 1 1 1 1];  % Frequências de perturbação ajustadas
-        k = [0.1 0.5 0.5];                 % Ganho do controlador ajustado
-        a = [1e-3 10e-6 0.5];                % Amplitude das perturbações ajustadas
+        k = [1e-3 1e-3 1e-3];                 % Ganho do controlador ajustado
+        a = [1e-3 1e-6 0.05];                % Amplitude das perturbações ajustadas
         
         % Inicialização das defasagens (fase) para cada amplitude
         phase_shift_amp = [0 0 0 0];    % Defasagem inicial de 0 para cada amplitude
@@ -40,7 +54,7 @@ persistent amp_history pw_history counter freq_history J_history a k omega amp p
 
     % Função de custo unificada que combina energia do tremor e erro de setpoint
     Q1 = diag([1e3, 1e3, 1e3, 1e3]);
-    Q2 = diag([1e3, 1e3, 1e3, 1e3]);
+    Q2 = diag([1e6, 1e6, 1e0, 1e0]);
     tremor_cost = E(1:4) * Q1 * E(1:4)';          % Custo baseado na energia do tremor
     error_cost = E(5:end) * Q2 * E(5:end)';       % Custo baseado no erro de setpoint
     J = tremor_cost + error_cost;                 % Função de custo combinada
@@ -56,7 +70,7 @@ persistent amp_history pw_history counter freq_history J_history a k omega amp p
     grad_freq = J * sin(omega(6) * t);
 
     % Aplicação de filtragem para suavizar os gradientes
-    alpha = 0.8;  % Constante de filtragem
+    alpha = .99;  % Constante de filtragem
     grad_amp_filt = alpha * grad_amp_filt + (1 - alpha) * grad_amp';
     grad_pw_filt = alpha * grad_pw_filt + (1 - alpha) * grad_pw;
     grad_freq_filt = alpha * grad_freq_filt + (1 - alpha) * grad_freq;
@@ -72,9 +86,9 @@ persistent amp_history pw_history counter freq_history J_history a k omega amp p
     freq = max(min(freq, 50), 0);     % Saturação da frequência entre 0 e 50 Hz
 
     % Saídas de controle
-    Ua = amp;  % Amplitudes independentes
+    Ua = 20e-3.*ones(4,1); %amp;  % Amplitudes independentes
     Uf = freq;
-    Upw = pw;
+    Upw = 250e-6;%pw;
 
     counter = counter + 1;
 

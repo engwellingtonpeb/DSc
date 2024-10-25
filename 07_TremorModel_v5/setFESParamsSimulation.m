@@ -35,7 +35,7 @@ if LinStabilityFlag
 
     %Time
     SimuInfo.Ts=1e-3;
-    SimuInfo.Tend=10;
+    SimuInfo.Tend=15;
     SimuInfo.TStim_ON=3; %e-stim initial time on the simulations
 
 
@@ -51,7 +51,7 @@ if LinStabilityFlag
 
     %Electrical Stimulation
     SimuInfo.FES='on'; %[on | off]
-    SimuInfo.FESProtocol='ESC' %[cc - O.L. co-contraction | op - O.L. out-of-phase]
+    SimuInfo.FESProtocol='OF' %[cc - O.L. co-contraction | op - O.L. out-of-phase]
     
     %sliderapp()
     

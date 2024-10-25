@@ -45,18 +45,70 @@ else
 
 
         case 'ESC'
-            [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo);
+            [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo)
 
             freq=Uf;
             pw=Upw;
             
-            A=[ Ua(1);... %sup
-                Ua(2);... %ecrl
-                0;... %ecrb
-                0;... %ecu
-                Ua(3);... %fcr
-                0;... %fcu
-                Ua(4)];   %pq
+            % A=[ Ua(1);... %sup
+            %     Ua(2);... %ecrl
+            %     0;... %ecrb
+            %     0;... %ecu
+            %     Ua(3);... %fcr
+            %     0;... %fcu
+            %     Ua(4)];   %pq
+
+            A=[ 0*Ua(1);... %sup % funcionou legal 
+                1*Ua(2);... %ecrl
+                1*Ua(2);... %ecrb
+                0*Ua(2);... %ecu
+                0*Ua(3);... %fcr
+                1*Ua(3);... %fcu
+                1*Ua(4)];   %pq
+
+        case 'CC'
+            [Ua, Upw, Uf] = CC_strategy()
+
+            freq=Uf;
+            pw=Upw;
+            
+            % A=[ Ua(1);... %sup
+            %     Ua(2);... %ecrl
+            %     0;... %ecrb
+            %     0;... %ecu
+            %     Ua(3);... %fcr
+            %     0;... %fcu
+            %     Ua(4)];   %pq
+
+            A=[ 0*Ua(1);... %sup % funcionou legal 
+                1*Ua(2);... %ecrl
+                1*Ua(2);... %ecrb
+                0*Ua(2);... %ecu
+                0*Ua(3);... %fcr
+                1*Ua(3);... %fcu
+                1*Ua(4)];   %pq
+
+        case 'OF'
+            [Ua, Upw, Uf] = OF_strategy(t)
+
+            freq=Uf;
+            pw=Upw;
+            
+            % A=[ Ua(1);... %sup
+            %     Ua(2);... %ecrl
+            %     0;... %ecrb
+            %     0;... %ecu
+            %     Ua(3);... %fcr
+            %     0;... %fcu
+            %     Ua(4)];   %pq
+
+            A=[ 0*Ua(1);... %sup % funcionou legal 
+                1*Ua(2);... %ecrl
+                1*Ua(2);... %ecrb
+                0*Ua(2);... %ecu
+                0*Ua(3);... %fcr
+                1*Ua(3);... %fcu
+                1*Ua(4)];   %pq
 
         case 'MPC'
             [Ua, Upw, Uf] = MPC_law(t, E, SimuInfo);

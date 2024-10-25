@@ -160,7 +160,7 @@ elseif t<2 && t>=0.1
     u(3)=1e6*ALPHA3*u(3); %PQ
     u(4)=1e6*ALPHA4*u(4); %SUP
 
-elseif t>2 && t<=10
+elseif t>2 && t<=SimuInfo.Tend
 
     u(1)=(1e6*ALPHA1*u(1))+.1*d(1)+0*d(2); %ECRL
     u(2)=(1e6*ALPHA2*u(2))+0*d(1)+.1*d(2); %FCU
