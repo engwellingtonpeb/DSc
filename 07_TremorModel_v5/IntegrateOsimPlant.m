@@ -104,13 +104,13 @@ function OutputData = IntegrateOsimPlant(osimModel, integratorName, SimuInfo, in
     
    % Create Output Data structure
     OutputData = struct();
-    if SimuInfo.PltFlag
-        subplot(5,1,2)
-        legend('ecrl', 'fcu')
-
-        subplot(5,1,4)
-        legend('sup', 'pq')
-    end
+    % if SimuInfo.PltFlag
+    %     subplot(5,1,2)
+    %     legend('ecrl', 'fcu')
+    % 
+    %     subplot(5,1,4)
+    %     legend('sup', 'pq')
+    % end
 
     % OutputData.name = [char(osimModel.getName()), '_states'];
     % OutputData.nRows = size(T, 1);

@@ -13,7 +13,7 @@
 
 clear all
 clc
-close all
+close all hidden
 
 import org.opensim.modeling.*
 opengl('save', 'software');

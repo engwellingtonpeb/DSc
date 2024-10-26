@@ -47,17 +47,18 @@ if LinStabilityFlag
     SimuInfo.ModelParams=ModelParams;
 
     %Tremor
-    SimuInfo.Tremor='on' %[on | off]
+    SimuInfo.Tremor='on'; %[on | off]
 
     %Electrical Stimulation
     SimuInfo.FES='off'; %[on | off]
-    SimuInfo.FESProtocol='none' %[cc - O.L. co-contraction | op - O.L. out-of-phase]
+    SimuInfo.FESProtocol='none'; %[cc - O.L. co-contraction | op - O.L. out-of-phase]
     
     %sliderapp()
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
     integratorName = 'ode1'; 
+    SimuInfo.integratorName=integratorName;
     integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3,'MaxStep', 10e-3);
         
     SimuInfo.RLTraining='off';
@@ -69,7 +70,7 @@ if LinStabilityFlag
     SimuInfo.w_tremor=0.1;
 
 
-        SimuInfo.Kz=c2d(K,SimuInfo.Ts);
+    SimuInfo.Kz=c2d(K,SimuInfo.Ts);
     
     [Ak,Bk,Ck,Dk]=ssdata(SimuInfo.Kz);
     
@@ -162,7 +163,7 @@ if LinStabilityFlag
         Coord_all(i,1) = cell(currentCoord.getName());
     end
     
-    SimuInfo.Coord_all=Coord_all;
+    SimuInfo.Coord_all=Coord_all
     
 
     %% Prep Simulation

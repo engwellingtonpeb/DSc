@@ -120,7 +120,7 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
            p_dot];    %66[p_sup] 67[p_ecrl] 68[p_ecrb] 69[p_ecu] 70[p_fcr] 71[p_fcu] 72[p_pq]
 
 
-
+    %[a0 a0_dot]
 
 
 

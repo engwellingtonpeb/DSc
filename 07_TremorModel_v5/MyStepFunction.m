@@ -11,8 +11,6 @@
 %                                                                         %
 %=========================================================================%
 function [NextObs,Reward,IsDone,LoggedSignals,SimuInfo] = MyStepFunction(Action,LoggedSignals,SimuInfo,osimModel,osimState)
-import org.opensim.modeling.*
-
 
 global episode
 global n
@@ -37,28 +35,33 @@ SimuInfo.Action=Action;
 % Create a anonymous handle to the OpenSim plant function.
 plantHandle = @(t,x) OsimPlantFcn(t, x, osimModel, osimState, SimuInfo);
 
-[LoggedSignals.State]=ode2(plantHandle, [t t+Ts], States);
 
-%[LoggedSignals.State]=IntegrateOsimPlant(osimModel,integratorName,SimuInfo,integratorOptions);
+% Integrate the system equations
+integratorFunc = str2func(SimuInfo.integratorName);
 
+[LoggedSignals.State]=integratorFunc(plantHandle, [t t+Ts], States); %Sem a func integrate
 States=LoggedSignals.State(end,:)';
 
-NextObs=[States(18); States(16); States(38); States(36)]; % [Phi[rad]; Psi[rad]; Phidot[rad/s]; Psidot[rad/s]]
+%%using function integrate
+% SimuInfo.timeSpan = [t:Ts:t+Ts];
+% integratorName = 'ode1'; 
+% integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3,'MaxStep', 10e-3);
+% [LoggedSignals.State]=IntegrateOsimPlant(osimModel,integratorName,SimuInfo,integratorOptions);
+% States=LoggedSignals.State.data(end,:)';
 
+
+
+NextObs=[States(18); States(16); States(38); States(36)]; % [Phi[rad]; Psi[rad]; Phidot[rad/s]; Psidot[rad/s]]
+rad2deg(NextObs)
 
 
 if any(isnan(NextObs)) || any(isinf(NextObs))
     error('Invalid values detected in NextObs');
 end
 
-phi_ref=deg2rad(SimuInfo.Setpoint(1));
-psi_ref=deg2rad(SimuInfo.Setpoint(2));
 
-%references 
-r=[phi_ref psi_ref 0 0]';
-erro=r-NextObs;
 
-% Reward
+%% Reward
 divergencePHI=logical(abs(rad2deg(States(18)))>=20);
 divergencePSI=logical(rad2deg(States(16))>=35 || rad2deg(States(16))<=10);
 BoundFlag= logical(divergencePHI || divergencePSI) ;
@@ -82,10 +85,12 @@ elseif(t>=3 && BoundFlag)
     Reward=-1e3;
     IsDone=1;
     episode=episode+1;
+    osimState=osimModel.initSystem();
 
 elseif (t>=10)
     Reward=1e2;
     IsDone=1;
+    osimState=osimModel.initSystem();
 end
 
 

@@ -34,7 +34,7 @@ if LinStabilityFlag
     %% Tremor Simulation for Tunning 
 
     %Time
-    SimuInfo.Ts=1e-3;
+    SimuInfo.Ts=1e-4;
     SimuInfo.Tend=15;
     SimuInfo.TStim_ON=3; %e-stim initial time on the simulations
 
@@ -57,7 +57,7 @@ if LinStabilityFlag
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
-    integratorName = 'ode1'; 
+    integratorName = 'ode3'; 
     integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3,'MaxStep', 10e-3);
     
     

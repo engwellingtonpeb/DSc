@@ -40,7 +40,7 @@ if LinStabilityFlag
 
 
     %Plotting 
-    SimuInfo.PltFlag='off'; %[on | off]
+    SimuInfo.PltFlag='on'; %[on | off]
     SimuInfo.PltResolution=100;
     
     %Params tuned by optimization
@@ -61,6 +61,7 @@ if LinStabilityFlag
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
     integratorName = 'ode1'; 
+    SimuInfo.integratorName=integratorName;
     integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3,'MaxStep', 10e-3);
     
     
@@ -122,6 +123,7 @@ if LinStabilityFlag
 
     % Create the Initial State matrix from the Opensim state
     numVar = osimState.getY().size();
+    SimuInfo.numVar=numVar;
     InitStates = zeros(numVar,1);
     for i = 0:1:numVar-1
         InitStates(i+1,1) = osimState.getY().get(i); 
@@ -195,7 +197,7 @@ actInfo.Description = 'f, pw, I_ch1, I_ch2, I_ch3, I_ch4';
 
 
 StepHandle=@(Action,LoggedSignals)MyStepFunction(Action,LoggedSignals,SimuInfo,osimModel,osimState);
-ResetHandle=@()MyResetFunction(osimModel,osimState);
+ResetHandle=@()MyResetFunction(osimModel,osimState,SimuInfo);
 
 env = rlFunctionEnv(obsInfo,actInfo,StepHandle,ResetHandle)
 
@@ -287,7 +289,7 @@ trainOpts = rlTrainingOptions(...
     'Plots', 'none', ... % Enable training plot to monitor progress
     'StopTrainingCriteria', 'AverageReward', ...
     'StopTrainingValue', 1e5, ... % Adjusted stop value for convergence criteria
-    'UseParallel', true, ... % Disable parallel for now, can enable after stability
+    'UseParallel', false, ... % Disable parallel for now, can enable after stability
     'SaveAgentCriteria', "EpisodeReward", ...
     'SaveAgentValue', -104, ... % Lower threshold to save agents with good performance
     'SaveAgentDirectory', pwd + "\Agents");
