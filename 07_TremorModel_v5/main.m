@@ -15,7 +15,7 @@
 opengl('save', 'software');
 
 clc
-clearvars
+clear all
 close all hidden
 pathconfig
 import org.opensim.modeling.*

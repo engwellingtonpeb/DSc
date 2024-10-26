@@ -1,14 +1,40 @@
+%=========================================================================%
+%                   Federal University of Rio de Janeiro                  %
+%                  Biomedical Engineering Program - COPPE                 %
+%                   https://www.peb.ufrj.br/index.php/pt/                 %
+%                                                                         %
+% Advisor: Prof. Dr. Luciano L. Menegaldo                                 %
+% Doctoral Candidate: Wellington C. Pinheiro MSc.                         %
+%=========================================================================%
+%                                                                         %
+% This fuction works as reset function of RL environment                  %
+%                                                                         %
+%=========================================================================%
+
 function [InitialObservation, LoggedSignal] = MyResetFunction(osimModel,osimState, SimuInfo)
 % clearvars -except agent env trainOpts osimModel osimState
-global States n episode 
+global States n episode lastTime
 
 
     osimState=osimModel.initSystem();
 
+% Primeira passagem
+if isempty(lastTime)
+    % Inicializa o valor da última vez na primeira passagem
+    lastTime = toc;  % Se 'tic' não foi chamado antes, 'toc' retorna o tempo desde o início da sessão MATLAB
 
+else
+    % Calcula o intervalo de tempo desde a última passagem
+    currentTime = toc;
+    interval = currentTime - lastTime;
+    disp(['Time for Episode Training: ', num2str(interval)]);
+
+    % Atualiza 'lastTime' com o tempo atual
+    lastTime = currentTime;
+end
 
     %% Model elements identification
-    
+
     % Create the Initial State matrix from the Opensim state
     numVar = SimuInfo.numVar;
     InitStates = zeros(numVar,1);
@@ -26,12 +52,12 @@ global States n episode
                   oscillator;...
                   activationsFES;...
                   fatigueDynamics];
-      
+
       SimuInfo.InitStates=InitStates;
-    
+
 %% Prep Simulation
 
-    
+
 States=InitStates;
 n=0;
 
@@ -50,5 +76,4 @@ InitialObservation = [phi; psi; phi_dot; psi_dot];
 
 close all
 %episode;
-toc
 end

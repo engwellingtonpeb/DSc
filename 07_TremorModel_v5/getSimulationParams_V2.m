@@ -40,7 +40,7 @@ if LinStabilityFlag
 
 
     %Plotting 
-    SimuInfo.PltFlag='on'; %[on | off]
+    SimuInfo.PltFlag='off'; %[on | off]
     SimuInfo.PltResolution=100;
     
     %Params tuned by optimization
@@ -294,7 +294,9 @@ trainOpts = rlTrainingOptions(...
     'SaveAgentValue', -104, ... % Lower threshold to save agents with good performance
     'SaveAgentDirectory', pwd + "\Agents");
 
-% Start Training
-trainingResults = train(agent, env, trainOpts);
+
+
+% % Start Training
+% trainingResults = train(agent, env, trainOpts);
 
 end
