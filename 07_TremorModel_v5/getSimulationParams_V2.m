@@ -47,16 +47,16 @@ if LinStabilityFlag
     SimuInfo.ModelParams=ModelParams;
 
     %Tremor
-    SimuInfo.Tremor='on' %[on | off]
+    SimuInfo.Tremor='on'; %[on | off]
 
     %Electrical Stimulation
     SimuInfo.FES='on'; %[on | off]
-    SimuInfo.FESProtocol='RL' %[cc - O.L. co-contraction | op - O.L. out-of-phase...
+    SimuInfo.FESProtocol='RL'; %[cc - O.L. co-contraction | op - O.L. out-of-phase...
     %                      RL - Reinforcement Learning]
     
     SimuInfo.TremorEnergy=[];
 
-    %sliderapp()
+
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
@@ -168,7 +168,7 @@ if LinStabilityFlag
     
     SimuInfo.Coord_all=Coord_all;
     
-
+    SimuInfo
     %% Prep Simulation
     osimModel.computeStateVariableDerivatives(osimState);
     osimModel.equilibrateMuscles(osimState); %solve for equilibrium similiar
@@ -190,7 +190,7 @@ obsInfo.Name = 'observation';
 obsInfo.Description = 'Phi, Psi, Phidot, Psidot';
 
 %Action Info
-actInfo=rlNumericSpec([eStimInputs 1], 'LowerLimit', [10; 100e-6; 4e-3; 4e-3; 4e-3;4e-3;],...
+actInfo=rlNumericSpec([eStimInputs 1], 'LowerLimit', [10; 150e-6; 4e-3;  4e-3;  4e-3;  4e-3;],...
                                        'UpperLimit', [40; 500e-6; 40e-3; 40e-3; 40e-3; 40e-3;]);
 actInfo.Name = 'action';
 actInfo.Description = 'f, pw, I_ch1, I_ch2, I_ch3, I_ch4';
@@ -236,7 +236,7 @@ criticNetwork = connectLayers(criticNetwork, 'fc5', 'add/in2');
 criticOptions = rlRepresentationOptions('LearnRate', 5e-4, ... % Reduced learning rate for better stability
                                         'GradientThreshold', 5, ... % Increased gradient threshold
                                         'L2RegularizationFactor', 5e-4, ... % Increased regularization to avoid overfitting
-                                        'UseDevice', "cpu"); % Use CPU for now to avoid GPU issues
+                                        'UseDevice', "gpu"); % Use CPU for now to avoid GPU issues
 
 critic = rlQValueRepresentation(criticNetwork, obsInfo, actInfo, ...
     'Observation', {'observation'}, 'Action', {'action'}, criticOptions);
@@ -258,7 +258,7 @@ actorNetwork = [
 actorOptions = rlRepresentationOptions('LearnRate', 1e-4, ... % Lower learning rate to improve convergence stability
                                        'GradientThreshold', 5, ... % Increased gradient threshold
                                        'L2RegularizationFactor', 5e-4, ... % Increased regularization to prevent overfitting
-                                       'UseDevice', "cpu"); % Use CPU for now to avoid GPU issues
+                                       'UseDevice', "gpu"); % Use CPU for now to avoid GPU issues
 
 actor = rlDeterministicActorRepresentation(actorNetwork, obsInfo, actInfo, ...
     'Observation', {'observation'}, 'Action', {'ActorScaling1'}, actorOptions);

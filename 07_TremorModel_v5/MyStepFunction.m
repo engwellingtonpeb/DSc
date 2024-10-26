@@ -52,7 +52,7 @@ States=LoggedSignals.State(end,:)';
 
 
 NextObs=[States(18); States(16); States(38); States(36)]; % [Phi[rad]; Psi[rad]; Phidot[rad/s]; Psidot[rad/s]]
-rad2deg(NextObs)
+%rad2deg(NextObs)
 
 
 if any(isnan(NextObs)) || any(isinf(NextObs))

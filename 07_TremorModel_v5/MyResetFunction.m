@@ -48,6 +48,7 @@ psi_dot=osimState.getY().get(35);% pro_sup velocity (rad/s)
 InitialObservation = [phi; psi; phi_dot; psi_dot];
 
 
-%close all
-episode
+close all
+%episode;
+toc
 end

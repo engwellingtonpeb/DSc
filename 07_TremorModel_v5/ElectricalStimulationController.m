@@ -43,6 +43,7 @@ else
                 SimuInfo.Action(4);... %fcu
                 SimuInfo.Action(5)];   %pq
 
+            [A' pw freq]
 
         case 'ESC'
             [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo)
