@@ -86,7 +86,7 @@ elseif(t>=3 && t<10 && ~BoundFlag)
     Q2 = diag([1e1, 1e1, 1e0, 1e0]);    
     tremor_cost = E(1:4) * Q1 * E(1:4)' ;         % Custo baseado na energia do tremor
     error_cost = E(5:end) * Q2 * E(5:end)'  ;     % Custo baseado no erro de setpoint
-    Reward = -(tremor_cost + error_cost)+1e-2*n;                 % Função de custo combinada
+    Reward = -(tremor_cost + error_cost)+1e-3*n;                 % Função de custo combinada
 
     IsDone=0;
 
