@@ -115,21 +115,21 @@ ERR_POS=[ERR_POS; [eps_phi eps_psi]];
 %% Energy Phi and Psi on Tremor range of Freq.
 global E
 
-% n=floor(t/SimuInfo.Ts);
-% 
-% if strcmp(SimuInfo.integratorName,'ode1')
-%     ode=1;
-% elseif strcmp(SimuInfo.integratorName,'ode2')
-%     ode=2;
-% elseif strcmp(SimuInfo.integratorName,'ode3')
-%     ode=3;
-% elseif strcmp(SimuInfo.integratorName,'ode4')
-%     ode=4;
-% end
-% 
-% if rem(n,ode)==0
+n=floor(t/SimuInfo.Ts);
+
+if strcmp(SimuInfo.integratorName,'ode1')
+    ode=1;
+elseif strcmp(SimuInfo.integratorName,'ode2')
+    ode=2;
+elseif strcmp(SimuInfo.integratorName,'ode3')
+    ode=3;
+elseif strcmp(SimuInfo.integratorName,'ode4')
+    ode=4;
+end
+
+if rem(n,ode)==0
     [E] = SlidingWindowEnergies(x, SimuInfo);
-% end
+end
 
 E=[E e(end-3:end)']; %[tremor energy, setpoint error]
 

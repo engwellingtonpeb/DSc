@@ -41,7 +41,7 @@ if LinStabilityFlag
 
     %Plotting 
     SimuInfo.PltFlag='on'; %[on | off]
-    SimuInfo.PltResolution=100;
+    SimuInfo.PltResolution=20;
     
     %Params tuned by optimization
     SimuInfo.ModelParams=ModelParams;
@@ -56,11 +56,12 @@ if LinStabilityFlag
     
     SimuInfo.TremorEnergy=[];
 
-    %sliderapp()
+
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
     integratorName = 'ode1'; 
+    SimuInfo.integratorName=integratorName;
     integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3,'MaxStep', 10e-3);
     
     
@@ -122,6 +123,7 @@ if LinStabilityFlag
 
     % Create the Initial State matrix from the Opensim state
     numVar = osimState.getY().size();
+    SimuInfo.numVar=numVar;
     InitStates = zeros(numVar,1);
     for i = 0:1:numVar-1
         InitStates(i+1,1) = osimState.getY().get(i); 
@@ -187,20 +189,19 @@ numStatesFromPatient=4; % number of states from biomechanical model or voluntary
 %Observation Info
 obsInfo= rlNumericSpec([numStatesFromPatient 1]);
 obsInfo.Name = 'observation';
-obsInfo.Description = 'Phi, Psi, error_int';
+obsInfo.Description = 'Phi, Psi, Phidot, Psidot';
 
 %Action Info
-actInfo=rlNumericSpec([eStimInputs 1], 'LowerLimit', [10; 100e-6; 4e-3; 4e-3; 4e-3;4e-3;],...
+actInfo=rlNumericSpec([eStimInputs 1], 'LowerLimit', [10; 150e-6; 4e-3;  4e-3;  4e-3;  4e-3;],...
                                        'UpperLimit', [40; 500e-6; 40e-3; 40e-3; 40e-3; 40e-3;]);
 actInfo.Name = 'action';
 actInfo.Description = 'f, pw, I_ch1, I_ch2, I_ch3, I_ch4';
 
 
 StepHandle=@(Action,LoggedSignals)MyStepFunction(Action,LoggedSignals,SimuInfo,osimModel,osimState);
-ResetHandle=@()MyResetFunction(osimModel,osimState);
+ResetHandle=@()MyResetFunction(osimModel,osimState,SimuInfo);
 
 env = rlFunctionEnv(obsInfo,actInfo,StepHandle,ResetHandle)
-
 
 %% Creating DDPG trained agent
 % 

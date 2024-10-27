@@ -34,30 +34,31 @@ if LinStabilityFlag
     %% Tremor Simulation for Tunning 
 
     %Time
-    SimuInfo.Ts=1e-4;
-    SimuInfo.Tend=15;
+    SimuInfo.Ts=1e-3;
+    SimuInfo.Tend=10;
     SimuInfo.TStim_ON=3; %e-stim initial time on the simulations
 
 
     %Plotting 
     SimuInfo.PltFlag='on'; %[on | off]
-    SimuInfo.PltResolution=50;
+    SimuInfo.PltResolution=20; % smaller gets more data points on plot
     
     %Params tuned by optimization
     SimuInfo.ModelParams=ModelParams;
 
     %Tremor
-    SimuInfo.Tremor='on' %[on | off]
+    SimuInfo.Tremor='on'; %[on | off]
 
     %Electrical Stimulation
     SimuInfo.FES='on'; %[on | off]
-    SimuInfo.FESProtocol='ESC' %[cc - O.L. co-contraction | op - O.L. out-of-phase]
+    SimuInfo.FESProtocol='ESC'; %[cc - O.L. co-contraction | op - O.L. out-of-phase]
     
-    %sliderapp()
+
     
     %Config Simulations using Matlab Integrator
     SimuInfo.timeSpan = [0:SimuInfo.Ts:SimuInfo.Tend];
-    integratorName = 'ode3'; 
+    integratorName = 'ode1'; 
+    SimuInfo.integratorName=integratorName;
     integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3,'MaxStep', 10e-3);
     
     
@@ -161,7 +162,7 @@ if LinStabilityFlag
         Coord_all(i,1) = cell(currentCoord.getName());
     end
     
-    SimuInfo.Coord_all=Coord_all;
+    SimuInfo.Coord_all=Coord_all
     
 
     %% Prep Simulation

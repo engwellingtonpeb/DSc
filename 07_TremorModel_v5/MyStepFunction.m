@@ -78,15 +78,15 @@ if t<3
     Reward=0;
     IsDone=0;
 
-elseif(t>=3 && ~BoundFlag)
+elseif(t>=3 && t<10 && ~BoundFlag)
     % Reward=-(E(1:4)*Q2*E(1:4)');
 
     % Função de custo unificada que combina energia do tremor e erro de setpoint
-    Q1 = diag([1e0, 1e0, 1e0, 1e0]);
-    Q2 = diag([1e0, 1e0, 1e0, 1e0]);
-    tremor_cost = E(1:4) * Q1 * E(1:4)';          % Custo baseado na energia do tremor
-    error_cost = E(5:end) * Q2 * E(5:end)';       % Custo baseado no erro de setpoint
-    Reward = -(tremor_cost + error_cost);                 % Função de custo combinada
+    Q1 = diag([1e3, 1e3, 1e3, 1e3]);
+    Q2 = diag([1e1, 1e1, 1e0, 1e0]);    
+    tremor_cost = E(1:4) * Q1 * E(1:4)' ;         % Custo baseado na energia do tremor
+    error_cost = E(5:end) * Q2 * E(5:end)'  ;     % Custo baseado no erro de setpoint
+    Reward = -(tremor_cost + error_cost)+1e-2*n;                 % Função de custo combinada
 
     IsDone=0;
 

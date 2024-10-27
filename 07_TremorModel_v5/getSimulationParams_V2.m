@@ -281,6 +281,19 @@ agentOpts.NoiseOptions.VarianceDecayRate = 1e-4; % Faster decay rate to encourag
 % Creating the DDPG Agent
 agent = rlDDPGAgent(actor, critic, agentOpts);
 
+% % Training Options for Optimized Convergence
+% trainOpts = rlTrainingOptions(...
+%     'MaxEpisodes', 3000, ... % Reduced max episodes for faster training cycles
+%     'MaxStepsPerEpisode', 1e4, ... % Reduced steps per episode for more frequent updates
+%     'Verbose', true, ...
+%     'Plots', 'none', ... % Enable training plot to monitor progress
+%     'StopTrainingCriteria', 'AverageReward', ...
+%     'StopTrainingValue', 1e5, ... % Adjusted stop value for convergence criteria
+%     'UseParallel', false, ... % Disable parallel for now, can enable after stability
+%     'SaveAgentCriteria', "AverageSteps", ...
+%     'SaveAgentValue', 10004, ... % Lower threshold to save agents with good performance
+%     'SaveAgentDirectory', pwd + "\Agents");
+
 % Training Options for Optimized Convergence
 trainOpts = rlTrainingOptions(...
     'MaxEpisodes', 3000, ... % Reduced max episodes for faster training cycles
@@ -290,10 +303,9 @@ trainOpts = rlTrainingOptions(...
     'StopTrainingCriteria', 'AverageReward', ...
     'StopTrainingValue', 1e5, ... % Adjusted stop value for convergence criteria
     'UseParallel', false, ... % Disable parallel for now, can enable after stability
-    'SaveAgentCriteria', "EpisodeReward", ...
-    'SaveAgentValue', -104, ... % Lower threshold to save agents with good performance
-    'SaveAgentDirectory', pwd + "\Agents");
-
+    'SaveAgentCriteria', "EpisodeSteps", ... % Save agent based on steps per episode
+    'SaveAgentValue', 8000, ... % Save agents with more than 5000 steps per episode
+    'SaveAgentDirectory', pwd + "\Agents"); % Directory to save agents
 
 
 % % Start Training
