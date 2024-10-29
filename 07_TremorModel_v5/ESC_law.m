@@ -57,7 +57,7 @@ persistent amp_history pw_history counter freq_history J_history a k omega amp p
     Q2 = diag([1e2, 1e2, 1e2, 1e2]);
     tremor_cost = E(1:4) * Q1 * E(1:4)';          % Custo baseado na energia do tremor
     error_cost = E(5:end) * Q2 * E(5:end)';       % Custo baseado no erro de setpoint
-    J = tremor_cost + error_cost                 % Função de custo combinada
+    J = tremor_cost + error_cost;                % Função de custo combinada
 
     % Cálculo dos gradientes de forma independente para cada amplitude
     for j = 1:4

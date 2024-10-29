@@ -18,6 +18,9 @@ clc
 clear 
 close all
 
+addpath('D:\02_DSc_v5\DSc\04_DMDc_IDTF\simulations\')
+addpath('D:\02_DSc_v5\DSc\04_DMDc_IDTF\utils\')
+
 load('2023_10_15_17_45_17_DScQuali_IDTFVector.mat')
 
 x=[motionData.data(1:9001,42) motionData.data(1:9001,44) motionData.data(1:9001,52)...

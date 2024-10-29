@@ -46,7 +46,7 @@ else
             % [A' pw freq]
 
         case 'ESC'
-            [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo)
+            [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo);
 
             freq=Uf;
             pw=Upw;
@@ -131,20 +131,19 @@ else
 end
 
 
-
-
-
         
-        
-        
-        % if t==0
-        %     pyenv('Version', 'C:\Users\engwe\anaconda3\envs\mat_py\python.exe');
-        % end
-
-        
-
+    % Nome do campo a ser verificado
+    fieldName = 'StoreStim';
+    % Verifica a existência do campo e se o conteúdo é 'on'
+    if isfield(SimuInfo, fieldName) && strcmp(SimuInfo.(fieldName), 'on')
     
+        % Declarando a variável global
+        global e_stim;
+        e_stim = [e_stim; [t A' pw freq]];
 
+    end
+    
+    
 
 
 
@@ -153,10 +152,21 @@ end
     
 
     ues=[A, pw*ones(7,1), freq*ones(7,1)];
+
+
+
+
+end
+
+
+
+
     % Python Parsing data
+    % if t==0
+    %     pyenv('Version', 'C:\Users\engwe\anaconda3\envs\mat_py\python.exe');
+    % end
     % Xk_py=py.numpy.array(SimuInfo.Xk);
     % [result]=pyrunfile("MPCteste.py", "ReturnList", xk=Xk_py, time=t);
     % StimuliCommand=double(result)';
     % 
     % ues=[StimuliCommand(1:7), StimuliCommand(8)*ones(7,1), StimuliCommand(9)*ones(7,1),];
-end

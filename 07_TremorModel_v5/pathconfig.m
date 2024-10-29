@@ -44,12 +44,12 @@ elseif strcmp(name,'MARCOPOLO')
     deleteXML(folderPath)
     
     addpath('Tuning_Feature\')
-    addpath('\Users\Wellington\Desktop\DSc_v5\DSc\02_Coletas\')
-    addpath('\Users\Wellington\Desktop\DSc_v5\DSc\03_ODE_Solvers\')
-    addpath('\Users\Wellington\Desktop\DSc_v5\DSc\04_DMDc_IDTF\simulations\')
+    addpath('\Users\Wellington\Desktop\DSc\02_Coletas\')
+    addpath('\Users\Wellington\Desktop\DSc\03_ODE_Solvers\')
+    addpath('\Users\Wellington\Desktop\DSc\04_DMDc_IDTF\simulations\')
     addpath('C:\Users\Wellington\.conda\envs\mat_py\')
 
-    osimModel=Model('C:\Users\Wellington\Desktop\DSc_v5\DSc\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
+    osimModel=Model('C:\Users\Wellington\Desktop\DSc\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
         
 
 elseif strcmp(name,'ENGWELLSURFACE')

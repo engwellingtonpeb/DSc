@@ -176,7 +176,7 @@ if t<.1 %initializing model
     u(4)=0.01;
 
 elseif t>=.1 && t<2 
-    u(1)=1e6*ALPHA1*u(1); %ECRL
+    u(1)=2e6*ALPHA1*u(1); %ECRL
     u(2)=1e6*ALPHA2*u(2); %FCU
     u(3)=1e6*ALPHA3*u(3); %PQ
     u(4)=1e6*ALPHA4*u(4); %SUP
