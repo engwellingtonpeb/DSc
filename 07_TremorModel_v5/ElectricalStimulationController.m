@@ -32,21 +32,30 @@ else
         
         case 'RL'
 
-            freq=SimuInfo.Action(1);
-            pw=SimuInfo.Action(2);
+            freq=SimuInfo.Action(6);
+            pw=SimuInfo.Action(5);
     
-            A=[ SimuInfo.Action(6);... %sup
-                SimuInfo.Action(3);... %ecrl
-                SimuInfo.Action(3);... %ecrb
-                0;... %ecu
-                SimuInfo.Action(4);... %fcr
-                SimuInfo.Action(4);... %fcu
-                SimuInfo.Action(5)];   %pq
+            % A=[ SimuInfo.Action(6);... %sup
+            %     SimuInfo.Action(3);... %ecrl
+            %     SimuInfo.Action(3);... %ecrb
+            %     0;... %ecu
+            %     SimuInfo.Action(4);... %fcr
+            %     SimuInfo.Action(4);... %fcu
+            %     SimuInfo.Action(5)];   %pq
+
+            A=[ 0*SimuInfo.Action(1);... %sup
+                SimuInfo.Action(2);... %ecrl
+                SimuInfo.Action(2);... %ecrb
+                0*SimuInfo.Action(2);;... %ecu
+                0*SimuInfo.Action(3);... %fcr
+                SimuInfo.Action(3);... %fcu
+                SimuInfo.Action(4)];   %pq
+
 
             % [A' pw freq]
 
         case 'ESC'
-            [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo);
+            [Ua, Upw, Uf] = ESC_law(t, E, SimuInfo)
 
             freq=Uf;
             pw=Upw;
@@ -131,19 +140,20 @@ else
 end
 
 
-        
-    % Nome do campo a ser verificado
-    fieldName = 'StoreStim';
-    % Verifica a existência do campo e se o conteúdo é 'on'
-    if isfield(SimuInfo, fieldName) && strcmp(SimuInfo.(fieldName), 'on')
-    
-        % Declarando a variável global
-        global e_stim;
-        e_stim = [e_stim; [t A' pw freq]];
 
-    end
+
+
+        
+        
+        
+        % if t==0
+        %     pyenv('Version', 'C:\Users\engwe\anaconda3\envs\mat_py\python.exe');
+        % end
+
+        
+
     
-    
+
 
 
 
@@ -152,21 +162,10 @@ end
     
 
     ues=[A, pw*ones(7,1), freq*ones(7,1)];
-
-
-
-
-end
-
-
-
-
     % Python Parsing data
-    % if t==0
-    %     pyenv('Version', 'C:\Users\engwe\anaconda3\envs\mat_py\python.exe');
-    % end
     % Xk_py=py.numpy.array(SimuInfo.Xk);
     % [result]=pyrunfile("MPCteste.py", "ReturnList", xk=Xk_py, time=t);
     % StimuliCommand=double(result)';
     % 
     % ues=[StimuliCommand(1:7), StimuliCommand(8)*ones(7,1), StimuliCommand(9)*ones(7,1),];
+end

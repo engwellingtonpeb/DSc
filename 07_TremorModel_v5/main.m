@@ -78,7 +78,7 @@ switch opt
         runFESCLSimulation
 
         %DMDc
-
+        DMDc_estim2tremor
 
         %SINDYc
 
