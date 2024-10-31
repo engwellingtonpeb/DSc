@@ -46,10 +46,10 @@ else
             A=[ 0*SimuInfo.Action(1);... %sup
                 SimuInfo.Action(2);... %ecrl
                 SimuInfo.Action(2);... %ecrb
-                0*SimuInfo.Action(2);;... %ecu
+                0*SimuInfo.Action(2);... %ecu
                 0*SimuInfo.Action(3);... %fcr
                 SimuInfo.Action(3);... %fcu
-                SimuInfo.Action(4)];   %pq
+                SimuInfo.Action(4)];  %pq
 
 
             % [A' pw freq]

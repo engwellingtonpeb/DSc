@@ -73,7 +73,6 @@ Q1=diag([1,1,1,1]);
 Q2=diag([1,1,1,1]);
 
 
-
 if t<3
     Reward=0;
     IsDone=0;
@@ -81,13 +80,21 @@ if t<3
 elseif(t>=3 && t<10 && ~BoundFlag)
     % Reward=-(E(1:4)*Q2*E(1:4)');
 
-    % Função de custo unificada que combina energia do tremor e erro de setpoint
+    % Fun��o de custo unificada que combina energia do tremor e erro de setpoint
     Q1 = diag([1e3, 1e3, 1e3, 1e3]);
-    Q2 = diag([1e1, 1e1, 1e0, 1e0]);    
+    Q2 = diag([1e1, 1e1, 1e1, 1e1]);    
     tremor_cost = E(1:4) * Q1 * E(1:4)' ;         % Custo baseado na energia do tremor
     error_cost = E(5:end) * Q2 * E(5:end)'  ;     % Custo baseado no erro de setpoint
-    Reward = -(tremor_cost + error_cost)+1e-3*n;                 % Função de custo combinada
 
+    sparReward=0;
+    if t>=3, sparReward=.5e2; end
+    if t>=4, sparReward=1e2; end
+    if t>=5, sparReward=2e2; end
+    if t>=6, sparReward=3e2; end
+    if t>=7, sparReward=4e2; end
+
+    Reward = -(tremor_cost + error_cost)+sparReward;          % Fun��o de custo combinada
+    % [t, Reward]
     IsDone=0;
 
 elseif(t>=3 && BoundFlag) 
@@ -101,8 +108,6 @@ elseif (t>=10)
     IsDone=1;
     osimState=osimModel.initSystem();
 end
-
-
 
 
 n=n+1;
