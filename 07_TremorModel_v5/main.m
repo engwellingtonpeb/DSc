@@ -23,14 +23,14 @@ datestr(now)
 
 
 prompt="Select an operation mode:\n" + ...
-    "(1) - Individualized Tremor Model Simulation \n" + ...
-    "(2) - Individualized Tremor Model Tuning \n" + ...
-    "(3) - Open-Loop e-stim (TEST) \n" + ...
-    "(4) - E-STIM 2 TREMOR Identification \n"+...
-    "(5) - RL Controller for e-stim (TRAINING)  \n" + ...
-    "(6) - RL Controller for e-stim (TEST) \n" + ...
+    "(1) - TUNE individualized tremor model \n" + ...
+    "(2) - SIMULATE individualized tremor model\n" + ...
+    "(3) - TEST Open-Loop Electrical Stimulation (CC/OP)\n" + ...
+    "(4) - IDENTIFICATE e-stim TO tremor dynamics\n"+...
+    "(5) - TRAIN RL  e-stim Controller \n" + ...
+    "(6) - TEST RL e-stim Controller\n" + ...
     "(7) - MPC Controller Design and Simulation \n" + ...
-    "(8) - ESC Controller (TEST) \n \n" + ...
+    "(8) - TEST ESC Controller\n \n" + ...
     "Option:";
 
 opt=input(prompt);
@@ -39,6 +39,22 @@ opt=input(prompt);
 switch opt
 
     case 1 
+
+        % Individualized Tremor Model TUNING
+        
+        % get and prepare patient data
+        getPatientSignals;
+        
+        % get Optimization Routine to run
+        runOptimizationTuning;
+        
+        % save results
+        saveTunedPTModel;
+
+ 
+
+    case 2 
+
     %Individualized Tremor Model SIMULATION
         
         % set patient parameters or use a dummy parameter vector
@@ -46,21 +62,9 @@ switch opt
 
         % run only tremor simulation without ES inputs
         runIndividualizedTremorSimulation;
-        
-
-    case 2 
-    % Individualized Tremor Model TUNING
-        
-        % get and prepare patient data
-        getPatientSignals;
-
-        % get Optimization Routine to run
-        runOptimizationTuning;
-
-        % save results
-        saveTunedPTModel;
 
 
+   
     case 3 
     %OPEN LOOP CC e-stim Simulation
 

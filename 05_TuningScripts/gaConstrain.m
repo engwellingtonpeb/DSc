@@ -2,7 +2,8 @@ function [c,ceq] = gaConstrain(ModelParams)
     c=[]; 
     ceq=[]; 
 
- %% HInf Synthesis
+%% HInf Synthesis
+
 %     x1=ModelParams(1); %W1
 %     x2=ModelParams(2); %W1
 %     x3=ModelParams(3); %W1
