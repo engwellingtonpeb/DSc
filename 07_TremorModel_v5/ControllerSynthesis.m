@@ -4,7 +4,6 @@ function [LinStabilityFlag, K] = ControllerSynthesis()
 load('2023_10_15_20_08_22_DMDmodel.mat'); %  Discrete DMDc identified model
 sys=d2c(sysDMDc);
 
-
 % Params GA
 f_tremor=4; %Hz (>=4)
 omega_tremor=2*pi*f_tremor;

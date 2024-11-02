@@ -52,7 +52,14 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
 
     % Inner loop (physiological muscle control)
         %[u_sup u_ecrl u_ecrb u_ecu u_fcr u_fcu u_pq]
+
     u0 = OsimControlsFcn(osimState,t,SimuInfo);
+    
+
+        
+
+
+
     if isnan(u0)
         disp('u0 fault - line 55 OsimPlantFcn')
     end

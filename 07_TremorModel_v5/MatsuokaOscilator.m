@@ -19,19 +19,44 @@
 % Therapies in Tremor Disorders. Springer Science & Business Media, 2012. %
 %=========================================================================%
 
-function [xosc_dot] = MatsuokaOscilator(t,SimuInfo)
+function [xosc_dot] = MatsuokaOscilator(t,SimuInfo,x)
 
 switch SimuInfo.Tremor
     case 'on'
 
         persistent Kf
         persistent j1
-        
-        % B=SimuInfo.ModelParams(7); %beta
-        % h=SimuInfo.ModelParams(8); %h
-        % rosc=SimuInfo.ModelParams(9); %rosc
-        % tau1=SimuInfo.ModelParams(10);%tau1
-        % tau2=SimuInfo.ModelParams(19);%tau2
+
+        if isfield(SimuInfo, 'ModelTunning') && strcmp(SimuInfo.ModelTunning, 'true')
+             B=SimuInfo.ModelParams(7); %beta
+             h=SimuInfo.ModelParams(8); %h
+             rosc=SimuInfo.ModelParams(9); %rosc
+             tau1=SimuInfo.ModelParams(10);%tau1
+             tau2=SimuInfo.ModelParams(11);%tau2
+             A1=SimuInfo.ModelParams(12);
+             A2=SimuInfo.ModelParams(13);
+        else
+
+            B=2.5;
+            h=2.5;
+            rosc=1;
+            tau1=.01; %substituir esse trecho pelos parametros vindos de um vetor qnd não 'e sintonia
+            tau2=.01;
+            A1=0;
+            A2=0;
+        end
+
+        x=SimuInfo.Xk;
+        %-----activations and fatigues------------
+        a0 = x(48:54,1); % physiologic base activation perturbed by oscillator
+        ae = x(59:65,1); % activation due to electrical stimulation
+        p  = x(66:72,1); % fatigue weighting function
+
+        aes=ae.*p;
+        a=aes+a0;
+        s1=a(2);
+        s2=a(5);
+
         
         y1=SimuInfo.du(1);
         y2=SimuInfo.du(2);
@@ -41,12 +66,7 @@ switch SimuInfo.Tremor
         x2=SimuInfo.Xk(57);
         v2=SimuInfo.Xk(58);
         
-        tau1=.01;
-        tau2=.01;
-        B=2.5;
-        A=5;
-        h=2.5;
-        rosc=1;
+
         
         if (t==0)
             j1=0;
@@ -72,10 +92,10 @@ switch SimuInfo.Tremor
         s2=0;
         
         
-        x1dot=(1/(Kf*tau1))*(-x1-B*v1-h*y2+A*s1+rosc);
+        x1dot=(1/(Kf*tau1))*(-x1-B*v1-h*y2+A1*s1+rosc);
         v1dot=(1/(Kf*tau2))*(-v1+y1);
         
-        x2dot=(1/(Kf*tau1))*(-x2-B*v2-h*y1-A*s2+rosc);
+        x2dot=(1/(Kf*tau1))*(-x2-B*v2-h*y1-A2*s2+rosc);
         v2dot=(1/(Kf*tau2))*(-v2+y2);
         
         

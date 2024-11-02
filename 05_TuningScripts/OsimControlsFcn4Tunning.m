@@ -23,11 +23,11 @@
 function [u_control] = OsimControlsFcn4Tunning(osimState,t,SimuInfo)
 
     
-    % Check Size
-    if(SimuInfo.Ncontrols < 1)
-       error('OpenSimPlantControlsFunction:InvalidControls', ...
-           'This model has no controls.');
-    end
+% Check Size
+if(SimuInfo.Ncontrols < 1)
+   error('OpenSimPlantControlsFunction:InvalidControls', ...
+       'This model has no controls.');
+end
 
     % Get a reference to current model controls
     % modelControls = osimModel.updControls(osimState);
@@ -60,24 +60,6 @@ psi=osimState.getY().get(15); % pro_sup angle (rad)
 phi_dot=osimState.getY().get(37);% wrist flexion velocity (rad/s)
 psi_dot=osimState.getY().get(35);% pro_sup velocity (rad/s)
 
-%finding position and velocities on state vector
-% persistent PhiVec
-% if t==0
-%     PhiVec=[];
-% end
-% 
-% PhiVec=[PhiVec; rad2deg(osimState.getY().get(15))];
-% 
-% if t>0.01
-%     phiDOT=(PhiVec(end)-PhiVec(end-2))/SimuInfo.Ts;
-% else
-%     phiDOT=0;
-% end
-% 
-% 
-% 
-% 
-% [rad2deg(osimState.getY().get(15)) rad2deg(osimState.getY().get(35)) phiDOT]
 
 
 %[a_sup a_ecrl a_ecrb a_ecu a_fcr a_fcu a_pq]
@@ -162,10 +144,6 @@ ALPHA3=(0.5*((exp(eps_psi)-exp(-eps_psi))/((exp(eps_psi))+exp(-eps_psi))))+.5;
 ALPHA4=(-0.5*((exp(eps_psi)-exp(-eps_psi))/((exp(eps_psi))+exp(-eps_psi))))+0.5;
 
 
-% ALPHA1=1;
-% ALPHA2=1;
-% ALPHA3=1;
-% ALPHA4=1;
 
 %% Tremor Affected Muscle Excitation 
 
@@ -210,7 +188,7 @@ end
 
     u_control=[u(4) u(1) 0.01 0.01 0.01 u(2) u(3)]; %[u_sup u_ecrl u_ecrb u_ecu u_fcr u_fcu u_pq]
 
-    %u_control=[0.01 0.01 0.01 0.01 0.01 0.01 0.01];
+
 end
 
 

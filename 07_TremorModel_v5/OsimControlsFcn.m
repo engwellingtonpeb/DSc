@@ -47,6 +47,8 @@ d=SimuInfo.du;
     phi_ref=deg2rad(SimuInfo.Setpoint(1));
     psi_ref=deg2rad(SimuInfo.Setpoint(2));
 
+ 
+
 
 %references 
 r=[0.01 0.01 0.01 0.01 phi_ref psi_ref 0 0]'; % asup aecrl afcu apq phi psi phidot psidot
@@ -60,24 +62,6 @@ psi=osimState.getY().get(15); % pro_sup angle (rad)
 phi_dot=osimState.getY().get(37);% wrist flexion velocity (rad/s)
 psi_dot=osimState.getY().get(35);% pro_sup velocity (rad/s)
 
-%finding position and velocities on state vector
-% persistent PhiVec
-% if t==0
-%     PhiVec=[];
-% end
-% 
-% PhiVec=[PhiVec; rad2deg(osimState.getY().get(15))];
-% 
-% if t>0.01
-%     phiDOT=(PhiVec(end)-PhiVec(end-2))/SimuInfo.Ts;
-% else
-%     phiDOT=0;
-% end
-% 
-% 
-% 
-% 
-% [rad2deg(osimState.getY().get(15)) rad2deg(osimState.getY().get(35)) phiDOT]
 
 
 %[a_sup a_ecrl a_ecrb a_ecu a_fcr a_fcu a_pq]
@@ -169,6 +153,40 @@ ALPHA4=(-0.5*((exp(eps_psi)-exp(-eps_psi))/((exp(eps_psi))+exp(-eps_psi))))+0.5;
 
 %% Tremor Affected Muscle Excitation 
 
+   if isfield(SimuInfo, 'ModelTunning') && strcmp(SimuInfo.ModelTunning, 'true')
+    
+       ko1=SimuInfo.ModelParams(14);
+       ko2=SimuInfo.ModelParams(15);
+       ko3=SimuInfo.ModelParams(16);
+       ko4=SimuInfo.ModelParams(17);
+       ko5=SimuInfo.ModelParams(18);
+       ko6=SimuInfo.ModelParams(19);
+       ko7=SimuInfo.ModelParams(20);
+       ko8=SimuInfo.ModelParams(21);
+
+       k1=SimuInfo.ModelParams(22);
+       k2=SimuInfo.ModelParams(23);
+       k3=SimuInfo.ModelParams(24);
+       k4=SimuInfo.ModelParams(25);
+
+   else 
+        
+        ko1=.1; %substituir esse trecho pelos parametros vindos de um vetor qnd não 'e sintonia
+        ko2=0;
+        ko3=0;
+        ko4=.1;
+        ko5=.1;
+        ko6=0;
+        ko7=0;
+        ko8=.1;
+        
+        k1=2e6;
+        k2=1e6;
+        k3=1e6;
+        k4=1e6;
+        
+   end
+
 if t<.1 %initializing model
     u(1)=.1;
     u(2)=0.01;
@@ -176,17 +194,17 @@ if t<.1 %initializing model
     u(4)=0.01;
 
 elseif t>=.1 && t<2 
-    u(1)=2e6*ALPHA1*u(1); %ECRL
-    u(2)=1e6*ALPHA2*u(2); %FCU
-    u(3)=1e6*ALPHA3*u(3); %PQ
-    u(4)=1e6*ALPHA4*u(4); %SUP
+    u(1)=k1*ALPHA1*u(1); %ECRL
+    u(2)=k2*ALPHA2*u(2); %FCU
+    u(3)=k3*ALPHA3*u(3); %PQ
+    u(4)=k4*ALPHA4*u(4); %SUP
 
 elseif t>2 && t<=SimuInfo.Tend
 
-    u(1)=(1e6*ALPHA1*u(1))+.1*d(1)+0*d(2); %ECRL
-    u(2)=(1e6*ALPHA2*u(2))+0*d(1)+.1*d(2); %FCU
-    u(3)=(1e6*ALPHA3*u(3))+.1*d(1)+0*d(2); %PQ
-    u(4)=(1e6*ALPHA4*u(4))+0*d(1)+.1*d(2); %SUP
+    u(1)=(k1*ALPHA1*u(1))+ko1*d(1)+ko2*d(2); %ECRL
+    u(2)=(k2*ALPHA2*u(2))+ko3*d(1)+ko4*d(2); %FCU
+    u(3)=(k3*ALPHA3*u(3))+ko5*d(1)+ko6*d(2); %PQ
+    u(4)=(k4*ALPHA4*u(4))+ko7*d(1)+ko8*d(2); %SUP
 
 else
 

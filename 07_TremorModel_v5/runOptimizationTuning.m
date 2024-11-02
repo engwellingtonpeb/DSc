@@ -16,7 +16,7 @@
 
 
 %Initial Gain Guess
-ModelParams=zeros(1,33);
+ModelParams=zeros(1,25);
 nvars=length(ModelParams);
 
 % ModelParams = [x1-x6]  -  Hinf controller synthesis
@@ -27,7 +27,7 @@ nvars=length(ModelParams);
 
 global countersubs SimuInfo
 countersubs=0;
-SimuInfo.ModelTunning='true';
+
 
 A=[];
 
@@ -50,8 +50,8 @@ lb = [lb 0 0 0 0 0 0 0 0];
 ub = [ub 1 1 1 1 1 1 1 1];
 
 %excitation gains
-lb = [lb 0    0   0   0]
-ub = [ub 2e6 2e6 2e6 2e6]
+lb = [lb 0    0   0   0];
+ub = [ub 2e6 2e6 2e6 2e6];
 
 
 intcon=[];%[13 14 15 16 17 18 19 20];
@@ -59,11 +59,13 @@ intcon=[];%[13 14 15 16 17 18 19 20];
 ConstraintFunction = @gaConstrain;
 rate=0.35;
 
+FirstGuess=[10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];   
+
 options = optimoptions(@gamultiobj,'CrossoverFraction',0.6,'Display','iter',...
     'FunctionTolerance',1e-4,'PopulationSize',10,'MaxGenerations',2000,...
     'MutationFcn', {@mutationadaptfeasible,rate},'MaxStallGenerations',10,'OutputFcn',...
     [], 'UseParallel', false, 'CreationFcn',{@gacreationnonlinearfeasible},...
-    'PlotFcn',{@gaplotscores,@gaplotpareto,@gaplotrankhist},'ConstraintTolerance',1e-4)
+    'PlotFcn',{@gaplotscores,@gaplotpareto,@gaplotrankhist},'ConstraintTolerance',1e-4, 'InitialPopulationMatrix', FirstGuess)
 
 
 % Define the current date and time format
