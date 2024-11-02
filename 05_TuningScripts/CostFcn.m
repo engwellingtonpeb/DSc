@@ -151,7 +151,7 @@ if LinStabilityFlag
     osimModel.equilibrateMuscles(osimState); %solve for equilibrium similiar
     
     %Controls function
-    controlsFuncHandle = @OsimControlsFcn;
+    % controlsFuncHandle = @OsimControlsFcn;
     
     
     
@@ -166,7 +166,7 @@ if LinStabilityFlag
         
         [Jmetrics] = CostMetrics(motionData, SimuInfo)
         
-        J=[Jmetrics.freq Jmetrics.Phi Jmetrics.Psi];
+        J = [Jmetrics.freq Jmetrics.Phi Jmetrics.Psi];
         %J=[Jmetrics.err_phi Jmetrics.err_phi]; % Hinf Tunning
     catch MExc
         if ~isempty(MExc.message)

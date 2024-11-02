@@ -16,16 +16,18 @@
 
 
 %Initial Gain Guess
-ModelParams=zeros(1,10);
+ModelParams=zeros(1,33);
 nvars=length(ModelParams);
 
-% ModelParams = [x1-x7] -  Hinf controller synthesis
-% ModelParams = [x8-x12] - [B  h   rosc    tau1 tau2] params matsuoka's oscillator
-% ModelParams = [x13-20] - flags ON/OFF oscillator channel aading to
-% control signal
+% ModelParams = [x1-x6]  -  Hinf controller synthesis
+% ModelParams = [x7-x13] - [B  h   rosc  tau1 tau2 A1 A2] params matsuoka's oscillator
+% ModelParams = [x14-21] - CPG coupling gains
+% ModelParams = [x22-25] - excitation gains
 
-global countersubs
+
+global countersubs SimuInfo
 countersubs=0;
+SimuInfo.ModelTunning='true';
 
 A=[];
 
@@ -35,13 +37,22 @@ Aeq = [];
 beq = [];
 
 %Hinf Synthesis
-% lb = [1.01  20  1e-3    1e-3 20  1  1  ];
-% ub = [30    35  0.99    0.1  35 30  2  ];
+lb = [1.01  20  1e-3    1e-3 20  1];
+ub = [30    35  0.99    0.1  35 30];
 
 %Oscillator Tunning
+lb = [lb   1   1  .5  .01 .01  0 0  ];
+ub = [ub  10  10   2  .5   .5  1 1  ];
 
-lb = [ 1  1   .5  .01 .01   0.6  0 0 0 0 ];
-ub = [10  10  2  .5   .5    2  .5 .5 .5 .5];
+
+%CPG coupling gains
+lb = [lb 0 0 0 0 0 0 0 0];
+ub = [ub 1 1 1 1 1 1 1 1];
+
+%excitation gains
+lb = [lb 0    0   0   0]
+ub = [ub 2e6 2e6 2e6 2e6]
+
 
 intcon=[];%[13 14 15 16 17 18 19 20];
 

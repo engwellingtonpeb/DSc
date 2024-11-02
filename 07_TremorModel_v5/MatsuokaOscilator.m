@@ -29,7 +29,7 @@ switch SimuInfo.Tremor
         
         % B=SimuInfo.ModelParams(7); %beta
         % h=SimuInfo.ModelParams(8); %h
-        % rosc=SimuInfo.ModelParams(9); %r
+        % rosc=SimuInfo.ModelParams(9); %rosc
         % tau1=SimuInfo.ModelParams(10);%tau1
         % tau2=SimuInfo.ModelParams(19);%tau2
         

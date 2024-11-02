@@ -5,19 +5,19 @@ load('2023_10_15_20_08_22_DMDmodel.mat'); %  Discrete DMDc identified model
 sys=d2c(sysDMDc);
 
 
-% x1=ModelParams(1);
-% x2=ModelParams(2);
-% x3=ModelParams(3);
-% x4=ModelParams(4);
-% x5=ModelParams(5);
-% x6=ModelParams(6);
+x1=ModelParams(1);
+x2=ModelParams(2);
+x3=ModelParams(3);
+x4=ModelParams(4);
+x5=ModelParams(5);
+x6=ModelParams(6);
 
-x1=20.3698473578088; %Hinf tunning 29_Oct_2023_18_31_37_GA.mat
-x2=22.9551494335181;
-x3=0.395878188726672;
-x4=0.0635164361392122;
-x5=29.8074619672985;
-x6=1.49241969097471;
+% x1=20.3698473578088; %Hinf tunning 29_Oct_2023_18_31_37_GA.mat
+% x2=22.9551494335181;
+% x3=0.395878188726672;
+% x4=0.0635164361392122;
+% x5=29.8074619672985;
+% x6=1.49241969097471;
 
 
 
