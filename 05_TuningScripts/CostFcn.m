@@ -144,7 +144,7 @@ if LinStabilityFlag
         Coord_all(i,1) = cell(currentCoord.getName());
     end
     
-    SimuInfo.Coord_all=Coord_all
+    SimuInfo.Coord_all=Coord_all;
     
     
     %% Prep Simulation
@@ -168,11 +168,16 @@ if LinStabilityFlag
         [Jmetrics] = CostMetrics(motionData, SimuInfo)
         
         J = min(max([Jmetrics.freq Jmetrics.Phi Jmetrics.Psi]))
+
+        if isnan(J)
+            J=1e4
+        end
+
         %J=[Jmetrics.err_phi Jmetrics.err_phi]; % Hinf Tunning
     catch MExc
         if ~isempty(MExc.message)
              J=1e4
-             %close all hidden
+             MExc.message
         end
 
     end
