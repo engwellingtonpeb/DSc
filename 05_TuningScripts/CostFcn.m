@@ -169,11 +169,6 @@ if LinStabilityFlag
         
         J = min(max([Jmetrics.freq Jmetrics.Phi Jmetrics.Psi]))
 
-        if isnan(J)
-            J=1e4
-        end
-
-        %J=[Jmetrics.err_phi Jmetrics.err_phi]; % Hinf Tunning
     catch MExc
         if ~isempty(MExc.message)
              J=1e4
@@ -189,9 +184,9 @@ countersubs=countersubs+1
 
     
 else
-    if ~exist('J', 'var')
+
+end
+    if ~exist('J', 'var')|| isnan(J)
         J = 1e-4; % custo alto - Não estável ou vazio
     end 
-end
-
 end
