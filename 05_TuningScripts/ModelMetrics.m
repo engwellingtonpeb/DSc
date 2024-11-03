@@ -104,6 +104,6 @@ centroid_Q=[sum((xiq.^2).*yiq)/sum(yiq) sum(yiq.*xiq)/sum(xiq)];
 
 Metrics.CentroidError=abs((centroid_P(1)-centroid_Q(1))); 
 
-close all
+% close all
 end
 
