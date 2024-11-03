@@ -61,7 +61,7 @@ rate=0.35;
 
 FirstGuess=[10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];   
 
-options = optimoptions(@gamultiobj,'CrossoverFraction',0.6,'Display','iter',...
+options = optimoptions(@ga,'CrossoverFraction',0.6,'Display','iter',...
     'FunctionTolerance',1e-4,'PopulationSize',10,'MaxGenerations',2000,...
     'MutationFcn', {@mutationadaptfeasible,rate},'MaxStallGenerations',10,'OutputFcn',...
     [], 'UseParallel', false, 'CreationFcn',{@gacreationnonlinearfeasible},...
@@ -88,6 +88,6 @@ logFilename = fullfile(output_folder, strcat(SimuInfo.PatientID, date_str, '_GA.
 % Define optimization function and parameters
 fun = @CostFcn;      
 
-[x, fval, exitflag, output, population, scores] = gamultiobj(fun, nvars, A, b, Aeq, beq, lb, ub, ConstraintFunction, intcon, options);
+[x, fval, exitflag, output, population, scores] = ga(fun, nvars, A, b, Aeq, beq, lb, ub, ConstraintFunction, intcon, options);
 
 

@@ -17,12 +17,12 @@ if LinStabilityFlag
 
     %Time
     SimuInfo.Ts=1e-3;
-    SimuInfo.Tend=5;
+    SimuInfo.Tend=10;
     SimuInfo.TStim_ON=3; %e-stim initial time on the simulations
 
 
     %Plotting 
-    SimuInfo.PltFlag='on'; %[on | off]
+    SimuInfo.PltFlag='off'; %[on | off]
     SimuInfo.PltResolution=20; % smaller gets more data points on plot
     
     %Params tuned by optimization
@@ -167,11 +167,11 @@ if LinStabilityFlag
         
         [Jmetrics] = CostMetrics(motionData, SimuInfo)
         
-        J = [Jmetrics.freq Jmetrics.Phi Jmetrics.Psi];
+        J = min(max([Jmetrics.freq Jmetrics.Phi Jmetrics.Psi]));
         %J=[Jmetrics.err_phi Jmetrics.err_phi]; % Hinf Tunning
     catch MExc
         if ~isempty(MExc.message)
-             J=[1e4 1e4 1e4];
+             J=1e4;
              % J=[1e4 1e4];% Hinf Tunning
              close all hidden
 
