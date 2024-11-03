@@ -102,15 +102,15 @@ Psidot_ref=Xgyro_f(:,1);
     s=abs((s)); %(ANALISE DE JANELAS DE 10 SEGUNDOS)
     s=s./max(max(s)); %normaliza a amplitude (q nao é importante na analise)
 
-    if SimuInfo.PltFlag
-        figure(ij)
-        surf( t, w, s );
-        %     title('Espectrograma s/ Overlap - Janela Hamming')
-        ylabel('Frequência(Hz)')
-        xlabel('Tempo(s)')
-        zlabel('Amplitude')
-        colormap jet
-    end
+    % if SimuInfo.PltFlag
+    %     figure(ij)
+    %     surf( t, w, s );
+    %     %     title('Espectrograma s/ Overlap - Janela Hamming')
+    %     ylabel('Frequência(Hz)')
+    %     xlabel('Tempo(s)')
+    %     zlabel('Amplitude')
+    %     colormap jet
+    % end
     
      
      
@@ -175,13 +175,13 @@ if SimuInfo.PltFlag
     s=abs((s)); %(ANALISE DE JANELAS DE 10 SEGUNDOS)
     s=s./max(max(s)); %normaliza a amplitude (q nao é importante na analise)
 
-        figure(6+ij)
-        surf( t, w, s );
-        %title('Espectrograma s/ Overlap - Janela Hamming')
-        ylabel('Frequência(Hz)')
-        xlabel('Tempo(s)')
-        zlabel('Amplitude')
-        colormap jet
+        % figure(6+ij)
+        % surf( t, w, s );
+        % %title('Espectrograma s/ Overlap - Janela Hamming')
+        % ylabel('Frequência(Hz)')
+        % xlabel('Tempo(s)')
+        % zlabel('Amplitude')
+        % colormap jet
    
      
      %FREQUENCY HISTOGRAM

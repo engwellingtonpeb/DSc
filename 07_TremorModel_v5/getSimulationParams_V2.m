@@ -236,7 +236,7 @@ criticNetwork = connectLayers(criticNetwork, 'fc5', 'add/in2');
 criticOptions = rlRepresentationOptions('LearnRate', 5e-4, ... % Reduced learning rate for better stability
                                         'GradientThreshold', 5, ... % Increased gradient threshold
                                         'L2RegularizationFactor', 5e-4, ... % Increased regularization to avoid overfitting
-                                        'UseDevice', "gpu"); % Use CPU for now to avoid GPU issues
+                                        'UseDevice', "cpu"); % Use CPU for now to avoid GPU issues
 
 critic = rlQValueRepresentation(criticNetwork, obsInfo, actInfo, ...
     'Observation', {'observation'}, 'Action', {'action'}, criticOptions);
@@ -258,7 +258,7 @@ actorNetwork = [
 actorOptions = rlRepresentationOptions('LearnRate', 1e-4, ... % Lower learning rate to improve convergence stability
                                        'GradientThreshold', 5, ... % Increased gradient threshold
                                        'L2RegularizationFactor', 5e-4, ... % Increased regularization to prevent overfitting
-                                       'UseDevice', "gpu"); % Use CPU for now to avoid GPU issues
+                                       'UseDevice', "cpu"); % Use CPU for now to avoid GPU issues
 
 actor = rlDeterministicActorRepresentation(actorNetwork, obsInfo, actInfo, ...
     'Observation', {'observation'}, 'Action', {'ActorScaling1'}, actorOptions);
@@ -290,7 +290,7 @@ trainOpts = rlTrainingOptions(...
     'MaxEpisodes', 3000, ... % Reduced max episodes for faster training cycles
     'MaxStepsPerEpisode', 1e4, ... % Reduced steps per episode for more frequent updates
     'Verbose', true, ...
-    'Plots', 'none', ... % Enable training plot to monitor progress
+    'Plots', 'training-progress', ... % Enable training plot to monitor progress
     'StopTrainingCriteria', 'AverageReward', ...
     'StopTrainingValue', 1e5, ... % Adjusted stop value for convergence criteria
     'UseParallel', false, ... % Disable parallel for now, can enable after stability
