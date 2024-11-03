@@ -15,7 +15,7 @@ function [J] = CostMetrics(motionData, SimuInfo)
 
 
 %% Getting Patient Signal and Treating
-close all
+%close all
 global SimuInfo
 
 %% load signal

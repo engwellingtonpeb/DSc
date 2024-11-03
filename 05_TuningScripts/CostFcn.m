@@ -184,7 +184,7 @@ if LinStabilityFlag
 
 elapsedTime=toc
 global countersubs
-countersubs=countersubs+1;
+countersubs=countersubs+1
 
 
     
