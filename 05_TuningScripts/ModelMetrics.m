@@ -17,17 +17,18 @@ if w<=0
     w=w1;
 end
 
-figure
-set(gcf,'color','w');
+% Temporarily disable figure creation
+set(0, 'DefaultFigureVisible', 'off');
+
 Metrics=struct;
-hist1=histogram(x1,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+hist1=histogram(x1,'BinLimits',edges,'BinWidth',w,'Normalization','probability', 'Visible','off');
 h=hist1.BinCounts;
-hold on
-hist2=histogram(y1,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+% hold on
+hist2=histogram(y1,'BinLimits',edges,'BinWidth',w,'Normalization','probability','Visible','off');
 k=hist2.BinCounts;
 
-% ax = gca; 
-% ax.FontSize = 20; 
+% Re-enable figure creation
+set(0, 'DefaultFigureVisible', 'on');
 
 
 

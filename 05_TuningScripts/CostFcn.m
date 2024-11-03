@@ -22,7 +22,7 @@ if LinStabilityFlag
 
 
     %Plotting 
-    SimuInfo.PltFlag='on'; %[on | off]
+    SimuInfo.PltFlag='off'; %[on | off]
     SimuInfo.PltResolution=20; % smaller gets more data points on plot
     
     %Params tuned by optimization

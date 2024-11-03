@@ -35,6 +35,17 @@ switch SimuInfo.Tremor
              tau2=SimuInfo.ModelParams(11);%tau2
              A1=SimuInfo.ModelParams(12);
              A2=SimuInfo.ModelParams(13);
+
+            x=SimuInfo.Xk;
+            %-----activations and fatigues------------
+            a0 = x(48:54,1); % physiologic base activation perturbed by oscillator
+            ae = x(59:65,1); % activation due to electrical stimulation
+            p  = x(66:72,1); % fatigue weighting function
+            
+            aes=ae.*p;
+            a=aes+a0;
+            s1=a(2);
+            s2=a(5);
         else
 
             B=2.5;
@@ -44,18 +55,11 @@ switch SimuInfo.Tremor
             tau2=.01;
             A1=0;
             A2=0;
+            s1=0;
+            s2=0;
         end
 
-        x=SimuInfo.Xk;
-        %-----activations and fatigues------------
-        a0 = x(48:54,1); % physiologic base activation perturbed by oscillator
-        ae = x(59:65,1); % activation due to electrical stimulation
-        p  = x(66:72,1); % fatigue weighting function
-
-        aes=ae.*p;
-        a=aes+a0;
-        s1=a(2);
-        s2=a(5);
+       
 
         
         y1=SimuInfo.du(1);
@@ -88,8 +92,7 @@ switch SimuInfo.Tremor
         
         
         
-        s1=0;
-        s2=0;
+
         
         
         x1dot=(1/(Kf*tau1))*(-x1-B*v1-h*y2+A1*s1+rosc);
