@@ -1,6 +1,6 @@
 function [Table] = MetricsTable(P,P1,Phi_ref,Phi_simu,Psi_ref,Psi_simu,Phidot_ref,Phidot_simu,Psidot_ref,Psidot_simu)
-close all
-clc
+% close all
+% clc
 %% freq
 w=2*iqr(P1)*length(P1)^(-1/3);
 edges=[min(P1),max(P1)];
