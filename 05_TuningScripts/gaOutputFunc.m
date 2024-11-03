@@ -51,7 +51,7 @@ switch flag
         %save history.mat history cost
 end
 
-%gaPlotFunc(state.Generation,cost)
+gaPlotFunc(state.Generation,cost)
 
 
 
