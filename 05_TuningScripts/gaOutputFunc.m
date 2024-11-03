@@ -38,7 +38,7 @@ switch flag
         string1=strcat(date,'GA')
 
 
-        folder1=strcat('D:\06_BiomechCodeRepo\BiomechanicsModeling\DSc2023_v2\ModelTunning\Tuning_Feature',string1);
+        folder1=strcat('D:\02_DSc_v5\DSc\07_TremorModel_v5\Tuning_Feature',string1);
 
         save(folder1,'history', 'cost')
 

@@ -167,7 +167,8 @@ if LinStabilityFlag
         
         [Jmetrics] = CostMetrics(motionData, SimuInfo)
         
-        J = min(max([Jmetrics.freq Jmetrics.Phi Jmetrics.Psi]))
+        J = min(max([Jmetrics.freq Jmetrics.Phi*1e-2 Jmetrics.Psi*1e-2 ...
+                     Jmetrics.Phidot*1e-3 Jmetrics.Psidot*1e-3 err_phi*1e-3 err_psi*1e-3]))
 
     catch MExc
         if ~isempty(MExc.message)
