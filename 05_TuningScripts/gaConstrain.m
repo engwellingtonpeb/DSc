@@ -53,37 +53,6 @@ function [c,ceq] = gaConstrain(ModelParams)
     c(2)=(x11/x12)+1-x9; %
 
 
-  %% Flags Oscillator add to control effort
-
-%     x13=ModelParams(13);
-%     x14=ModelParams(14);
-%     x15=ModelParams(15);
-%     x16=ModelParams(16);
-% 
-%     A1=[x13 x14; x15 x16];
-%     A2=[x15 x16; x13 x14];
-% 
-%     if (isdiag(A1) && det(A1)~=0) || (isdiag(A2) && det(A2)~=0)
-%         c(6)=-1;
-%     else
-%         c(6)=1;
-%     end
-% 
-%     
-%     x17=ModelParams(17);
-%     x18=ModelParams(18);
-%     x19=ModelParams(19);
-%     x20=ModelParams(20);
-% 
-% 
-%     A3=[x17 x18; x19 x20];
-%     A4=[x19 x20; x17 x18];
-% 
-%     if (isdiag(A3) && det(A3)~=0) || (isdiag(A4) && det(A4)~=0)
-%         c(7)=-1;
-%     else
-%         c(7)=1;
-%     end
 
  
 

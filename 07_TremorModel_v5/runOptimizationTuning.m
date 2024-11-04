@@ -14,6 +14,8 @@
 %------------------------------------------------------------------------ %
 
 
+global countersubs 
+countersubs=0;
 
 %Initial Gain Guess
 nVars=25;
@@ -26,8 +28,6 @@ nvars=length(ModelParams);
 % ModelParams = [x22-25] - excitation gains
 
 
-global countersubs SimuInfo
-countersubs=0;
 
 
 A=[];
@@ -42,7 +42,7 @@ lb = [1.01  20  1e-3    1e-3 20  1];
 ub = [30    35  0.99    0.1  35 30];
 
 %Oscillator Tunning
-lb = [lb   1   1  .5  .01 .01  0 0  ];
+lb = [lb   1   1  .5  .01 .01  -1 -1  ];
 ub = [ub  10  10   2  .5   .5  1 1  ];
 
 
@@ -64,7 +64,7 @@ rate=0.35;
 firstGuess=[10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];   
 
 % Size of the population (e.g., 100 individuals)
-popSize = 125;
+popSize = 20;
 
 % Generate initial population around the first guess
 % Add random variation around the first guess
@@ -79,12 +79,12 @@ options = optimoptions(@ga,...
     'Display','iter',...
     'FunctionTolerance',1e-4,...
     'PopulationSize',popSize,...
-    'MaxGenerations',200,...
+    'MaxGenerations',150,...
     'MutationFcn', {@mutationadaptfeasible,rate},...
     'MaxStallGenerations',10,...
     'OutputFcn', @gaOutputFunc,...
     'UseParallel', true,...
-    'PlotFcn',{},...
+    'PlotFcn',{@gaplotscores,@gaplotgenealogy},...
     'ConstraintTolerance',1e-4,...
     'InitialPopulationMatrix', initialPopulation)
 
@@ -106,8 +106,10 @@ logFilename = fullfile(output_folder, strcat(SimuInfo.PatientID, date_str, '_GA.
 % Uncomment the following line if you need to open the log file
 % fid = fopen(logFilename, 'w');
 
+
+
 % Define optimization function and parameters
-fun = @CostFcn;
+fun = @(ModelParams)CostFcn(ModelParams, pd011, SimuInfo);
 
 [x, fval, exitflag, output, population, scores] = ga(fun, nvars, A, b, Aeq, beq, lb, ub, ConstraintFunction, intcon, options);
 

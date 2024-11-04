@@ -58,12 +58,14 @@ if isnumeric(choice) && choice >= 1 && choice <= length(fieldsData1)
     selectedField = fieldsData1{choice};
 
     % Assign the chosen dataset to SimuInfo.pd011
-    SimuInfo.pd011 = table2array(data1.(selectedField));
+    pd011 = table2array(data1.(selectedField));
 else
     error('Invalid selection. Please run the code again and select a valid option.');
 end
 
 end
+
+
 
 SimuInfo.P=data2.P;
 pd = makedist('Uniform','lower',1,'upper',length(data2.P));

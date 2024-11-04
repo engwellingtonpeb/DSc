@@ -1,10 +1,11 @@
-function [J] = CostFcn(ModelParams)
-clearvars -except ModelParams
-% clear global 
-global SimuInfo
+function [J] = CostFcn(ModelParams, pd011, SimuInfo )
+clearvars -except ModelParams pd011 SimuInfo
+
+
 
 % SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
+
 pathconfig
 %% Controller Synthesis
 
@@ -60,9 +61,9 @@ if LinStabilityFlag
     SimuInfo.Ck=Ck;
     SimuInfo.Dk=Dk;
     
-    SimuInfo.P=P;
-    pd = makedist('Uniform','lower',1,'upper',length(P));
-    SimuInfo.pd=pd;
+    % SimuInfo.P=P;
+    % pd = makedist('Uniform','lower',1,'upper',length(P));
+    % SimuInfo.pd=pd;
     
     
     PhiRef=0;%makedist('Normal','mu',0,'sigma',4);
@@ -165,10 +166,10 @@ if LinStabilityFlag
         elapsedTime=toc;
         SimuInfo.elapsedTime=elapsedTime;
         
-        [Jmetrics] = CostMetrics(motionData, SimuInfo)
+        [Jmetrics] = CostMetrics(motionData,  pd011, SimuInfo)
         
-        J = min(max([Jmetrics.freq Jmetrics.Phi*1e-2 Jmetrics.Psi*1e-2 ...
-                     Jmetrics.Phidot*1e-3 Jmetrics.Psidot*1e-3 err_phi*1e-3 err_psi*1e-3]))
+        J = min(max([Jmetrics.freq*1e2 Jmetrics.Phi*1e1 Jmetrics.Psi*1e1 Jmetrics.Phidot...
+            Jmetrics.Psidot Jmetrics.err_phi Jmetrics.err_psi]))
 
     catch MExc
         if ~isempty(MExc.message)

@@ -1,4 +1,4 @@
-function [J] = CostMetrics(motionData, SimuInfo)
+function [J] = CostMetrics(motionData,  pd011, SimuInfo)
 %-------------------------------------------------------------------------%
 %                  Federal University of Rio de Janeiro                   %
 %                 Biomedical Engineering Program - COPPE                  %
@@ -16,13 +16,19 @@ function [J] = CostMetrics(motionData, SimuInfo)
 
 %% Getting Patient Signal and Treating
 %close all
-global SimuInfo
+
 
 %% load signal
 add=1;
 P=[];
 P1=[];
-pd011=SimuInfo.pd011;  
+% pd011=myVarWrapper.Value; 
+% if ~isfield(SimuInfo, 'pd011') || isempty(SimuInfo.pd011)
+%     disp('Erro na função CostMetrics: o campo SimuInfo.pd011 não existe ou está vazio.');
+%     pause(5)
+%     global SimuInfo
+%     pd011=SimuInfo.pd011;  
+% end
       
 
 
