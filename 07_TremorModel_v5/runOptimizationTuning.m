@@ -60,19 +60,39 @@ intcon=[];%[13 14 15 16 17 18 19 20];
 ConstraintFunction = @gaConstrain;
 rate=0.35;
 
+% % First guess
+% firstGuess=[10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];   
+% 
+% % Size of the population (e.g., 100 individuals)
+% popSize = 20;
+
+% Generate initial population around the first guess
+% Add random variation around the first guess
+% variationScale = 0.25; % Controls the spread of initial population around first guess
+% initialPopulation = repmat(firstGuess, popSize, 1) + variationScale * randn(popSize, nVars);
+% 
+% % Ensure initial population remains within bounds, if there are bounds
+% initialPopulation = max(min(initialPopulation, ub), lb);
+
+
 % First guess
-firstGuess=[10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];   
+firstGuess = [10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];
 
 % Size of the population (e.g., 100 individuals)
 popSize = 20;
 
-% Generate initial population around the first guess
-% Add random variation around the first guess
-variationScale = 0.25; % Controls the spread of initial population around first guess
-initialPopulation = repmat(firstGuess, popSize, 1) + variationScale * randn(popSize, nVars);
+% Number of variables
+nVars = length(firstGuess);
+
+% Define independent variation scales for each parameter
+variationScale = [0.5, 1, 0.005, 0.005, 1, 0.1, 0.5, 0.5, 0.1, 0.005, 0.005, 0, 0, 0.05, 0, 0, 0.05, 0.05, 0, 0, 0.05, 1e5, 5e5, 5e5, 5e5];
+
+% Generate initial population around the first guess with independent variations
+initialPopulation = repmat(firstGuess, popSize, 1) + randn(popSize, nVars) .* variationScale;
 
 % Ensure initial population remains within bounds, if there are bounds
-initialPopulation = max(min(initialPopulation, ub), lb);
+initialPopulation = max(min(initialPopulation, ub), lb)
+
 
 options = optimoptions(@ga,...
     'CrossoverFraction',0.6,...
