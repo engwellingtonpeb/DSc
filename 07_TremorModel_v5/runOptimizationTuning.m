@@ -14,7 +14,7 @@
 %------------------------------------------------------------------------ %
 
 
-global countersubs 
+global countersubs opt
 countersubs=0;
 
 %Initial Gain Guess

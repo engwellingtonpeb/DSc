@@ -5,7 +5,7 @@ clearvars -except ModelParams pd011 SimuInfo
 
 % SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
-
+global opt
 pathconfig
 %% Controller Synthesis
 

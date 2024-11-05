@@ -12,7 +12,7 @@
 clc
 clearvars
 close all hidden
-
+global opt
 pathconfig
 
 datestr(now)

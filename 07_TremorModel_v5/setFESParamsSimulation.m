@@ -14,7 +14,7 @@
 clc
 clear all
 close all hidden
-
+global opt
 pathconfig
 SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
