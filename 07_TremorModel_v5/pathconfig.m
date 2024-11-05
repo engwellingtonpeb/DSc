@@ -53,6 +53,21 @@ if strcmp(name,'ENGWELLPC')
     
     
 elseif strcmp(name,'MARCOPOLO')
+    if opt==1
+        if isempty(gcp('nocreate'))  % Check if a parallel pool is not running
+            c = parcluster;
+            c.NumWorkers = 32;
+            parpool(c, 32);  % Create a parallel pool with 12 workers
+        else
+            disp('Parallel pool is already running.');
+        end
+        
+        GAResultsPath = 'C:\Users\Wellington\Desktop\DSc\07_TremorModel_v5\Tuning_Feature';
+        
+        % Change to the target folder
+        targetFolder = 'C:\Users\Wellington\Desktop\DSc\02_Coletas';
+    end
+
     % Specify the folder path where the .xml files are located and delete
     % it to avoid crash during RL training
     folderPath = 'C:\Users\Wellington\AppData\Local\MathWorks\MATLAB\R2023b';
