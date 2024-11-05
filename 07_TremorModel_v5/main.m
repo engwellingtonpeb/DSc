@@ -17,8 +17,7 @@ opengl('save', 'software');
 clc
 clear all
 close all hidden
-pathconfig
-import org.opensim.modeling.*
+
 datestr(now)
 
 
@@ -40,6 +39,8 @@ switch opt
 
     case 1 
 
+        pathconfig
+
         % Individualized Tremor Model TUNING
         
         % get and prepare patient data
@@ -54,8 +55,8 @@ switch opt
  
 
     case 2 
-
-    %Individualized Tremor Model SIMULATION
+        pathconfig
+        %Individualized Tremor Model SIMULATION
         
         % set patient parameters or use a dummy parameter vector
         setOnlyTremorSimulationParams;
@@ -67,7 +68,7 @@ switch opt
    
     case 3 
     %OPEN LOOP CC e-stim Simulation
-
+        pathconfig
         % set patient parameters for e-stim
         setFESParamsSimulation;
 
@@ -76,7 +77,7 @@ switch opt
 
     case 4
     % e-stim 2 tremor - Identification Dynamics
-        
+        pathconfig
         %Run e-stim simulation an save data
         IDTFConfig_estim2tremor
         runFESCLSimulation
@@ -92,7 +93,7 @@ switch opt
 
     case 5 
     %e-stim RL CONTROL LAW TRAINNING
-
+        pathconfig
         %get patient parameters or use a dummy parameter vector
         getSimulationParams_V2;
 
@@ -101,7 +102,7 @@ switch opt
 
     case 6 
     %e-stim RL CONTROL LAW TESTING
-
+        pathconfig
         %get patient parameters or use a dummy parameter vector
         getSimulationParams;
 
@@ -111,14 +112,14 @@ switch opt
 
 
     case 7
-
+        pathconfig
         disp('Module still being developed...')
         disp('   ')
 
 
     case 8
         %e-stim ESC CONTROL LAW 
-
+        pathconfig
         setFESParamsSimulation
         runFESCLSimulation
 

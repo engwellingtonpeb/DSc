@@ -85,13 +85,13 @@ popSize = 20;
 nVars = length(firstGuess);
 
 % Define independent variation scales for each parameter
-variationScale = [0.5, 1, 0.005, 0.005, 1, 0.1, 0.5, 0.5, 0.1, 0.005, 0.005, 0, 0, 0.05, 0, 0, 0.05, 0.05, 0, 0, 0.05, 1e5, 5e5, 5e5, 5e5];
+variationScale = [0.5, 1, 0.005, 0.005, 1, 0.1, 0.5, 0.5, 0.1, 0.005, 0.005, 0.1, 0.1, 0.05, 0.1, 0.1, 0.05, 0.05, 0.1, 0.1, 0.05, 1e5, 5e5, 5e5, 5e5];
 
 % Generate initial population around the first guess with independent variations
 initialPopulation = repmat(firstGuess, popSize, 1) + randn(popSize, nVars) .* variationScale;
 
 % Ensure initial population remains within bounds, if there are bounds
-initialPopulation = max(min(initialPopulation, ub), lb)
+initialPopulation = max(min(initialPopulation, ub), lb);
 
 
 options = optimoptions(@ga,...
@@ -109,24 +109,25 @@ options = optimoptions(@ga,...
     'InitialPopulationMatrix', initialPopulation)
 
 
-% Define the current date and time format
-date_str = datestr(datetime('now'), 'yyyy_mm_dd_HH_MM');
-
-% Set the base address to the current folder and define the output folder path
-base_address = pwd; % Current folder
-output_folder = fullfile(base_address, 'IndividualizedModels');
-if ~exist(output_folder, 'dir')
-    mkdir(output_folder); % Create folder if it does not exist
-end
-
-% Set up log file name using the formatted date and variable name structure
-global logFilename
-logFilename = fullfile(output_folder, strcat(SimuInfo.PatientID, date_str, '_GA.txt'));
+% % Define the current date and time format
+% date_str = datestr(datetime('now'), 'yyyy_mm_dd_HH_MM');
+% 
+% % Set the base address to the current folder and define the output folder path
+% base_address = pwd; % Current folder
+% output_folder = fullfile(base_address, 'IndividualizedModels');
+% if ~exist(output_folder, 'dir')
+%     mkdir(output_folder); % Create folder if it does not exist
+% end
+% 
+% % Set up log file name using the formatted date and variable name structure
+% global logFilename
+% logFilename = fullfile(output_folder, strcat(SimuInfo.PatientID, date_str, '_GA.txt'));
 
 % Uncomment the following line if you need to open the log file
 % fid = fopen(logFilename, 'w');
 
-
+global PatientID
+PatientID=SimuInfo.PatientID;
 
 % Define optimization function and parameters
 fun = @(ModelParams)CostFcn(ModelParams, pd011, SimuInfo);

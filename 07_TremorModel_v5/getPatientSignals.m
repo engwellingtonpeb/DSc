@@ -20,8 +20,7 @@ SimuInfo=struct;
 % Save the current working directory
 originalFolder = pwd;
 
-% Change to the target folder
-targetFolder = 'D:\02_DSc_v5\DSc\02_Coletas';
+
 cd(targetFolder);
 
 % Prompt user to select two .mat files to import
@@ -51,7 +50,7 @@ for i = 1:length(fieldsData1)
 end
 
 % Prompt the user for a selection using input
-choice = input('Which dataset do you want to save to SimuInfo.pd011: ');
+choice = input('Save to SimuInfo.pd011: ');
 
 % Validate the choice
 if isnumeric(choice) && choice >= 1 && choice <= length(fieldsData1)

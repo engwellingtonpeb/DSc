@@ -51,10 +51,12 @@ function [state, options, optchanged] = gaOutputFunc(options, state, flag)
             cost(:,ss + 1) = state.Score;
             
             % Salvar o histórico e o custo
+            global GAResultsPath PatientID
+
             dateStr = datestr(datetime('now'), 'yyyy_mm_dd_HH_MM_SS');
-            folderPath = fullfile('D:\02_DSc_v5\DSc\07_TremorModel_v5\Tuning_Feature', ['GA_', dateStr]);
+            folderPath = fullfile(GAResultsPath, [dateStr,'_GA_',PatientID]);
             save(folderPath, 'history', 'cost');
-            save('history.mat', 'history', 'cost');
+            %save('history.mat', 'history', 'cost');
     end
     
     % Função de plotagem opcional

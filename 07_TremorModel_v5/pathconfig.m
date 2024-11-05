@@ -14,7 +14,7 @@
 %clear all
 %clc
 %close all hidden
-
+global GAResultsPath
 import org.opensim.modeling.*
 opengl('save', 'software');
 
@@ -22,6 +22,20 @@ name = getenv('COMPUTERNAME');
 
 
 if strcmp(name,'ENGWELLPC')
+
+    if opt==1
+        if isempty(gcp('nocreate'))  % Check if a parallel pool is not running
+            c = parcluster;
+            c.NumWorkers = 12;
+            parpool(c, 12);  % Create a parallel pool with 12 workers
+        else
+            disp('Parallel pool is already running.');
+        end
+
+        GAResultsPath = 'C:\Users\engwe\Desktop\DSc_v5\DSc\07_TremorModel_v5';
+        % Change to the target folder
+        targetFolder = 'C:\Users\engwe\Desktop\DSc_v5\DSc\02_Coletas';
+    end
 
     % Specify the folder path where the .xml files are located and delete
     % it to avoid crash during RL training
@@ -37,7 +51,7 @@ if strcmp(name,'ENGWELLPC')
     
     osimModel=Model('C:\Users\engwe\Desktop\DSc_v5\DSc\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
-
+    
 elseif strcmp(name,'MARCOPOLO')
     % Specify the folder path where the .xml files are located and delete
     % it to avoid crash during RL training
@@ -55,6 +69,21 @@ elseif strcmp(name,'MARCOPOLO')
         
 
 elseif strcmp(name,'ENGWELLSURFACE')
+
+    if opt==1
+        if isempty(gcp('nocreate'))  % Check if a parallel pool is not running
+            c = parcluster;
+            c.NumWorkers = 16;
+            parpool(c, 16);  % Create a parallel pool with 12 workers
+        else
+            disp('Parallel pool is already running.');
+        end
+        
+        GAResultsPath = 'D:\02_DSc_v5\DSc\07_TremorModel_v5\Tuning_Feature';
+        
+        % Change to the target folder
+        targetFolder = 'D:\02_DSc_v5\DSc\02_Coletas';
+    end
 
     addpath('\02_DSc_v5\DSc\07_TremorModel_v5\Tuning_Feature')
    

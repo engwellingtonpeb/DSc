@@ -15,19 +15,69 @@ clc
 clear all
 close all hidden
 
-pathconfig
+
 SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
 
 
-%pacitente 01
-load('29_Oct_2023_20_15_55_GA.mat') % sintonia do oscilador 2 dias 
-ModelParams=x(12,:);% sintonia do oscilador 2 dias 
+% %pacitente 01
+% load('29_Oct_2023_20_15_55_GA.mat') % sintonia do oscilador 2 dias 
+% ModelParams=x(12,:);% sintonia do oscilador 2 dias 
+
+
+% Prompt user to choose how to provide ModelParams
+choice = input('Choose option:\n1 - Load vector of parameters from a file\n2 - Type the vector manually\nEnter choice (1 or 2): ');
+
+switch choice
+    case 1
+        % Option 1: Load vector of parameters from a file
+        [fileName, pathName] = uigetfile('*.mat', 'Select the parameter file');
+        if isequal(fileName, 0)
+            disp('File selection canceled. Exiting...');
+            return;
+        end
+        fullFilePath = fullfile(pathName, fileName);
+        data = load(fullFilePath);
+
+        % Ensure the file contains 'cost' and 'history' variables
+        if isfield(data, 'cost') && isfield(data, 'history')
+            % Find the minimum cost and corresponding index for each run (column)
+            [minCostValues, minIndices] = min(data.cost, [], 1); % Min along the first dimension (rows)
+            
+            % Identify the parameter set with the absolute minimum cost
+            [minCost, bestColumn] = min(minCostValues);
+            bestRow = minIndices(bestColumn);
+
+            % Extract the parameter vector from 'history' for the best row and column
+            ModelParams = data.history(bestRow, :, bestColumn);
+            disp('Loaded ModelParams from file with minimum cost.');
+            
+            % Display the minimum cost
+            fprintf('Minimum cost: %f\n', minCost);
+        else
+            error('The selected file does not contain the required ''cost'' and ''history'' variables.');
+        end
+        
+    case 2
+        % Option 2: Type the vector manually
+        ModelParams = input('Enter the parameter vector (e.g., [1, 2, 3, ...]): ');
+        
+    otherwise
+        error('Invalid choice. Please choose either 1 or 2.');
+end
+
+% Now ModelParams is set based on the selected option
+disp('ModelParams set as:');
+disp(ModelParams);
+
+
+
 
 %% Controller Synthesis
 
 
- [LinStabilityFlag, K] = ControllerSynthesis();
+ 
+[LinStabilityFlag, K] = ControllerSynthesis();
 
 
 if LinStabilityFlag
