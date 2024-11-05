@@ -109,19 +109,19 @@ options = optimoptions(@ga,...
     'InitialPopulationMatrix', initialPopulation)
 
 
-% % Define the current date and time format
-% date_str = datestr(datetime('now'), 'yyyy_mm_dd_HH_MM');
-% 
-% % Set the base address to the current folder and define the output folder path
-% base_address = pwd; % Current folder
-% output_folder = fullfile(base_address, 'IndividualizedModels');
-% if ~exist(output_folder, 'dir')
-%     mkdir(output_folder); % Create folder if it does not exist
-% end
-% 
-% % Set up log file name using the formatted date and variable name structure
-% global logFilename
-% logFilename = fullfile(output_folder, strcat(SimuInfo.PatientID, date_str, '_GA.txt'));
+% Define the current date and time format
+date_str = datestr(datetime('now'), 'yyyy_mm_dd_HH_MM');
+
+% Set the base address to the current folder and define the output folder path
+base_address = pwd; % Current folder
+output_folder = fullfile(base_address, 'IndividualizedModels');
+if ~exist(output_folder, 'dir')
+    mkdir(output_folder); % Create folder if it does not exist
+end
+
+% Set up log file name using the formatted date and variable name structure
+global logFilename
+logFilename = fullfile(output_folder, strcat(SimuInfo.PatientID, date_str, '_GA.txt'));
 
 % Uncomment the following line if you need to open the log file
 % fid = fopen(logFilename, 'w');
