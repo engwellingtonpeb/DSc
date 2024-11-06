@@ -27,37 +27,81 @@ switch SimuInfo.Tremor
         persistent Kf
         persistent j1
 
-        if isfield(SimuInfo, 'ModelTunning') && strcmp(SimuInfo.ModelTunning, 'true')
-             B=SimuInfo.ModelParams(7); %beta
-             h=SimuInfo.ModelParams(8); %h
-             rosc=SimuInfo.ModelParams(9); %rosc
-             tau1=SimuInfo.ModelParams(10);%tau1
-             tau2=SimuInfo.ModelParams(11);%tau2
-             A1=SimuInfo.ModelParams(12);
-             A2=SimuInfo.ModelParams(13);
-
-            x=SimuInfo.Xk;
-            %-----activations and fatigues------------
-            a0 = x(48:54,1); % physiologic base activation perturbed by oscillator
-            ae = x(59:65,1); % activation due to electrical stimulation
-            p  = x(66:72,1); % fatigue weighting function
+    try
+        %% OSCILLATOR for model Tuning or Tuned model SIMULATION
+            if isfield(SimuInfo,'ModelTunning') && strcmp(SimuInfo.ModelTunning, 'true')
+    
+                B=SimuInfo.ModelParams(7); %beta
+                h=SimuInfo.ModelParams(8); %h
+                rosc=SimuInfo.ModelParams(9); %rosc
+                tau1=SimuInfo.ModelParams(10);%tau1
+                tau2=SimuInfo.ModelParams(11);%tau2
+                A1=SimuInfo.ModelParams(12);
+                A2=SimuInfo.ModelParams(13);
+                
+                x=SimuInfo.Xk;
+                %-----activations and fatigues------------
+                a0 = x(48:54,1); % physiologic base activation perturbed by oscillator
+                ae = x(59:65,1); % activation due to electrical stimulation
+                p  = x(66:72,1); % fatigue weighting function
+                
+                aes=ae.*p;
+                a=aes+a0;
+                s1=a(2);
+                s2=a(5);
             
-            aes=ae.*p;
-            a=aes+a0;
-            s1=a(2);
-            s2=a(5);
-        else
-
-            B=2.5;
-            h=2.5;
-            rosc=1;
-            tau1=.01; %substituir esse trecho pelos parametros vindos de um vetor qnd não 'e sintonia
-            tau2=.01;
-            A1=0;
-            A2=0;
-            s1=0;
-            s2=0;
-        end
+            elseif isfield(SimuInfo,'ModelTunning') && strcmp(SimuInfo.ModelTunning, 'false')
+                    % standard oscillator
+                    B=2.5;
+                    h=2.5;
+                    rosc=1;
+                    tau1=.01; %substituir esse trecho pelos parametros vindos de um vetor qnd não 'e sintonia
+                    tau2=.01;
+                    A1=0;
+                    A2=0;
+                    s1=0;
+                    s2=0;
+            end
+    
+    %% OSCILLATOR 
+    
+                if isfield(SimuInfo, 'DummySimulation') && strcmp(SimuInfo.DummySimulation, 'false')
+                     B=SimuInfo.ModelParams(7); %beta
+                     h=SimuInfo.ModelParams(8); %h
+                     rosc=SimuInfo.ModelParams(9); %rosc
+                     tau1=SimuInfo.ModelParams(10);%tau1
+                     tau2=SimuInfo.ModelParams(11);%tau2
+                     A1=SimuInfo.ModelParams(12);
+                     A2=SimuInfo.ModelParams(13);
+        
+                    x=SimuInfo.Xk;
+                    %-----activations and fatigues------------
+                    a0 = x(48:54,1); % physiologic base activation perturbed by oscillator
+                    ae = x(59:65,1); % activation due to electrical stimulation
+                    p  = x(66:72,1); % fatigue weighting function
+                    
+                    aes=ae.*p;
+                    a=aes+a0;
+                    s1=a(2);
+                    s2=a(5);
+    
+                elseif isfield(SimuInfo, 'DummySimulation') && strcmp(SimuInfo.DummySimulation, 'true')
+                    % standard oscillator
+                    B=2.5;
+                    h=2.5;
+                    rosc=1;
+                    tau1=.01; %substituir esse trecho pelos parametros vindos de um vetor qnd não 'e sintonia
+                    tau2=.01;
+                    A1=0;
+                    A2=0;
+                    s1=0;
+                    s2=0;
+    
+                end
+    catch
+        disp('Oscillator case Error: Verify DummySimulation or ModelTunning')
+    end
+%% Other cases of Oscillator
 
        
 

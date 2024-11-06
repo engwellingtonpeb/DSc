@@ -10,19 +10,8 @@
 %=========================================================================%
 
 
-
-clc
-clear all
-close all hidden
-
-
 SimuInfo=struct; %information about simulation parameters
-import org.opensim.modeling.*
-
-
-% %pacitente 01
-% load('29_Oct_2023_20_15_55_GA.mat') % sintonia do oscilador 2 dias 
-% ModelParams=x(12,:);% sintonia do oscilador 2 dias 
+SimuInfo.DummySimulation='false'; 
 
 
 % Prompt user to choose how to provide ModelParams
@@ -37,30 +26,24 @@ switch choice
             return;
         end
         fullFilePath = fullfile(pathName, fileName);
-        data = load(fullFilePath);
-
-        % Ensure the file contains 'cost' and 'history' variables
-        if isfield(data, 'cost') && isfield(data, 'history')
-            % Find the minimum cost and corresponding index for each run (column)
-            [minCostValues, minIndices] = min(data.cost, [], 1); % Min along the first dimension (rows)
+        data = load(fullFilePath, 'x', 'fval');  % Load only 'x' and 'fval'
+        
+        % Check if 'x' and 'fval' are in the loaded data
+        if isfield(data, 'x') && isfield(data, 'fval')
+            % Assign 'x' to ModelParams and 'fval' to minimum cost
+            ModelParams = data.x;
+            minimum_cost = data.fval;
             
-            % Identify the parameter set with the absolute minimum cost
-            [minCost, bestColumn] = min(minCostValues);
-            bestRow = minIndices(bestColumn);
-
-            % Extract the parameter vector from 'history' for the best row and column
-            ModelParams = data.history(bestRow, :, bestColumn);
-            disp('Loaded ModelParams from file with minimum cost.');
-            
-            % Display the minimum cost
-            fprintf('Minimum cost: %f\n', minCost);
+            % Display the loaded values
+            disp('Loaded ModelParams and minimum cost from file.');
+            fprintf('Minimum cost: %f\n', minimum_cost);
         else
-            error('The selected file does not contain the required ''cost'' and ''history'' variables.');
+            error('The selected file does not contain the required ''x'' and ''fval'' variables.');
         end
         
     case 2
         % Option 2: Type the vector manually
-        ModelParams = input('Enter the parameter vector (e.g., [1, 2, 3, ...]): ');
+        ModelParams = input('Enter the parameter vector ([1, 2, 3, ...]): ');
         
     otherwise
         error('Invalid choice. Please choose either 1 or 2.');
@@ -71,21 +54,26 @@ disp('ModelParams set as:');
 disp(ModelParams);
 
 
-
+if strcmp(SimuInfo.DummySimulation, 'true')
+% %pacitente 01
+    load('29_Oct_2023_20_15_55_GA.mat') % sintonia do oscilador 2 dias 
+    ModelParams=x(12,:);% sintonia do oscilador 2 dias 
+end
 
 %% Controller Synthesis
 
 
  
-[LinStabilityFlag, K] = ControllerSynthesis();
+[LinStabilityFlag, K] = ControllerSynthesis(SimuInfo, ModelParams);
 
 
 if LinStabilityFlag
  %% Tremor Simulation for Tunning 
+    
 
     %Time
     SimuInfo.Ts=1e-3;
-    SimuInfo.Tend=15;
+    SimuInfo.Tend=10;
     SimuInfo.TStim_ON=3; %e-stim initial time on the simulations
 
 

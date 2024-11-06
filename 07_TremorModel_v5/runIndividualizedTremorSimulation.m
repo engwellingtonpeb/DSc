@@ -17,3 +17,11 @@ tic
     motionData = IntegrateOsimPlant(osimModel,integratorName,SimuInfo,integratorOptions);
 elapsedTime=toc
 SimuInfo.elapsedTime=elapsedTime;
+
+
+%Calling the Metrics
+
+
+
+%Gerating a motion file (.mot) to import on opensim
+

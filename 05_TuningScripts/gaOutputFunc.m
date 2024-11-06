@@ -54,9 +54,13 @@ function [state, options, optchanged] = gaOutputFunc(options, state, flag)
             global GAResultsPath PatientID
 
             dateStr = datestr(datetime('now'), 'yyyy_mm_dd_HH_MM_SS');
-            folderPath = fullfile(GAResultsPath, [dateStr,'_GA_',PatientID]);
+            folderPath = fullfile(GAResultsPath, [dateStr,PatientID,'_GA.mat']);
             save(folderPath, 'history', 'cost');
             %save('history.mat', 'history', 'cost');
+
+
+% Close any open file identifiers
+fclose('all');
     end
     
     % Função de plotagem opcional

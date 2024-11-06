@@ -153,24 +153,26 @@ ALPHA4=(-0.5*((exp(eps_psi)-exp(-eps_psi))/((exp(eps_psi))+exp(-eps_psi))))+0.5;
 
 %% Tremor Affected Muscle Excitation 
 
-   if isfield(SimuInfo, 'ModelTunning') && strcmp(SimuInfo.ModelTunning, 'true')
+
+try
+    %% CONTROL parameters for model Tuning or Tuned model SIMULATION
+    if isfield(SimuInfo,'ModelTunning') && strcmp(SimuInfo.ModelTunning, 'true')
     
-       ko1=SimuInfo.ModelParams(14);
-       ko2=SimuInfo.ModelParams(15);
-       ko3=SimuInfo.ModelParams(16);
-       ko4=SimuInfo.ModelParams(17);
-       ko5=SimuInfo.ModelParams(18);
-       ko6=SimuInfo.ModelParams(19);
-       ko7=SimuInfo.ModelParams(20);
-       ko8=SimuInfo.ModelParams(21);
-
-       k1=SimuInfo.ModelParams(22);
-       k2=SimuInfo.ModelParams(23);
-       k3=SimuInfo.ModelParams(24);
-       k4=SimuInfo.ModelParams(25);
-
-   else 
+        ko1=SimuInfo.ModelParams(14);
+        ko2=SimuInfo.ModelParams(15);
+        ko3=SimuInfo.ModelParams(16);
+        ko4=SimuInfo.ModelParams(17);
+        ko5=SimuInfo.ModelParams(18);
+        ko6=SimuInfo.ModelParams(19);
+        ko7=SimuInfo.ModelParams(20);
+        ko8=SimuInfo.ModelParams(21);
         
+        k1=SimuInfo.ModelParams(22);
+        k2=SimuInfo.ModelParams(23);
+        k3=SimuInfo.ModelParams(24);
+        k4=SimuInfo.ModelParams(25);
+    
+    elseif isfield(SimuInfo,'ModelTunning') && strcmp(SimuInfo.ModelTunning, 'false')
         ko1=.1; %substituir esse trecho pelos parametros vindos de um vetor qnd não 'e sintonia
         ko2=0;
         ko3=0;
@@ -184,8 +186,47 @@ ALPHA4=(-0.5*((exp(eps_psi)-exp(-eps_psi))/((exp(eps_psi))+exp(-eps_psi))))+0.5;
         k2=1e6;
         k3=1e6;
         k4=1e6;
+    end
+
+%% OSCILLATOR 
+
+    if isfield(SimuInfo, 'DummySimulation') && strcmp(SimuInfo.DummySimulation, 'false')
+        ko1=SimuInfo.ModelParams(14);
+        ko2=SimuInfo.ModelParams(15);
+        ko3=SimuInfo.ModelParams(16);
+        ko4=SimuInfo.ModelParams(17);
+        ko5=SimuInfo.ModelParams(18);
+        ko6=SimuInfo.ModelParams(19);
+        ko7=SimuInfo.ModelParams(20);
+        ko8=SimuInfo.ModelParams(21);
         
-   end
+        k1=SimuInfo.ModelParams(22);
+        k2=SimuInfo.ModelParams(23);
+        k3=SimuInfo.ModelParams(24);
+        k4=SimuInfo.ModelParams(25);
+    
+    elseif isfield(SimuInfo, 'DummySimulation') && strcmp(SimuInfo.DummySimulation, 'true')
+        ko1=.1; %substituir esse trecho pelos parametros vindos de um vetor qnd não 'e sintonia
+        ko2=0;
+        ko3=0;
+        ko4=.1;
+        ko5=.1;
+        ko6=0;
+        ko7=0;
+        ko8=.1;
+        
+        k1=2e6;
+        k2=1e6;
+        k3=1e6;
+        k4=1e6;
+    end
+catch
+    disp('Controller case Error: Verify DummySimulation or ModelTunning flags')
+end
+
+
+
+%% Control Law Switching
 
 if t<.1 %initializing model
     u(1)=.1;

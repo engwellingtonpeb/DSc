@@ -109,4 +109,33 @@ elseif strcmp(name,'ENGWELLSURFACE')
 
     osimModel=Model('D:\02_DSc_v5\DSc\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
+
+elseif strcmp(name,'PROJETOFINEP_01')
+
+    if opt==1
+        if isempty(gcp('nocreate'))  % Check if a parallel pool is not running
+            c = parcluster;
+            c.NumWorkers = 36;
+            parpool(c, 36);  % Create a parallel pool with 12 workers
+        else
+            disp('Parallel pool is already running.');
+        end
+        
+        GAResultsPath = 'C:\Users\wellington\Desktop\DSc\07_TremorModel_v5\Tuning_Feature';
+        
+        % Change to the target folder
+        targetFolder = 'C:\Users\wellington\Desktop\DSc\02_Coletas';
+    end
+
+    addpath('\Users\wellington\Desktop\DSc\07_TremorModel_v5\Tuning_Feature\')
+   
+    addpath('\Users\wellington\Desktop\DSc\02_Coletas\')
+    addpath('\Users\wellington\Desktop\DSc\03_ODE_Solvers\')
+    addpath('\Users\wellington\Desktop\DSc\04_DMDc_IDTF\simulations\')
+    addpath('\Users\wellington\Desktop\DSc\05_TuningScripts\')
+
+    osimModel=Model('C:\Users\wellington\Desktop\DSc\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
+    
+
+
 end

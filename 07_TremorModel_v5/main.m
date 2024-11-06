@@ -12,7 +12,6 @@
 %      environment for RL agent training. RL agent will control           %
 %      electrical stimulator                                              %
 %=========================================================================%
-opengl('save', 'software');
 
 clc
 clear all
@@ -50,9 +49,8 @@ switch opt
         runOptimizationTuning;
         
         % save results
-        saveTunedPTModel;
-
- 
+        saveTunedPTModel; 
+         
 
     case 2 
         pathconfig
