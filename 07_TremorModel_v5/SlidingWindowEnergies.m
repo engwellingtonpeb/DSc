@@ -47,7 +47,7 @@ function [E] = SlidingWindowEnergies(newData, SimuInfo)
     end
 
 
-E=bandpower((lastOneSecondSignal-mean(lastOneSecondSignal)),1/SimuInfo.Ts,[2 8]);
+E=bandpower((lastOneSecondSignal-mean(lastOneSecondSignal)),1/SimuInfo.Ts,[2.5 8]);
 % SimuInfo.TremorEnergy=E;
 
 end

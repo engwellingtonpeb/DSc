@@ -13,6 +13,9 @@
 SimuInfo=struct; %information about simulation parameters
 SimuInfo.DummySimulation='false'; 
 
+if strcmp(SimuInfo.DummySimulation,'true')
+disp('[!!!RUNNING A DUMMY SIMULATION!!!]')
+end
 
 % Prompt user to choose how to provide ModelParams
 choice = input('Choose option:\n1 - Load vector of parameters from a file\n2 - Type the vector manually\nEnter choice (1 or 2): ');
@@ -26,20 +29,31 @@ switch choice
             return;
         end
         fullFilePath = fullfile(pathName, fileName);
-        data = load(fullFilePath, 'x', 'fval');  % Load only 'x' and 'fval'
+        data = load(fullFilePath);
         
-        % Check if 'x' and 'fval' are in the loaded data
+        % Check if the file follows the new structure with 'x' and 'fval'
         if isfield(data, 'x') && isfield(data, 'fval')
-            % Assign 'x' to ModelParams and 'fval' to minimum cost
+            % New structure: Assign 'x' to ModelParams and 'fval' to minimum cost
             ModelParams = data.x;
             minimum_cost = data.fval;
-            
-            % Display the loaded values
-            disp('Loaded ModelParams and minimum cost from file.');
+            disp('Loaded ModelParams and minimum cost from file (new structure).');
             fprintf('Minimum cost: %f\n', minimum_cost);
-        else
-            error('The selected file does not contain the required ''x'' and ''fval'' variables.');
-        end
+        
+        % Check if the file follows the old structure with 'cost' and 'history'
+        elseif isfield(data, 'cost') && isfield(data, 'history')
+            % Old structure: Find the minimum cost and corresponding parameters
+            [minCostValues, minIndices] = min(data.cost, [], 1); % Min along the first dimension (rows)
+            [minimum_cost, bestColumn] = min(minCostValues);
+            bestRow = minIndices(bestColumn);
+            ModelParams = data.history(bestRow, :, bestColumn);
+            disp('Loaded ModelParams from file with minimum cost (old structure).');
+            fprintf('Minimum cost: %f\n', minimum_cost);
+
+else
+    % Error if neither structure is found
+    error('The selected file does not contain the required variables for either structure.');
+end
+
         
     case 2
         % Option 2: Type the vector manually

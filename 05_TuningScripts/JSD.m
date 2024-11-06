@@ -1,4 +1,4 @@
-function [J] = JSD(motionData, SimuInfo)
+function [MetricsTable, J] = JSD(motionData, SimuInfo)
 %-------------------------------------------------------------------------%
 %                  Federal University of Rio de Janeiro                   %
 %                 Biomedical Engineering Program - COPPE                  %
@@ -14,16 +14,13 @@ function [J] = JSD(motionData, SimuInfo)
 %------------------------------------------------------------------------ %
 
 
-%% Getting Patient Signal and Treating
-%close all
-
-
 %% load signal
 add=1;
 P=[];
 P1=[];
+MetricsTable=[];
 pd011=SimuInfo.pd011;  
-      
+
 
 
 
@@ -231,6 +228,9 @@ J=struct();
     [Metrics] = ModelMetrics(P,P1,w,edges,w1,edges1); % JSD of tremor freq 
     J.freq=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
 
+    MetricsRow = struct2table(Metrics);
+    MetricsTable = [MetricsTable; MetricsRow];
+
     %% phi
     Phi_ref=Phi_ref+mean(Phi_simu);
 
@@ -242,6 +242,8 @@ J=struct();
     [Metrics] = ModelMetrics(Phi_ref,Phi_simu,w,edges,w1,edges1); % JSD of tremor Phi
     J.Phi=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
 
+    MetricsRow = struct2table(Metrics);
+    MetricsTable = [MetricsTable; MetricsRow];
 
 
     %% psi
@@ -254,6 +256,9 @@ J=struct();
 
     [Metrics] = ModelMetrics(Psi_ref,Psi_simu,w,edges,w1,edges1); % JSD of tremor Psi
     J.Psi=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+    
+    MetricsRow = struct2table(Metrics);
+    MetricsTable = [MetricsTable; MetricsRow];
 
     %% Erro de setpoint
     ess_phi=Phi_simu-(ones(length(Phi_simu),1)*SimuInfo.Setpoint(1));
@@ -277,6 +282,9 @@ J=struct();
 
     [Metrics] = ModelMetrics(Phidot_ref,Phidot_simu,w,edges,w1,edges1); % JSD of tremor Psi
     J.Phidot=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+
+    MetricsRow = struct2table(Metrics);
+    MetricsTable = [MetricsTable; MetricsRow];
     %% psidot
     Psidot_ref=Psidot_ref+mean(Psi_simu);
 
@@ -287,5 +295,8 @@ J=struct();
 
     [Metrics] = ModelMetrics(Psidot_ref,Psidot_simu,w,edges,w1,edges1); % JSD of tremor Psi
     J.Psidot=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+
+    MetricsRow = struct2table(Metrics);
+    MetricsTable = [MetricsTable; MetricsRow];
 
 end

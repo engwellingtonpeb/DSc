@@ -108,7 +108,8 @@ elseif strcmp(name,'ENGWELLSURFACE')
     addpath('\02_DSc_v5\DSc\05_TuningScripts\')
 
     osimModel=Model('D:\02_DSc_v5\DSc\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
-    
+    % Change to the target folder
+    targetFolder = 'D:\02_DSc_v5\DSc\02_Coletas';
 
 elseif strcmp(name,'PROJETOFINEP_01')
 
@@ -136,6 +137,7 @@ elseif strcmp(name,'PROJETOFINEP_01')
 
     osimModel=Model('C:\Users\wellington\Desktop\DSc\01_ModelFilesOsim41\MoBL-ARMS Upper Extremity Model\Benchmarking Simulations\4.1 Model with Millard-Schutte Matched Curves\MOBL_ARMS_module2_4_allmuscles_ignoreactivation.osim');
     
-
+    % Change to the target folder
+    targetFolder = 'C:\Users\wellington\Desktop\DSc\02_Coletas';
 
 end
