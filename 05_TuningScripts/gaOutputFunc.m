@@ -37,31 +37,32 @@ function [state, options, optchanged] = gaOutputFunc(options, state, flag)
     fprintf('Melhor vetor de parâmetros: %s\n', mat2str(bestParams));
     
     % Armazenar histórico conforme o estado da otimização
-    switch flag
-        case 'init'
-            history(:,:,1) = state.Population;
-            cost(:,1) = state.Score;
-        case {'iter', 'interrupt'}
-            ss = size(history, 3);
-            history(:,:,ss + 1) = state.Population;
-            cost(:,ss + 1) = state.Score;
-        case 'done'
-            ss = size(history, 3);
-            history(:,:,ss + 1) = state.Population;
-            cost(:,ss + 1) = state.Score;
+% Armazenar histórico conforme o estado da otimização, considerando o custo como uma matriz
+switch flag
+    case 'init'
+        % Inicializar histórico e custo com a dimensão apropriada
+        history(:,:,1) = state.Population;
+        cost(:,:,1) = state.Score; % Modificar para armazenar custo como uma matriz
+    case {'iter', 'interrupt'}
+        % Adicionar a população e o custo atual ao histórico
+        ss = size(history, 3);
+        history(:,:,ss + 1) = state.Population;
+        cost(:,:,ss + 1) = state.Score; % Armazenar a matriz de custos na terceira dimensão
+    case 'done'
+        % Armazenar a população e custo final
+        ss = size(history, 3);
+        history(:,:,ss + 1) = state.Population;
+        cost(:,:,ss + 1) = state.Score; % Armazenar o custo final como uma matriz
+
             
-            % Salvar o histórico e o custo
-            global GAResultsPath PatientID
+        % Salvar o histórico e o custo
+        global GAResultsPath PatientID
 
-            dateStr = datestr(datetime('now'), 'yyyy_mm_dd_HH_MM_SS');
-            folderPath = fullfile(GAResultsPath, [dateStr,PatientID,'_GA.mat']);
-            save(folderPath, 'history', 'cost');
-            %save('history.mat', 'history', 'cost');
-
-
-% Close any open file identifiers
-fclose('all');
-    end
+        dateStr = datestr(datetime('now'), 'yyyy_mm_dd_HH_MM_SS');
+        folderPath = fullfile(GAResultsPath, [dateStr,'_GA_',PatientID]);
+        save(folderPath, 'history', 'cost');
+        %save('history.mat', 'history', 'cost');
+end
     
     % Função de plotagem opcional
     gaPlotFunc(state.Generation, cost);

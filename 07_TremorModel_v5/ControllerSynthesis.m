@@ -5,65 +5,25 @@ load('2023_10_15_20_08_22_DMDmodel.mat'); %  Discrete DMDc identified model
 sys=d2c(sysDMDc);
 
 
-if isfield(SimuInfo, 'DummySimulation') 
-    
-    if strcmp(SimuInfo.DummySimulation, 'true')
 
-       % Params GA
-        f_tremor=4; %Hz (>=4)
-        omega_tremor=2*pi*f_tremor;
-        
-        f_mov=2.5; %Hz (<=2.5)
-        omega_mov=2*pi*f_mov;
-        
-        
-        omegaMed=(omega_tremor+omega_mov)/2;
-        
-        
-        
-        
-        % 24/10
-        % FPB pondera S=1/W1
-        W1=makeweight(10,[30,1],.01); %makeweight(dcgain,[freq,mag],hfgain)
-        
-        % FPA pondera T=1/W3
-        W3=makeweight(.01,[30,.9],1); %makeweight(dcgain,[freq,mag],hfgain)
-        
-        
-        W2 =[];% makeweight(x5,[x6 x7],x8); % FPA pondera KS
-        
-        
-        [K,CL,gamma,info] = mixsyn(sys,W1,W2,W3);
-    
-    
-        if isempty(K)
-            LinStabilityFlag=0;
-        else
-            LinStabilityFlag=isstable(CL);
-        end
-    end
 
-    if strcmp(SimuInfo.DummySimulation, 'false')
+try
+    %% OSCILLATOR 
+    
+    if isfield(SimuInfo, 'DummySimulation') && strcmp(SimuInfo.DummySimulation, 'false')
         x1=ModelParams(1);
         x2=ModelParams(2);
         x3=ModelParams(3);
         x4=ModelParams(4);
         x5=ModelParams(5);
         x6=ModelParams(6);
-        
-     
-        
-        
-        
-        
+                   
         % 24/10
         % FPB pondera S=1/W1
         W1=makeweight(x1,[x2,1],x3); %makeweight(dcgain,[freq,mag],hfgain)
         
         % FPA pondera T=1/W3
         W3=makeweight(x4,[x5,.9],x6); %makeweight(dcgain,[freq,mag],hfgain)
-        
-        
         
         % % FPB pondera S=1/W1
         % W1=makeweight(10,[30,1],.01); %makeweight(dcgain,[freq,mag],hfgain)
@@ -85,6 +45,58 @@ if isfield(SimuInfo, 'DummySimulation')
         else
             LinStabilityFlag=isstable(CL);
         end
+    
+    elseif isfield(SimuInfo, 'DummySimulation') && strcmp(SimuInfo.DummySimulation, 'true')
+        % Params GA
+        f_tremor=4; %Hz (>=4)
+        omega_tremor=2*pi*f_tremor;
+        
+        f_mov=2.5; %Hz (<=2.5)
+        omega_mov=2*pi*f_mov;
+        
+        omegaMed=(omega_tremor+omega_mov)/2;
+        
+        % 24/10
+        % FPB pondera S=1/W1
+        W1=makeweight(10,[30,1],.01); %makeweight(dcgain,[freq,mag],hfgain)
+        
+        % FPA pondera T=1/W3
+        W3=makeweight(.01,[30,.9],1); %makeweight(dcgain,[freq,mag],hfgain)
+        
+        
+        W2 =[];% makeweight(x5,[x6 x7],x8); % FPA pondera KS
+        
+        
+        [K,CL,gamma,info] = mixsyn(sys,W1,W2,W3);
+        
+        
+        if isempty(K)
+            LinStabilityFlag=0;
+        else
+            LinStabilityFlag=isstable(CL);
+        end
+    
+    
+    
+    end
+catch
+    disp('Controller Synthesis Error: Verify DummySimulation or ModelTunning')
+end
+
+
+
+
+
+
+
+
+if isfield(SimuInfo, 'DummySimulation') 
+    
+    if strcmp(SimuInfo.DummySimulation, 'true')
+
+
+    if strcmp(SimuInfo.DummySimulation, 'false')
+       
     
         
     end
