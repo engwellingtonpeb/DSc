@@ -19,6 +19,11 @@ datestr(now)
 SimuInfo=struct; %information about simulation parameters
 import org.opensim.modeling.*
 
+SimuInfo.DummySimulation='false'; 
+
+if strcmp(SimuInfo.DummySimulation,'true')
+    disp('[!!!RUNNING A DUMMY SIMULATION!!!]')
+end
 
 % %pacitente 01
 % load('29_Oct_2023_20_15_55_GA.mat') % sintonia do oscilador 2 dias 
@@ -73,7 +78,7 @@ disp(ModelParams);
 %% Controller Synthesis
 
 
- [LinStabilityFlag, K] = ControllerSynthesis();
+ [LinStabilityFlag, K] = ControllerSynthesis(SimuInfo, ModelParams);
 
 
 if LinStabilityFlag

@@ -84,8 +84,11 @@ popSize = 20;
 % Number of variables
 nVars = length(firstGuess);
 
+% % Define independent variation scales for each parameter
+% variationScale = [0.5, 1, 0.005, 0.005, 1, 0.1, 0.5, 0.5, 0.1, 0.005, 0.005, 0.1, 0.1, 0.05, 0.1, 0.1, 0.05, 0.05, 0.1, 0.1, 0.05, 1e5, 5e5, 5e5, 5e5];
+
 % Define independent variation scales for each parameter
-variationScale = [0.5, 1, 0.005, 0.005, 1, 0.1, 0.5, 0.5, 0.1, 0.005, 0.005, 0.1, 0.1, 0.05, 0.1, 0.1, 0.05, 0.05, 0.1, 0.1, 0.05, 1e5, 5e5, 5e5, 5e5];
+variationScale = [1, 5, 0.1, 0.1, 5, 0.1, 1, 1, 0.5, 0.05, 0.05, 0.5, 0.5, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 5e5, 5e5, 5e5, 5e5];
 
 % Generate initial population around the first guess with independent variations
 initialPopulation = repmat(firstGuess, popSize, 1) + randn(popSize, nVars) .* variationScale;

@@ -11,7 +11,7 @@
 
 
 SimuInfo=struct; %information about simulation parameters
-SimuInfo.DummySimulation='true'; 
+SimuInfo.DummySimulation='false'; 
 
 if strcmp(SimuInfo.DummySimulation,'true')
 disp('[!!!RUNNING A DUMMY SIMULATION!!!]')
