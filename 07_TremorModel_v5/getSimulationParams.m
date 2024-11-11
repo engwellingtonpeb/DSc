@@ -78,8 +78,8 @@ disp(ModelParams);
 %% Controller Synthesis
 
 
- [LinStabilityFlag, K] = ControllerSynthesis(SimuInfo, ModelParams);
-;
+[LinStabilityFlag, K] = ControllerSynthesis(SimuInfo, ModelParams);
+
 
 
 if LinStabilityFlag
@@ -234,7 +234,6 @@ if LinStabilityFlag
 
 %% Environment for RL Training
 
-
 eStimInputs=6; % parameter number of electrical stimulator
 numStatesFromPatient=4; % number of states from biomechanical model or voluntary+observer
 
@@ -244,16 +243,17 @@ obsInfo.Name = 'observation';
 obsInfo.Description = 'Phi, Psi, Phidot, Psidot';
 
 %Action Info
-actInfo=rlNumericSpec([eStimInputs 1], 'LowerLimit', [10; 150e-6; 4e-3;  4e-3;  4e-3;  4e-3;],...
-                                       'UpperLimit', [40; 500e-6; 40e-3; 40e-3; 40e-3; 40e-3;]);
+actInfo=rlNumericSpec([eStimInputs 1], 'LowerLimit', [4e-3;  4e-3;  4e-3;  4e-3; 150e-6; 10],...
+                                       'UpperLimit', [40e-3; 40e-3; 40e-3; 40e-3;500e-6; 40]);
 actInfo.Name = 'action';
-actInfo.Description = 'f, pw, I_ch1, I_ch2, I_ch3, I_ch4';
+actInfo.Description = 'I_ch1, I_ch2, I_ch3, I_ch4, pw, f ';
 
 
 StepHandle=@(Action,LoggedSignals)MyStepFunction(Action,LoggedSignals,SimuInfo,osimModel,osimState);
 ResetHandle=@()MyResetFunction(osimModel,osimState,SimuInfo);
 
 env = rlFunctionEnv(obsInfo,actInfo,StepHandle,ResetHandle)
+
 
 %% Creating DDPG trained agent
 % 
