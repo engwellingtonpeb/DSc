@@ -103,7 +103,7 @@ centroid_P=sum((xip.^2).*yip)/sum(xip.*yip); %posquali xip^2*yip = xip*Area
 centroid_Q=sum((xiq.^2).*yiq)/sum(xiq.*yiq);
 
 
-Metrics.CentroidError=abs(centroid_P-centroid_Q)/centroid_P; %abs_error/expected_value
+Metrics.CentroidError=abs(centroid_P-centroid_Q)/abs(centroid_P); %abs_error/expected_value
 
 % close all
 end

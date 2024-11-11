@@ -61,7 +61,7 @@ ConstraintFunction = @gaConstrain;
 rate=0.35;
 
 % % First guess
-% firstGuess=[10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];   
+%firstGuess=[10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];   
 % 
 % % Size of the population (e.g., 100 individuals)
 % popSize = 20;
@@ -76,26 +76,26 @@ rate=0.35;
 
 
 % First guess
-% firstGuess = [10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];
-initialPopulation= [10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];
+firstGuess = [10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];
+%initialPopulation= [10 30 .01 .01 30 1 2.5 2.5 1 .01 .01 0 0 .1 0 0 .1 .1 0 0 .1 2e6 1e6 1e6 1e6];
 
 % Size of the population (e.g., 100 individuals)
 popSize = 20;
 
-% % Number of variables
-% nVars = length(firstGuess);
-% 
-% % % Define independent variation scales for each parameter
-% % variationScale = [0.5, 1, 0.005, 0.005, 1, 0.1, 0.5, 0.5, 0.1, 0.005, 0.005, 0.1, 0.1, 0.05, 0.1, 0.1, 0.05, 0.05, 0.1, 0.1, 0.05, 1e5, 5e5, 5e5, 5e5];
-% 
+% Number of variables
+nVars = length(firstGuess);
+
 % % Define independent variation scales for each parameter
-% variationScale = [1, 5, 0.1, 0.1, 5, 0.1, 1, 1, 0.5, 0.05, 0.05, 0.5, 0.5, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 5e5, 5e5, 5e5, 5e5];
-% 
-% % Generate initial population around the first guess with independent variations
-% initialPopulation = repmat(firstGuess, popSize, 1) + randn(popSize, nVars) .* variationScale;
-% 
-% % Ensure initial population remains within bounds, if there are bounds
-% initialPopulation = max(min(initialPopulation, ub), lb);
+% variationScale = [0.5, 1, 0.005, 0.005, 1, 0.1, 0.5, 0.5, 0.1, 0.005, 0.005, 0.1, 0.1, 0.05, 0.1, 0.1, 0.05, 0.05, 0.1, 0.1, 0.05, 1e5, 5e5, 5e5, 5e5];
+
+% Define independent variation scales for each parameter
+variationScale = [1, 5, 0.1, 0.1, 5, 0.1, 1, 1, 0.5, 0.1, 0.1, 0.5, 0.5, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 5e5, 5e5, 5e5, 5e5];
+
+% Generate initial population around the first guess with independent variations
+initialPopulation = repmat(firstGuess, popSize, 1) + randn(popSize, nVars) .* variationScale;
+
+% Ensure initial population remains within bounds, if there are bounds
+initialPopulation = max(min(initialPopulation, ub), lb);
 
 
 % Define the current date and time format
@@ -130,9 +130,9 @@ fun = @(ModelParams)CostFcn(ModelParams, pd011, SimuInfo);
 %     'MaxGenerations',150,...
 %     'MutationFcn', {@mutationadaptfeasible,rate},...
 %     'MaxStallGenerations',10,...
-%     'OutputFcn', '',...
+%     'OutputFcn', @gaOutputFunc,...
 %     'UseParallel', false,...
-%     'PlotFcn',{@gaplotscores,@gaplotgenealogy},...
+%     'PlotFcn',{@gaplotscores},...
 %     'ConstraintTolerance',1e-4,...
 %     'InitialPopulationMatrix', initialPopulation)
 % 
