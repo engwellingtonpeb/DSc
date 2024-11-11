@@ -99,10 +99,11 @@ yiq(end+1)=yiq(end);
 % centroid_P=[sum(xip.*yip)/sum(yip) sum(yip.*xip)/sum(xip)];
 % centroid_Q=[sum(xiq.*yiq)/sum(yiq) sum(yiq.*xiq)/sum(xiq)];
 
-centroid_P=[sum((xip.^2).*yip)/sum(xip.*yip) sum(yip.*xip)/sum(xip)]; %posquali
-centroid_Q=[sum((xiq.^2).*yiq)/sum(yiq) sum(yiq.*xiq)/sum(xiq)];
+centroid_P=sum((xip.^2).*yip)/sum(xip.*yip); %posquali xip^2*yip = xip*Area
+centroid_Q=sum((xiq.^2).*yiq)/sum(xiq.*yiq);
 
-Metrics.CentroidError=abs((centroid_P(1)-centroid_Q(1))); 
+
+Metrics.CentroidError=abs(centroid_P-centroid_Q)/centroid_P; %abs_error/expected_value
 
 % close all
 end

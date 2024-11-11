@@ -88,8 +88,8 @@ elseif strcmp(name,'ENGWELLSURFACE')
     if opt==1
         if isempty(gcp('nocreate'))  % Check if a parallel pool is not running
             c = parcluster;
-            c.NumWorkers = 16;
-            parpool(c, 16);  % Create a parallel pool with 12 workers
+            c.NumWorkers = 10;
+            parpool(c, 10);  % Create a parallel pool with 12 workers
         else
             disp('Parallel pool is already running.');
         end

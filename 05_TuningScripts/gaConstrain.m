@@ -1,7 +1,7 @@
-function [c,ceq] = gaConstrain(ModelParams)
+function [c,ceq] = gaConstrain(ModelParams,SimuInfo)
     c=[]; 
     ceq=[]; 
-
+    global distFtremor
 %% HInf Synthesis
 
     x1=ModelParams(1); %W1
@@ -52,8 +52,14 @@ function [c,ceq] = gaConstrain(ModelParams)
     c(1)=x9-1-x8;
     c(2)=(x11/x12)+1-x9; %
 
-
-
+    %Tremor Freq. condition 
+    % fp=mean(distFtremor);
+    % omegap=2*pi.*distFtremor;
+    % Kfs=(1./omegap)*sqrt(1/(x11*x12));
+    % 
+    % Kf_bar=mean(Kfs);
+    % 
+    % c(4)=fp-(1/(2*pi*Kf_bar))*sqrt(1/(x11*x12))-0.25;
  
 
 

@@ -169,12 +169,12 @@ if LinStabilityFlag
         [Jmetrics] = CostMetrics(motionData,  pd011, SimuInfo)
         
         %ga
-        J = min(max([Jmetrics.freq*1e2 Jmetrics.Phi*1e1 Jmetrics.Psi*1e1 Jmetrics.Phidot...
-            Jmetrics.Psidot Jmetrics.err_phi Jmetrics.err_psi]))
+        % J = min(max([Jmetrics.freq*1e2 Jmetrics.Phi*1e1 Jmetrics.Psi*1e1 Jmetrics.Phidot...
+        %     Jmetrics.Psidot Jmetrics.err_phi Jmetrics.err_psi]))
 
         %gamultiobj
         J = [Jmetrics.freq Jmetrics.Phi Jmetrics.Psi Jmetrics.Phidot...
-            Jmetrics.Psidot Jmetrics.err_phi Jmetrics.err_psi]
+            Jmetrics.Psidot 1e-3*Jmetrics.err_phi 1e-3*Jmetrics.err_psi]
 
     catch MExc
         if ~isempty(MExc.message)

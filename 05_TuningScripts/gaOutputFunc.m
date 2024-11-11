@@ -27,10 +27,15 @@ function [state, options, optchanged] = gaOutputFunc(options, state, flag)
     [currentBestCost, idx] = min(state.Score);
     currentBestParams = state.Population(idx, :);
     
-    if isempty(bestCost) || currentBestCost < bestCost
-        bestCost = currentBestCost;
-        bestParams = currentBestParams;
-    end
+if isempty(bestCost)
+    bestCost = currentBestCost;
+    bestParams = currentBestParams;
+elseif currentBestCost < bestCost
+    bestCost = currentBestCost;
+    bestParams = currentBestParams;
+end
+
+
     
     % Exibir o melhor vetor de parâmetros e custo até o momento
     fprintf('Melhor custo até agora: %.4f\n', bestCost);
@@ -65,7 +70,7 @@ switch flag
 end
     
     % Função de plotagem opcional
-    gaPlotFunc(state.Generation, cost);
+    %gaPlotFunc(state.Generation, cost);
 end
 
 
