@@ -59,7 +59,7 @@ end
 choice = input('Save to SimuInfo.pd011: ');
 
 % Validate the choice
-if isnumeric(choice) && choice >= 1 && choice <= length(fieldsData1)
+if all([isnumeric(choice), isscalar(choice), choice >= 1, choice <= length(fieldsData1)])
     selectedField = fieldsData1{choice};
 
     % Assign the chosen dataset to SimuInfo.pd011
@@ -67,6 +67,7 @@ if isnumeric(choice) && choice >= 1 && choice <= length(fieldsData1)
 else
     error('Invalid selection. Please run the code again and select a valid option.');
 end
+
 
 end
 

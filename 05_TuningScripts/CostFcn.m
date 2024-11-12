@@ -18,13 +18,13 @@ if LinStabilityFlag
 
     %Time
     SimuInfo.Ts=1e-3;
-    SimuInfo.Tend=10;
+    SimuInfo.Tend=30;
     SimuInfo.TStim_ON=3; %e-stim initial time on the simulations
 
 
     %Plotting 
     SimuInfo.PltFlag='off'; %[on | off]
-    SimuInfo.PltResolution=20; % smaller gets more data points on plot
+    SimuInfo.PltResolution=50; % smaller gets more data points on plot
     
     %Params tuned by optimization
     SimuInfo.ModelParams=ModelParams;
@@ -170,12 +170,12 @@ if LinStabilityFlag
         MetricsTable
         
         %ga
-        % J = max([Jmetrics.freq*1e2 Jmetrics.Phi*1e1 Jmetrics.Psi*1e1 Jmetrics.Phidot...
-        %     Jmetrics.Psidot Jmetrics.err_phi Jmetrics.err_psi])
+        J = max([Jmetrics.freq   Jmetrics.Phi     Jmetrics.Psi     Jmetrics.Phidot...
+                 Jmetrics.Psidot Jmetrics.err_phi*1e-1 Jmetrics.err_psi*1e-1])
 
         %gamultiobj
-        J = [Jmetrics.freq Jmetrics.Phi Jmetrics.Psi Jmetrics.Phidot...
-            Jmetrics.Psidot 1e-2*Jmetrics.err_phi 1e-2*Jmetrics.err_psi]
+        % J = [Jmetrics.freq Jmetrics.Phi Jmetrics.Psi Jmetrics.Phidot...
+        %     Jmetrics.Psidot 1e-2*Jmetrics.err_phi 1e-2*Jmetrics.err_psi]
 
     catch MExc
         if ~isempty(MExc.message)
