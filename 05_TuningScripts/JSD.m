@@ -128,7 +128,7 @@ Psidot_ref=Xgyro_f(:,1);
     X=[cumtrapz(t_gyro,Xbase(:,1)) cumtrapz(t_gyro,Xbase(:,2)) cumtrapz(t_gyro,Xbase(:,3))];
  end
 
-P(P<3) = [];
+% P(P<3) = [];
  %% Sinais do Modelo
 
     t_simu=[];
@@ -149,37 +149,53 @@ a_ecrl=[a_ecrl; motionData.data((2000:end),44)];  %ativ ECRL
 a_fcu=[a_fcu; motionData.data((2000:end),52)];  %ativ FCU
 
 
+
+Ts=SimuInfo.Ts;
+t_simu=0:Ts:(length(Phi_simu)-1)*Ts;
+
+[Phi_simu,t_new] = resample(Phi_simu,t_simu,Fs_gyro);
+[Psi_simu,t_new] = resample(Psi_simu,t_simu,Fs_gyro);
+
+Psi_simu=Psi_simu-mean(Psi_simu);
+
+[Phidot_simu,t_new] = resample(Phidot_simu,t_simu,Fs_gyro);
+[Psidot_simu,t_new] = resample(Psidot_simu,t_simu,Fs_gyro);
+
+
+
 % spectrogram from simulation
     
     
 
-    ts_simu=SimuInfo.Ts;
-    Fs_simu=1/ts_simu;
+
+    Fs_simu=Fs_gyro;
+    ts_simu=ts_gyro;
     Tjan=.5;
     Njan=round(Tjan/ts_simu); %qtd ptos na janela
     r=rectwin(Njan);%Define janela RETANGULAR de comprimento Njan
     h=hamming(Njan);%Define janela HAMMING de comprimento Njan
     N=length(Phidot_simu);
-
-
-if SimuInfo.PltFlag
     w1=(floor(N/6));
-    for ij=1:6 %6 JANELAS DE 10 SEGUNDOS
 
+%spectrogram from simulation
+
+
+for ij=1:6 %6 JANELAS DE 10 SEGUNDOS
+    
     F=0:.1:20;
     overlap=.5*Njan; % 50% overlap
-    [s,w,t] =spectrogram(Phidot_simu(((w1*ij-w1+1):(w1*(ij+1)-w1-1)),1),h,overlap,F,Fs_simu,'yaxis');
+    [s,w,t] =spectrogram(Phidot_simu(((w1*ij-w1+1):(w1*(ij+1)-w1-1)),1),h,overlap,F,Fs_gyro,'yaxis');
     s=abs((s)); %(ANALISE DE JANELAS DE 10 SEGUNDOS)
     s=s./max(max(s)); %normaliza a amplitude (q nao é importante na analise)
+    figure(6+ij)
+    surf( t, w, s );
+%     title('Espectrograma s/ Overlap - Janela Hamming')
+    ylabel('Frequência(Hz)')
+    xlabel('Tempo(s)')
+    zlabel('Amplitude')
+    colormap jet
 
-        % figure(6+ij)
-        % surf( t, w, s );
-        % %title('Espectrograma s/ Overlap - Janela Hamming')
-        % ylabel('Frequência(Hz)')
-        % xlabel('Tempo(s)')
-        % zlabel('Amplitude')
-        % colormap jet
-   
+     
      
      %FREQUENCY HISTOGRAM
 
@@ -190,28 +206,7 @@ if SimuInfo.PltFlag
             P1=[P1 F(k)];
         end
 
-      end   
-else
-    w1=(floor(N));
-     ij=1; %6 JANELAS DE 10 SEGUNDOS
-        F=0:.1:20;
-        overlap=.5*Njan; % 50% overlap
-        [s,w,t] =spectrogram(Phidot_simu(((w1*ij-w1+1):(w1*(ij+1)-w1-1)),1),h,overlap,F,Fs_simu,'yaxis');
-        s=abs((s)); %(ANALISE DE JANELAS DE 10 SEGUNDOS)
-        s=s./max(max(s)); %normaliza a amplitude (q nao é importante na analise)
-    
-      
-         
-         %FREQUENCY HISTOGRAM
-    
-            [k,l]=size(s);
-            
-            for i=1:l
-                [val,k]=max(s(:,i));
-                P1=[P1 F(k)];
-            end
-
-end
+end       
   
 
 J=struct();

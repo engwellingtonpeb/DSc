@@ -16,7 +16,7 @@
 %close all hidden
 global GAResultsPath
 import org.opensim.modeling.*
-opengl('save', 'software');
+% opengl('save', 'software');
 
 name = getenv('COMPUTERNAME'); 
 
