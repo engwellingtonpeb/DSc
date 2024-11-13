@@ -187,13 +187,13 @@ for ij=1:6 %6 JANELAS DE 10 SEGUNDOS
     [s,w,t] =spectrogram(Phidot_simu(((w1*ij-w1+1):(w1*(ij+1)-w1-1)),1),h,overlap,F,Fs_gyro,'yaxis');
     s=abs((s)); %(ANALISE DE JANELAS DE 10 SEGUNDOS)
     s=s./max(max(s)); %normaliza a amplitude (q nao é importante na analise)
-    figure(6+ij)
-    surf( t, w, s );
-%     title('Espectrograma s/ Overlap - Janela Hamming')
-    ylabel('Frequência(Hz)')
-    xlabel('Tempo(s)')
-    zlabel('Amplitude')
-    colormap jet
+%     figure(6+ij)
+%     surf( t, w, s );
+% %     title('Espectrograma s/ Overlap - Janela Hamming')
+%     ylabel('Frequência(Hz)')
+%     xlabel('Tempo(s)')
+%     zlabel('Amplitude')
+%     colormap jet
 
      
      
@@ -226,6 +226,12 @@ J=struct();
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
 
+    figure
+    hist1=histogram(P,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hold on
+    hist1=histogram(P1,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+
+
     %% phi
     Phi_ref=Phi_ref+mean(Phi_simu);
 
@@ -240,6 +246,10 @@ J=struct();
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
 
+    figure
+    hist1=histogram(Phi_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hold on
+    hist1=histogram(Phi_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
 
     %% psi
     Psi_ref=Psi_ref+mean(Psi_simu);
@@ -254,6 +264,11 @@ J=struct();
     
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
+
+    figure
+    hist1=histogram(Psi_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hold on
+    hist1=histogram(Psi_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability')
 
     %% Erro de setpoint
     ess_phi=Phi_simu-(ones(length(Phi_simu),1)*SimuInfo.Setpoint(1));

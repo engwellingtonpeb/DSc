@@ -92,7 +92,7 @@ if LinStabilityFlag
 
 
     %Plotting 
-    SimuInfo.PltFlag='on'; %[on | off]
+    SimuInfo.PltFlag='off'; %[on | off]
     SimuInfo.PltResolution=100;
     
     %Params tuned by optimization

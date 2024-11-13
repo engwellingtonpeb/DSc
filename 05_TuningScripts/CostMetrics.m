@@ -175,7 +175,7 @@ for ij=1:6 %6 JANELAS DE 10 SEGUNDOS
     [s,w,t] =spectrogram(Phidot_simu(((w1*ij-w1+1):(w1*(ij+1)-w1-1)),1),h,overlap,F,Fs_gyro,'yaxis');
     s=abs((s)); %(ANALISE DE JANELAS DE 10 SEGUNDOS)
     s=s./max(max(s)); %normaliza a amplitude (q nao é importante na analise)
-    figure(6+ij)
+    % figure(6+ij)
 %     surf( t, w, s );
 % %     title('Espectrograma s/ Overlap - Janela Hamming')
 %     ylabel('Frequência(Hz)')
