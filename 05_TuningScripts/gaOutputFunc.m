@@ -10,9 +10,11 @@ function [state, options, optchanged] = gaOutputFunc(options, state, flag)
     currentTime = datetime('now');
     if isempty(lastTime)
         lastTime = currentTime; % Inicializa o tempo na primeira chamada
+        disp('Casos Iniciais')
     else
         elapsedTime = seconds(currentTime - lastTime);
         fprintf('Tempo entre chamadas: %.2f segundos\n', elapsedTime);
+        fprintf('GERAÇÃO: %d \n', state.Generation);
         lastTime = currentTime; % Atualiza o último tempo
     end
     

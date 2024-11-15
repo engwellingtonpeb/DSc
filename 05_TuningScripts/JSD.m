@@ -100,13 +100,13 @@ Psidot_ref=Xgyro_f(:,1);
     s=s./max(max(s)); %normaliza a amplitude (q nao é importante na analise)
 
     % if SimuInfo.PltFlag
-    %     figure(ij)
-    %     surf( t, w, s );
-    %     %     title('Espectrograma s/ Overlap - Janela Hamming')
-    %     ylabel('Frequência(Hz)')
-    %     xlabel('Tempo(s)')
-    %     zlabel('Amplitude')
-    %     colormap jet
+        figure(ij)
+        surf( t, w, s );
+        %     title('Espectrograma s/ Overlap - Janela Hamming')
+        ylabel('Frequência(Hz)')
+        xlabel('Tempo(s)')
+        zlabel('Amplitude')
+        colormap jet
     % end
     
      
@@ -187,13 +187,13 @@ for ij=1:6 %6 JANELAS DE 10 SEGUNDOS
     [s,w,t] =spectrogram(Phidot_simu(((w1*ij-w1+1):(w1*(ij+1)-w1-1)),1),h,overlap,F,Fs_gyro,'yaxis');
     s=abs((s)); %(ANALISE DE JANELAS DE 10 SEGUNDOS)
     s=s./max(max(s)); %normaliza a amplitude (q nao é importante na analise)
-%     figure(6+ij)
-%     surf( t, w, s );
-% %     title('Espectrograma s/ Overlap - Janela Hamming')
-%     ylabel('Frequência(Hz)')
-%     xlabel('Tempo(s)')
-%     zlabel('Amplitude')
-%     colormap jet
+    figure(6+ij)
+    surf( t, w, s );
+%     title('Espectrograma s/ Overlap - Janela Hamming')
+    ylabel('Frequência(Hz)')
+    xlabel('Tempo(s)')
+    zlabel('Amplitude')
+    colormap jet
 
      
      
@@ -227,9 +227,9 @@ J=struct();
     MetricsTable = [MetricsTable; MetricsRow];
 
     figure
-    hist1=histogram(P,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hist1=histogram(P,'Normalization','probability');
     hold on
-    hist1=histogram(P1,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hist1=histogram(P1,'Normalization','probability');
 
 
     %% phi
@@ -295,6 +295,11 @@ J=struct();
 
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
+
+    figure
+    hist1=histogram(Phidot_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hold on
+    hist1=histogram(Phidot_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
     %% psidot
     Psidot_ref=Psidot_ref+mean(Psi_simu);
 
@@ -308,5 +313,10 @@ J=struct();
 
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
+
+    figure
+    hist1=histogram(Psidot_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hold on
+    hist1=histogram(Psidot_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
 
 end
