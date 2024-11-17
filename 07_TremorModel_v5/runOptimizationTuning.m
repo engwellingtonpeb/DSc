@@ -18,14 +18,13 @@ global countersubs opt
 countersubs=0;
 
 %Initial Gain Guess
-nVars=25;
+nVars=18;
 ModelParams=zeros(1,nVars);
 nvars=length(ModelParams);
 
 % ModelParams = [x1-x6]  -  Hinf controller synthesis
-% ModelParams = [x7-x13] - [B  h   rosc  tau1 tau2 A1 A2] params matsuoka's oscillator
-% ModelParams = [x14-21] - CPG coupling gains
-% ModelParams = [x22-25] - excitation gains
+% ModelParams = [x7-x14] - CPG coupling gains C-matrix
+% ModelParams = [x15-x18] - excitation gains E-matrix
 
 
 
@@ -41,9 +40,9 @@ beq = [];
 lb = [1.01  20  1e-3    1e-3 20  1];
 ub = [30    35  0.99    0.1  35 30];
 
-%Oscillator Tunning
-lb = [lb   1   1  .5  .01 .01  -1 -1  ];
-ub = [ub  10  10   2  .5   .5  1 1  ];
+% %Oscillator Tunning
+% lb = [lb   1   1  .5  .01 .01  -1 -1  ];
+% ub = [ub  10  10   2  .5   .5  1 1  ];
 
 
 %CPG coupling gains
@@ -77,7 +76,6 @@ rate=0.35;
 
 % First guess
 firstGuess = [10 30 .01 .01 30 1, ...
-              2.5 2.5 1 .01 .01 0 0,...
               .1 0 0 .1 .1 0 0 .1,...
               2e6 1e6 1e6 1e6];
 
@@ -94,7 +92,6 @@ nVars = length(firstGuess);
 
 % Define independent variation scales for each parameter
 variationScale = [1, 5, 0.1, 0.1, 5, 0.1,...
-                  1, 1, 0.5, 0.1, 0.1, 0.5, 0.5,...
                   0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1,...
                   5e5, 5e5, 5e5, 5e5];
 

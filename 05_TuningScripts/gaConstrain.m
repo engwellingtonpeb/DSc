@@ -23,7 +23,7 @@ function [c,ceq] = gaConstrain(ModelParams,SimuInfo)
         x7=1;
     end
 
-    c(3)=x7; % if x7 negative Jaime's book (pg198) condition of W1, W3 is met.
+    c(1)=x7; % if x7 negative Jaime's book (pg198) condition of W1, W3 is met.
 
 
     
@@ -41,16 +41,16 @@ function [c,ceq] = gaConstrain(ModelParams,SimuInfo)
     % A1=SimuInfo.ModelParams(12);
     % A2=SimuInfo.ModelParams(13);
 
-    x8=ModelParams(7);   %beta
-    x9=ModelParams(8);   %h
-    x10=ModelParams(9); %r
-    x11=ModelParams(10); %tau1
-    x12=ModelParams(11); %tau2
-
-    % Stable oscilation conditions from Matsuoka, Kiyotoshi. "Analysis of a 
-    % neural oscillator." Biological cybernetics 104 (2011): 297-304.
-    c(1)=x9-1-x8;
-    c(2)=(x11/x12)+1-x9; %
+    % x8=ModelParams(7);   %beta
+    % x9=ModelParams(8);   %h
+    % x10=ModelParams(9); %r
+    % x11=ModelParams(10); %tau1
+    % x12=ModelParams(11); %tau2
+    % 
+    % % Stable oscilation conditions from Matsuoka, Kiyotoshi. "Analysis of a 
+    % % neural oscillator." Biological cybernetics 104 (2011): 297-304.
+    % c(1)=x9-1-x8;
+    % c(2)=(x11/x12)+1-x9; %
 
     %Tremor Freq. condition 
     % fp=mean(distFtremor);

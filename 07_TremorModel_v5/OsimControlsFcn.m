@@ -158,19 +158,19 @@ try
     %% CONTROL parameters for model Tuning or Tuned model SIMULATION
     if isfield(SimuInfo,'ModelTunning') && strcmp(SimuInfo.ModelTunning, 'true')
     
-        ko1=SimuInfo.ModelParams(14);
-        ko2=SimuInfo.ModelParams(15);
-        ko3=SimuInfo.ModelParams(16);
-        ko4=SimuInfo.ModelParams(17);
-        ko5=SimuInfo.ModelParams(18);
-        ko6=SimuInfo.ModelParams(19);
-        ko7=SimuInfo.ModelParams(20);
-        ko8=SimuInfo.ModelParams(21);
+        ko1=SimuInfo.ModelParams(7);
+        ko2=SimuInfo.ModelParams(8);
+        ko3=SimuInfo.ModelParams(9);
+        ko4=SimuInfo.ModelParams(10);
+        ko5=SimuInfo.ModelParams(11);
+        ko6=SimuInfo.ModelParams(12);
+        ko7=SimuInfo.ModelParams(13);
+        ko8=SimuInfo.ModelParams(14);
         
-        k1=SimuInfo.ModelParams(22);
-        k2=SimuInfo.ModelParams(23);
-        k3=SimuInfo.ModelParams(24);
-        k4=SimuInfo.ModelParams(25);
+        k1=SimuInfo.ModelParams(15);
+        k2=SimuInfo.ModelParams(16);
+        k3=SimuInfo.ModelParams(17);
+        k4=SimuInfo.ModelParams(18);
     
     elseif isfield(SimuInfo,'ModelTunning') && strcmp(SimuInfo.ModelTunning, 'false')
         ko1=.1; %substituir esse trecho pelos parametros vindos de um vetor qnd não 'e sintonia
@@ -191,19 +191,19 @@ try
 %% OSCILLATOR 
 
     if isfield(SimuInfo, 'DummySimulation') && strcmp(SimuInfo.DummySimulation, 'false')
-        ko1=SimuInfo.ModelParams(14);
-        ko2=SimuInfo.ModelParams(15);
-        ko3=SimuInfo.ModelParams(16);
-        ko4=SimuInfo.ModelParams(17);
-        ko5=SimuInfo.ModelParams(18);
-        ko6=SimuInfo.ModelParams(19);
-        ko7=SimuInfo.ModelParams(20);
-        ko8=SimuInfo.ModelParams(21);
+        ko1=SimuInfo.ModelParams(7);
+        ko2=SimuInfo.ModelParams(8);
+        ko3=SimuInfo.ModelParams(9);
+        ko4=SimuInfo.ModelParams(10);
+        ko5=SimuInfo.ModelParams(11);
+        ko6=SimuInfo.ModelParams(12);
+        ko7=SimuInfo.ModelParams(13);
+        ko8=SimuInfo.ModelParams(14);
         
-        k1=SimuInfo.ModelParams(22);
-        k2=SimuInfo.ModelParams(23);
-        k3=SimuInfo.ModelParams(24);
-        k4=SimuInfo.ModelParams(25);
+        k1=SimuInfo.ModelParams(15);
+        k2=SimuInfo.ModelParams(16);
+        k3=SimuInfo.ModelParams(17);
+        k4=SimuInfo.ModelParams(18);
     
     elseif isfield(SimuInfo, 'DummySimulation') && strcmp(SimuInfo.DummySimulation, 'true')
         ko1=.1; %substituir esse trecho pelos parametros vindos de um vetor qnd não 'e sintonia
@@ -247,12 +247,12 @@ elseif t>2 && t<=SimuInfo.Tend
     u(3)=(k3*ALPHA3*u(3))+ko5*d(1)+ko6*d(2); %PQ
     u(4)=(k4*ALPHA4*u(4))+ko7*d(1)+ko8*d(2); %SUP
 
-else
-
-    u(1)=2e6*ALPHA1*u(1); %ECRL
-    u(2)=1e6*ALPHA2*u(2); %FCU
-    u(3)=1e6*ALPHA3*u(3); %PQ
-    u(4)=1e6*ALPHA4*u(4); %SUP
+% else
+% 
+%     u(1)=2e6*ALPHA1*u(1); %ECRL
+%     u(2)=1e6*ALPHA2*u(2); %FCU
+%     u(3)=1e6*ALPHA3*u(3); %PQ
+%     u(4)=1e6*ALPHA4*u(4); %SUP
 
 end
 
