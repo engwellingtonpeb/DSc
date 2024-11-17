@@ -195,6 +195,6 @@ else
 
 end
     if ~exist('J', 'var')
-        J = 1e-4; % custo alto - Não estável ou vazio
+        J = 1e4; % custo alto - Não estável ou vazio
     end 
 end
