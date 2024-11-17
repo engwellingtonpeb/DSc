@@ -101,6 +101,10 @@ Psidot_ref=Xgyro_f(:,1);
 
     % if SimuInfo.PltFlag
         figure(ij)
+    % Configure the figure background color to white
+    set(gcf, 'Color', 'w');
+    % Customize the axes
+    set(gca, 'FontSize', 24); % Set font size
         surf( t, w, s );
         %     title('Espectrograma s/ Overlap - Janela Hamming')
         ylabel('Frequência(Hz)')
@@ -188,6 +192,10 @@ for ij=1:6 %6 JANELAS DE 10 SEGUNDOS
     s=abs((s)); %(ANALISE DE JANELAS DE 10 SEGUNDOS)
     s=s./max(max(s)); %normaliza a amplitude (q nao é importante na analise)
     figure(6+ij)
+    % Configure the figure background color to white
+    set(gcf, 'Color', 'w');
+    % Customize the axes
+    set(gca, 'FontSize', 24); % Set font size
     surf( t, w, s );
 %     title('Espectrograma s/ Overlap - Janela Hamming')
     ylabel('Frequência(Hz)')
@@ -212,24 +220,28 @@ end
 J=struct();
 
     %% freq
-%     P1=[P1 P1];
+    P1=[P1 P1];
     w1=2*iqr(P1)*length(P1)^(-1/3);
     edges1=[min(P1),max(P1)];
-
     w=2*iqr(P)*length(P)^(-1/3);
     edges=[min(P),max(P)];
     
+    figure
+    % Configure the figure background color to white
+    set(gcf, 'Color', 'w');
+    hist1=histogram(P,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hold on
+    hist1=histogram(P1,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    % Customize the axes
+    set(gca, 'FontSize', 24); % Set font size
 
     [Metrics] = ModelMetrics(P,P1,w,edges,w1,edges1); % JSD of tremor freq 
-    J.freq=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+    J.freq=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
 
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
 
-    figure
-    hist1=histogram(P,'Normalization','probability');
-    hold on
-    hist1=histogram(P1,'Normalization','probability');
+
 
 
     %% phi
@@ -240,16 +252,22 @@ J=struct();
     w1=2*iqr(Phi_simu)*length(Phi_simu)^(-1/3);
     edges1=[min(Phi_simu),max(Phi_simu)];
 
+    figure
+    % Configure the figure background color to white
+    set(gcf, 'Color', 'w');
+    hist1=histogram(Phi_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hold on
+    hist1=histogram(Phi_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    % Customize the axes
+    set(gca, 'FontSize', 24); % Set font size
+
     [Metrics] = ModelMetrics(Phi_ref,Phi_simu,w,edges,w1,edges1); % JSD of tremor Phi
-    J.Phi=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+    J.Phi=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
 
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
 
-    figure
-    hist1=histogram(Phi_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
-    hold on
-    hist1=histogram(Phi_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+
 
     %% psi
     Psi_ref=Psi_ref+mean(Psi_simu);
@@ -259,16 +277,22 @@ J=struct();
     w1=2*iqr(Psi_simu)*length(Psi_simu)^(-1/3);
     edges1=[min(Psi_simu),max(Psi_simu)];
 
+    figure
+    % Configure the figure background color to white
+    set(gcf, 'Color', 'w');
+    hist1=histogram(Psi_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hold on
+    hist1=histogram(Psi_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability')
+    % Customize the axes
+    set(gca, 'FontSize', 24); % Set font size
+
     [Metrics] = ModelMetrics(Psi_ref,Psi_simu,w,edges,w1,edges1); % JSD of tremor Psi
-    J.Psi=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+    J.Psi=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
     
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
 
-    figure
-    hist1=histogram(Psi_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
-    hold on
-    hist1=histogram(Psi_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability')
+
 
     %% Erro de setpoint
     ess_phi=Phi_simu-(ones(length(Phi_simu),1)*SimuInfo.Setpoint(1));
@@ -289,17 +313,23 @@ J=struct();
     edges=[min(Phidot_ref),max(Phidot_ref)];
     w1=2*iqr(Phidot_simu)*length(Phidot_simu)^(-1/3);
     edges1=[min(Phidot_simu),max(Phidot_simu)];
+    
+    figure
+    % Configure the figure background color to white
+    set(gcf, 'Color', 'w');
+    hist1=histogram(Phidot_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hold on
+    hist1=histogram(Phidot_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    % Customize the axes
+    set(gca, 'FontSize', 24); % Set font size
 
     [Metrics] = ModelMetrics(Phidot_ref,Phidot_simu,w,edges,w1,edges1); % JSD of tremor Psi
-    J.Phidot=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+    J.Phidot=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
 
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
 
-    figure
-    hist1=histogram(Phidot_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
-    hold on
-    hist1=histogram(Phidot_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+
     %% psidot
     Psidot_ref=Psidot_ref+mean(Psi_simu);
 
@@ -308,15 +338,21 @@ J=struct();
     w1=2*iqr(Psidot_simu)*length(Psidot_simu)^(-1/3);
     edges1=[min(Psidot_simu),max(Psidot_simu)];
 
+    figure
+    % Configure the figure background color to white
+    set(gcf, 'Color', 'w');
+    hist1=histogram(Psidot_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    hold on
+    hist1=histogram(Psidot_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    % Customize the axes
+    set(gca, 'FontSize', 24); % Set font size
+
     [Metrics] = ModelMetrics(Psidot_ref,Psidot_simu,w,edges,w1,edges1); % JSD of tremor Psi
-    J.Psidot=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+    J.Psidot=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
 
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
 
-    figure
-    hist1=histogram(Psidot_ref,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
-    hold on
-    hist1=histogram(Psidot_simu,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+
 
 end

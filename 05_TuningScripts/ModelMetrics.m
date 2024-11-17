@@ -50,7 +50,16 @@ num=[];
 for i=1:length(h)
     num(i)= min(h(i),k(i));
 end
-Metrics.dI=1-(sum(num)/sum(h));
+
+
+if any([all(isnan(h)), all(isnan(k))])
+    Metrics.dI=1;
+else
+   Metrics.dI=1-(sum(num)/sum(h));
+end
+
+
+
 
 %% L-1 distance (Manhattan)
 % H=cumsum(h);
@@ -72,7 +81,11 @@ DKL2=sum(dKL2,'omitnan');
 
 JSD=0.5*DKL1+0.5*DKL2;
 
-Metrics.JSD=JSD;
+if all(isnan(M))
+    Metrics.JSD=1;
+else
+    Metrics.JSD=JSD;
+end
 
 
 
@@ -92,18 +105,35 @@ Metrics.JSD=JSD;
 % Metrics.Skewness=[skewness(x1) skewness(y1)];
 % % 
 %% centroid
-[yip,xip] = histcounts(x1);%paciente
-[yiq,xiq] = histcounts(y1);%modelo
-yip(end+1)=yip(end);
-yiq(end+1)=yiq(end);
+% [yip,xip] = histcounts(x1,'Normalization', 'probability');%paciente
+% [yiq,xiq] = histcounts(y1,'Normalization', 'probability');%modelo
+% yip(end+1)=yip(end);
+% yiq(end+1)=yiq(end);
 % centroid_P=[sum(xip.*yip)/sum(yip) sum(yip.*xip)/sum(xip)];
 % centroid_Q=[sum(xiq.*yiq)/sum(yiq) sum(yiq.*xiq)/sum(xiq)];
+% 
+% centroid_P=sum((xip.^2).*yip)/sum(xip.*yip); %posquali xip^2*yip = xip*Area
+% centroid_Q=sum((xiq.^2).*yiq)/sum(xiq.*yiq);
 
-centroid_P=sum((xip.^2).*yip)/sum(xip.*yip); %posquali xip^2*yip = xip*Area
-centroid_Q=sum((xiq.^2).*yiq)/sum(xiq.*yiq);
+
+% Histograma para paciente
+[yip, xip_edges] = histcounts(x1, 'Normalization', 'probability');
+xip_centers = (xip_edges(1:end-1) + xip_edges(2:end)) / 2; % Calcular os centros das barras
+centroid_paciente = sum(xip_centers .* yip) / sum(yip);    % Cálculo do centróide
+
+% Histograma para modelo
+[yiq, xiq_edges] = histcounts(y1, 'Normalization', 'probability');
+xiq_centers = (xiq_edges(1:end-1) + xiq_edges(2:end)) / 2; % Calcular os centros das barras
+centroid_modelo = sum(xiq_centers .* yiq) / sum(yiq);      % Cálculo do centróide
+
+% Exibição dos resultados
+% fprintf('Centróide do histograma do paciente: %.4f\n', centroid_paciente);
+% fprintf('Centróide do histograma do modelo: %.4f\n', centroid_modelo);
 
 
-Metrics.CentroidError=abs(centroid_P-centroid_Q)/abs(centroid_P); %abs_error/expected_value
+Metrics.RelativeCentroidError=abs(centroid_paciente-centroid_modelo)/abs(max(x1)-min(x1));
+Metrics.CentroidError=abs(centroid_paciente-centroid_modelo);
+
 
 % close all
 end

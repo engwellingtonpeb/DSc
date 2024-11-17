@@ -209,7 +209,7 @@ J=struct();
     
 
     [Metrics] = ModelMetrics(P,P1,w,edges,w1,edges1); % JSD of tremor freq 
-    J.freq=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+    J.freq=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
     
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
@@ -223,7 +223,7 @@ J=struct();
     edges1=[min(Phi_simu),max(Phi_simu)];
 
     [Metrics] = ModelMetrics(Phi_ref,Phi_simu,w,edges,w1,edges1); % JSD of tremor Phi
-    J.Phi=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+    J.Phi=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
 
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
@@ -237,7 +237,7 @@ J=struct();
     edges1=[min(Psi_simu),max(Psi_simu)];
 
     [Metrics] = ModelMetrics(Psi_ref,Psi_simu,w,edges,w1,edges1); % JSD of tremor Psi
-    J.Psi=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+    J.Psi=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
     
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
@@ -263,7 +263,7 @@ J=struct();
     edges1=[min(Phidot_simu),max(Phidot_simu)];
 
     [Metrics] = ModelMetrics(Phidot_ref,Phidot_simu,w,edges,w1,edges1); % JSD of tremor Psi
-    J.Phidot=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+    J.Phidot=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
 
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
@@ -276,7 +276,7 @@ J=struct();
     edges1=[min(Psidot_simu),max(Psidot_simu)];
 
     [Metrics] = ModelMetrics(Psidot_ref,Psidot_simu,w,edges,w1,edges1); % JSD of tremor Psi
-    J.Psidot=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.CentroidError^2);
+    J.Psidot=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
 
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];

@@ -85,58 +85,53 @@ end
 
 
 
-
-
-
-
-
-if isfield(SimuInfo, 'DummySimulation') 
-    
-    if strcmp(SimuInfo.DummySimulation, 'true')
-
-
-    if strcmp(SimuInfo.DummySimulation, 'false')
-       
-    
-        
-    end
-
-else
-
-           % Params GA
-        f_tremor=4; %Hz (>=4)
-        omega_tremor=2*pi*f_tremor;
-        
-        f_mov=2.5; %Hz (<=2.5)
-        omega_mov=2*pi*f_mov;
-        
-        
-        omegaMed=(omega_tremor+omega_mov)/2;
-        
-        
-        
-        
-        % 24/10
-        % FPB pondera S=1/W1
-        W1=makeweight(10,[30,1],.01); %makeweight(dcgain,[freq,mag],hfgain)
-        
-        % FPA pondera T=1/W3
-        W3=makeweight(.01,[30,.9],1); %makeweight(dcgain,[freq,mag],hfgain)
-        
-        
-        W2 =[];% makeweight(x5,[x6 x7],x8); % FPA pondera KS
-        
-        
-        [K,CL,gamma,info] = mixsyn(sys,W1,W2,W3);
-    
-    
-        if isempty(K)
-            LinStabilityFlag=0;
-        else
-            LinStabilityFlag=isstable(CL);
-        end
-
-end
+% if isfield(SimuInfo, 'DummySimulation') 
+% 
+%     if strcmp(SimuInfo.DummySimulation, 'true')
+% 
+% 
+%     if strcmp(SimuInfo.DummySimulation, 'false')
+% 
+% 
+% 
+%     end
+% 
+% else
+% 
+%            % Params GA
+%         f_tremor=4; %Hz (>=4)
+%         omega_tremor=2*pi*f_tremor;
+% 
+%         f_mov=2.5; %Hz (<=2.5)
+%         omega_mov=2*pi*f_mov;
+% 
+% 
+%         omegaMed=(omega_tremor+omega_mov)/2;
+% 
+% 
+% 
+% 
+%         % 24/10
+%         % FPB pondera S=1/W1
+%         W1=makeweight(10,[30,1],.01); %makeweight(dcgain,[freq,mag],hfgain)
+% 
+%         % FPA pondera T=1/W3
+%         W3=makeweight(.01,[30,.9],1); %makeweight(dcgain,[freq,mag],hfgain)
+% 
+% 
+%         W2 =[];% makeweight(x5,[x6 x7],x8); % FPA pondera KS
+% 
+% 
+%         [K,CL,gamma,info] = mixsyn(sys,W1,W2,W3);
+% 
+% 
+%         if isempty(K)
+%             LinStabilityFlag=0;
+%         else
+%             LinStabilityFlag=isstable(CL);
+%         end
+% 
+% end
 
 
 end
