@@ -166,16 +166,13 @@ if LinStabilityFlag
         elapsedTime=toc;
         SimuInfo.elapsedTime=elapsedTime;
         
-        [MetricsTable,Jmetrics] = CostMetrics(motionData,  pd011, SimuInfo);
-        MetricsTable
+        [MetricsTable,Jmetrics] = CostMetrics(motionData,  pd011, SimuInfo)
         
         %ga
         J = max([1e1*Jmetrics.freq   1e1*Jmetrics.Phi     1e1*Jmetrics.Psi     Jmetrics.Phidot...
                  Jmetrics.Psidot Jmetrics.err_phi*1e-2 Jmetrics.err_psi*1e-2])
 
-        %gamultiobj
-        % J = [Jmetrics.freq Jmetrics.Phi Jmetrics.Psi Jmetrics.Phidot...
-        %     Jmetrics.Psidot 1e-2*Jmetrics.err_phi 1e-2*Jmetrics.err_psi]
+
 
     catch MExc
         if ~isempty(MExc.message)
