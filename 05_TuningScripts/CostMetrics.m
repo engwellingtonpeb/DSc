@@ -134,6 +134,7 @@ Psidot_ref=Xgyro_f(:,1);
 
 % P(P<3) = [];
  %% Sinais do Modelo
+ %% Sinais do Modelo
 
     t_simu=[];
     Phi_simu=[];
@@ -152,6 +153,34 @@ Psidot_simu=[Psidot_simu; rad2deg(motionData.data((2000:end),37))];
 a_ecrl=[a_ecrl; motionData.data((2000:end),44)];  %ativ ECRL
 a_fcu=[a_fcu; motionData.data((2000:end),52)];  %ativ FCU
 
+
+
+Ts=SimuInfo.Ts;
+t_simu=0:Ts:(length(Phi_simu)-1)*Ts;
+
+[Phi_simu,t_new] = resample(Phi_simu,t_simu,Fs_gyro);
+[Psi_simu,t_new] = resample(Psi_simu,t_simu,Fs_gyro);
+
+Psi_simu=Psi_simu-mean(Psi_simu);
+
+[Phidot_simu,t_new] = resample(Phidot_simu,t_simu,Fs_gyro);
+[Psidot_simu,t_new] = resample(Psidot_simu,t_simu,Fs_gyro);
+
+
+
+% spectrogram from simulation
+    
+    
+
+
+    Fs_simu=Fs_gyro;
+    ts_simu=ts_gyro;
+    Tjan=.5;
+    Njan=round(Tjan/ts_simu); %qtd ptos na janela
+    r=rectwin(Njan);%Define janela RETANGULAR de comprimento Njan
+    h=hamming(Njan);%Define janela HAMMING de comprimento Njan
+    N=length(Phidot_simu);
+    w1=(floor(N/6));
 
 % spectrogram from simulation
     

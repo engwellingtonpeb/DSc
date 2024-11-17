@@ -26,8 +26,8 @@ if strcmp(name,'ENGWELLPC')
     if opt==1
         if isempty(gcp('nocreate'))  % Check if a parallel pool is not running
             c = parcluster;
-            c.NumWorkers = 12;
-            parpool(c, 12);  % Create a parallel pool with 12 workers
+            c.NumWorkers = 8;
+            parpool(c, 8);  % Create a parallel pool with 12 workers
         else
             disp('Parallel pool is already running.');
         end
@@ -56,8 +56,8 @@ elseif strcmp(name,'MARCOPOLO')
     if opt==1
         if isempty(gcp('nocreate'))  % Check if a parallel pool is not running
             c = parcluster;
-            c.NumWorkers = 32;
-            parpool(c, 32);  % Create a parallel pool with 12 workers
+            c.NumWorkers = 20;
+            parpool(c, 20);  % Create a parallel pool with 12 workers
         else
             disp('Parallel pool is already running.');
         end
@@ -116,8 +116,8 @@ elseif strcmp(name,'PROJETOFINEP_01')
     if opt==1
         if isempty(gcp('nocreate'))  % Check if a parallel pool is not running
             c = parcluster;
-            c.NumWorkers = 36;
-            parpool(c, 36);  % Create a parallel pool with 12 workers
+            c.NumWorkers = 30;
+            parpool(c, 30);  % Create a parallel pool with 12 workers
         else
             disp('Parallel pool is already running.');
         end
