@@ -234,12 +234,13 @@ J=struct();
     w1=2*iqr(P1)*length(P1)^(-1/3);
     edges1=[min(P1),max(P1)];
     w=2*iqr(P)*length(P)^(-1/3);
+    edges=[min(P),max(P)];
 
     if w==0
         w=w1;
     end
 
-       [Metrics] = ModelMetrics(P,P1,w,edges,w1,edges1); % JSD of tremor freq 
+    [Metrics] = ModelMetrics(P,P1,w,edges,w1,edges1); % JSD of tremor freq 
     J.freq=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
     
     MetricsRow = struct2table(Metrics);
