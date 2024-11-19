@@ -70,8 +70,7 @@ SimuInfo.P=data2.P;
 global distFtremor
 distFtremor=data2.P;
 
-pd = makedist('Uniform','lower',1,'upper',length(data2.P));
-SimuInfo.pd=pd;             
+            
 SimuInfo.PatientID=file1(1:end-4); %removes '.mat'
 
 

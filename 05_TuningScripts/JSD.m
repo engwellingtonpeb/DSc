@@ -226,14 +226,14 @@ J=struct();
     w=2*iqr(P)*length(P)^(-1/3);
     edges=[min(P),max(P)];
     
-    figure
-    % Configure the figure background color to white
-    set(gcf, 'Color', 'w');
-    hist1=histogram(P,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
-    hold on
-    hist1=histogram(P1,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
-    % Customize the axes
-    set(gca, 'FontSize', 24); % Set font size
+    % figure
+    % % Configure the figure background color to white
+    % set(gcf, 'Color', 'w');
+    % hist1=histogram(P,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    % hold on
+    % hist1=histogram(P1,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
+    % % Customize the axes
+    % set(gca, 'FontSize', 24); % Set font size
 
     [Metrics] = ModelMetrics(P,P1,w,edges,w1,edges1); % JSD of tremor freq 
     J.freq=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);
