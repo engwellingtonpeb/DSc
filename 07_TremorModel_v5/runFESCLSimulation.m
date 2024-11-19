@@ -25,9 +25,9 @@ fieldName = 'StoreStim';
 if isfield(SimuInfo, fieldName) && strcmp(SimuInfo.(fieldName), 'on')
 
     % Declarando a variável global
-    global e_stim;
-    motionData.e_stim=e_stim;
-
+    global e_stim E
+    motionData.e_stim=e_stim(:, (1:9));
+    motionData.Energy=e_stim(:, (10:end));
 end
 
 

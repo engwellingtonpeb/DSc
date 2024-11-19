@@ -88,6 +88,7 @@ if LinStabilityFlag
     SimuInfo.Ts=1e-3;
     SimuInfo.Tend=10;
     SimuInfo.TStim_ON=3; %e-stim initial time on the simulations
+    SimuInfo.StoreStim='on';
 
 
     %Plotting 

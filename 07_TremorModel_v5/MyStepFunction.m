@@ -13,11 +13,8 @@
 
 function [NextObs,Reward,IsDone,LoggedSignals,SimuInfo] = MyStepFunction(Action,LoggedSignals,SimuInfo,osimModel,osimState)
 
-global episode
-global n
-global States
+global episode n States E data
 
-global E
 
 Ts=SimuInfo.Ts;
 t=n*Ts;
@@ -25,6 +22,7 @@ t=n*Ts;
 
 if t==0
     States=SimuInfo.InitStates;
+    data=[];
 end
 
 % e-stim parameter by RL parsing to pulse generator
@@ -64,7 +62,7 @@ end
 
 %% Reward
 divergencePHI=logical(abs(rad2deg(States(18)))>=20);
-divergencePSI=logical(rad2deg(States(16))>=35 || rad2deg(States(16))<=10);
+divergencePSI=logical(rad2deg(States(16))>=45 || rad2deg(States(16))<=10);
 BoundFlag= logical(divergencePHI || divergencePSI) ;
 [divergencePHI divergencePSI];
 
@@ -109,6 +107,7 @@ elseif (t>=10)
     osimState=osimModel.initSystem();
 end
 
+data=[data; States']; 
 
 n=n+1;
 end

@@ -107,6 +107,7 @@ if LinStabilityFlag
     %                      RL - Reinforcement Learning]
     
     SimuInfo.TremorEnergy=[];
+    SimuInfo.StoreStim='on';
 
 
     

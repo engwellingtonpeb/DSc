@@ -129,18 +129,7 @@ function [x_dot] = OsimPlantFcn(t, x, osimModel, osimState,SimuInfo)
 
     %[a0 a0_dot]
 
-% if isfield(SimuInfo, 'ModelTunning') && strcmp(SimuInfo.ModelTunning, 'true') && (t>=1)
-% 
-%     divergencePHI=logical(abs(rad2deg(x(18)))>=20);
-%     divergencePSI=logical(rad2deg(x(16))>=35 || rad2deg(x(16))<=10);
-%     BoundFlag= logical(divergencePHI || divergencePSI)
-%     [divergencePHI divergencePSI]
-% 
-%     if BoundFlag
-% 
-%     end
-% 
-% end
+
     
 
     % Plotting Results

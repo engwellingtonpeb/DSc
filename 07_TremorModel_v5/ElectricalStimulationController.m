@@ -12,7 +12,11 @@
 % electrodes                                                              %
 %=========================================================================%
 function [ues] = ElectricalStimulationController(E,SimuInfo,t)
+global e_stim
 
+if t==0
+    e_stim=[];
+end
 
 if t<SimuInfo.TStim_ON || strcmp(SimuInfo.FESProtocol,'none') % it avoids electrical stimulation starts almost simultaneously to tremor. 
 
@@ -26,6 +30,7 @@ if t<SimuInfo.TStim_ON || strcmp(SimuInfo.FESProtocol,'none') % it avoids electr
         0];   %pq
     
     pw=0;
+    e_stim=[e_stim; [A',pw,freq, E(1:4)]];
 
 else
     switch SimuInfo.FESProtocol
@@ -136,6 +141,7 @@ else
 
     end
 
+      e_stim=[e_stim; [A',pw,freq, E(1:4)]];
 
 end
 
