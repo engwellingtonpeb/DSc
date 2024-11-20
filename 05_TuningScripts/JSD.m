@@ -55,7 +55,7 @@ pd011=SimuInfo.pd011;
      
      
     ts_gyro=1/Fs_gyro;
-    Tjan=.5;
+    Tjan=1;
     Njan=round(Tjan/ts_gyro); %qtd ptos na janela
     r=rectwin(Njan);%Define janela RETANGULAR de comprimento Njan
     h=hamming(Njan);%Define janela HAMMING de comprimento Njan
@@ -100,19 +100,20 @@ Psidot_ref=Xgyro_f(:,1);
     s=s./max(max(s)); %normaliza a amplitude (q nao é importante na analise)
 
     % if SimuInfo.PltFlag
-        figure(ij)
+    figure(ij)
     % Configure the figure background color to white
     set(gcf, 'Color', 'w');
-    % Customize the axes
-    set(gca, 'FontSize', 24); % Set font size
-        surf( t, w, s );
-        %     title('Espectrograma s/ Overlap - Janela Hamming')
-        ylabel('Frequência(Hz)')
-        xlabel('Tempo(s)')
-        zlabel('Amplitude')
-        colormap jet
+    surf( t, w, s );
+    % Set view to 2D by rotating to look directly at the 'xy' plane
+    view(-90.2, 90); % This sets the view to look directly down from above
+    %     title('Espectrograma s/ Overlap - Janela Hamming')
+    ylabel('Frequência(Hz)')
+    xlabel('Tempo(s)')
+    zlabel('Amplitude')
+    colormap jet
     % end
-    
+    % Customize the axes
+    set(gca, 'FontSize', 36); % Set font size
      
      
      %FREQUENCY HISTOGRAM
@@ -174,7 +175,7 @@ Psi_simu=Psi_simu-mean(Psi_simu);
 
     Fs_simu=Fs_gyro;
     ts_simu=ts_gyro;
-    Tjan=.5;
+    Tjan=1;
     Njan=round(Tjan/ts_simu); %qtd ptos na janela
     r=rectwin(Njan);%Define janela RETANGULAR de comprimento Njan
     h=hamming(Njan);%Define janela HAMMING de comprimento Njan
@@ -194,15 +195,17 @@ for ij=1:6 %6 JANELAS DE 10 SEGUNDOS
     figure(6+ij)
     % Configure the figure background color to white
     set(gcf, 'Color', 'w');
-    % Customize the axes
-    set(gca, 'FontSize', 24); % Set font size
+
     surf( t, w, s );
+    % Set view to 2D by rotating to look directly at the 'xy' plane
+    view(-90.2, 90); % This sets the view to look directly down from above
 %     title('Espectrograma s/ Overlap - Janela Hamming')
     ylabel('Frequência(Hz)')
     xlabel('Tempo(s)')
     zlabel('Amplitude')
     colormap jet
-
+    % Customize the axes
+    set(gca, 'FontSize', 36); % Set font size
      
      
      %FREQUENCY HISTOGRAM
@@ -238,7 +241,7 @@ J=struct();
     hold on
     hist1=histogram(P1,'BinLimits',edges,'BinWidth',w,'Normalization','probability');
     % Customize the axes
-    set(gca, 'FontSize', 24); % Set font size
+    set(gca, 'FontSize', 36); % Set font size
 
     [Metrics] = ModelMetrics(P,P1,w,edges,w1,edges1); % JSD of tremor freq 
     J.freq=sqrt(Metrics.JSD^2+Metrics.dI^2+Metrics.RelativeCentroidError^2);

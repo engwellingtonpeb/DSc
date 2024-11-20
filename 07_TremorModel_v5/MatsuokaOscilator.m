@@ -134,7 +134,7 @@ switch SimuInfo.Tremor
             v1=normrnd(.5,0.25);
             v2=normrnd(.5,0.25);
         
-        elseif (rem(j1,1000)==0)
+        elseif (rem(j1,1500)==0)
         
             P=randsample(SimuInfo.P,1);
             Kf=(1/(2*pi*P))*sqrt(1/(tau1*tau2)); 

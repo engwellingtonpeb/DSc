@@ -59,7 +59,7 @@ MetricsTable = [];
      
      
     ts_gyro=1/Fs_gyro;
-    Tjan=.5;
+    Tjan=1;
     Njan=round(Tjan/ts_gyro); %qtd ptos na janela
     r=rectwin(Njan);%Define janela RETANGULAR de comprimento Njan
     h=hamming(Njan);%Define janela HAMMING de comprimento Njan
@@ -187,7 +187,7 @@ Psi_simu=Psi_simu-mean(Psi_simu);
 
     Fs_simu=Fs_gyro;
     ts_simu=ts_gyro;
-    Tjan=.5;
+    Tjan=1;
     Njan=round(Tjan/ts_simu); %qtd ptos na janela
     r=rectwin(Njan);%Define janela RETANGULAR de comprimento Njan
     h=hamming(Njan);%Define janela HAMMING de comprimento Njan
