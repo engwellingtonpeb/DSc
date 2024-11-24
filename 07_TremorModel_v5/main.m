@@ -94,7 +94,6 @@ switch opt
         pathconfig
         %get patient parameters or use a dummy parameter vector
         getSimulationParams_V2;
-
         %RL Controller Trainning
         runRLControllerTrainning
 
@@ -103,9 +102,11 @@ switch opt
         pathconfig
         %get patient parameters or use a dummy parameter vector
         getSimulationParams;
-
         %RL Controller Testing
         runRLControllerTesting
+
+        %Suppression Metrics
+        e_stimAnalysis
 
 
 

@@ -124,8 +124,6 @@ elseif strcmp(name,'PROJETOFINEP_01')
         
         GAResultsPath = 'C:\Users\wellington\Desktop\DSc\07_TremorModel_v5\Tuning_Feature';
         
-        % Change to the target folder
-        targetFolder = 'C:\Users\wellington\Desktop\DSc\02_Coletas';
     end
 
     addpath('\Users\wellington\Desktop\DSc\07_TremorModel_v5\Tuning_Feature\')

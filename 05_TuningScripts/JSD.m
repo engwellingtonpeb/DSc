@@ -63,8 +63,8 @@ pd011=SimuInfo.pd011;
     w1=(floor(N/6));
     
     
-    fc=15;
-    delta=10;
+    fc=10;
+    delta=3;
     Wp=(fc-delta)/(Fs_gyro/2);
     Ws=(fc+delta)/(Fs_gyro/2);
     Rp=0.1;
@@ -361,6 +361,30 @@ J=struct();
     MetricsRow = struct2table(Metrics);
     MetricsTable = [MetricsTable; MetricsRow];
 
+%%    limit cycles
+
+    % Set the default figure background color to white
+    set(groot, 'defaultFigureColor', 'w');
+    
+    % First plot
+    figure
+    plot(Phi_simu, Phidot_simu, 'r-.', 'LineWidth', 0.5, 'Color', [1, 0, 0, 0.6]) % RGB + Alpha (transparency)
+   
+    grid on
+    hold on
+    % Adjust transparency for red dashed line
+     plot(Phi_ref, Phidot_ref, 'b', 'LineWidth', .5, 'Color', [0, 0, 1, 0.6])
+    set(gca, 'FontSize', 36)
+    
+    % Second plot
+    figure
+    plot(Psi_simu, Psidot_simu, 'r-.', 'LineWidth', 0.5, 'Color', [1, 0, 0, 0.6]) % RGB + Alpha (transparency)
+    grid on
+    hold on
+    % Adjust transparency for red dashed line
+    
+    plot(Psi_ref, Psidot_ref, 'b', 'LineWidth', .5, 'Color', [0, 0, 1, 0.6])
+    set(gca, 'FontSize', 36)
 
 
 end

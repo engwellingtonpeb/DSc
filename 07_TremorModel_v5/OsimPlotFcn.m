@@ -35,7 +35,8 @@ switch SimuInfo.PltFlag
             j=0;
 
         elseif (rem(j,SimuInfo.PltResolution)==0) && strcmp(SimuInfo.PltFlag,'on')
-        
+            % Configure the figure background color to white
+            set(gcf, 'Color', 'w');
         
             subplot(5,1,1)
             plot(t,phi_ref,'go',t,rad2deg(phi),'r.')
@@ -72,7 +73,7 @@ switch SimuInfo.PltFlag
             
             global E
             subplot(5,1,5)
-            plot(t,2*(E(3)+E(4)),'b.')
+            plot(t,(E(3)+E(4)),'b.')
             axis([t-3 t 0 10])
             drawnow;
             grid on;

@@ -87,7 +87,7 @@ if LinStabilityFlag
 
     %Time
     SimuInfo.Ts=1e-3;
-    SimuInfo.Tend=10;
+    SimuInfo.Tend=30;
     SimuInfo.TStim_ON=3; %e-stim initial time on the simulations
 
 

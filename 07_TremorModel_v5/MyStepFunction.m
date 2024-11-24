@@ -27,6 +27,13 @@ end
 
 % e-stim parameter by RL parsing to pulse generator
 SimuInfo.Action=Action;
+Act=[SimuInfo.Action(1);...
+     SimuInfo.Action(2);...
+     SimuInfo.Action(3);...
+     SimuInfo.Action(4)];
+pw=SimuInfo.Action(5);
+freq=SimuInfo.Action(6);
+
 % SimuInfo.RLTraining='on'; %[on | off]
 
 
@@ -61,8 +68,9 @@ end
 
 
 %% Reward
-divergencePHI=logical(abs(rad2deg(States(18)))>=20);
-divergencePSI=logical(rad2deg(States(16))>=45 || rad2deg(States(16))<=10);
+
+divergencePHI=logical(abs(rad2deg(States(18)))>=25);
+divergencePSI=logical(rad2deg(States(16))>=35 || rad2deg(States(16))<=10);
 BoundFlag= logical(divergencePHI || divergencePSI) ;
 [divergencePHI divergencePSI];
 
@@ -78,31 +86,33 @@ if t<3
 elseif(t>=3 && t<10 && ~BoundFlag)
     % Reward=-(E(1:4)*Q2*E(1:4)');
 
-    % Fun��o de custo unificada que combina energia do tremor e erro de setpoint
-    Q1 = diag([1e3, 1e3, 1e3, 1e3]);
-    Q2 = diag([1e1, 1e1, 1e1, 1e1]);    
+    % Funcao de custo unificada que combina energia do tremor e erro de setpoint
+    Q1 = diag([1e1, 1e1, 1e2, 1e2]);
+    Q2 = diag([1e-1, 1e-1, 1e-1, 1e-1]);    
+    Q3 = diag([1e6*pw, 1e6*pw, 1e6*pw, 1e6*pw]);   
     tremor_cost = E(1:4) * Q1 * E(1:4)' ;         % Custo baseado na energia do tremor
     error_cost = E(5:end) * Q2 * E(5:end)'  ;     % Custo baseado no erro de setpoint
+    
 
-    sparReward=0;
-    if t>=3, sparReward=.5e2; end
-    if t>=4, sparReward=1e2; end
-    if t>=5, sparReward=2e2; end
-    if t>=6, sparReward=3e2; end
-    if t>=7, sparReward=4e2; end
+                        
 
-    Reward = -(tremor_cost + error_cost)+sparReward;          % Fun��o de custo combinada
+    energy_cost=Act'*Q3*Act;
+
+    sparReward=5e2*t;
+
+
+    Reward = -(tremor_cost+error_cost+energy_cost)+sparReward;          % Funcao de custo combinada
     % [t, Reward]
     IsDone=0;
 
 elseif(t>=3 && BoundFlag) 
-    Reward=-1e3;
+    Reward=-1e6;
     IsDone=1;
     episode=episode+1;
     osimState=osimModel.initSystem();
 
 elseif (t>=10)
-    Reward=1e2;
+    Reward=1e3;
     IsDone=1;
     osimState=osimModel.initSystem();
 end
