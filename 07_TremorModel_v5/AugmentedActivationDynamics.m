@@ -111,6 +111,7 @@ switch StatusFES
             pw0=ues(i,2);
             f=ues(i,3);
             a=ae(i);
+            pe=p(i);
             
             Ibar=I/Imax;
             % Pulse Width Characteristic
@@ -132,7 +133,7 @@ switch StatusFES
             % Muscle Fatigue
             lambda=1-beta+beta*(f/100)^2;
             
-            p_dot=(((pmin-p)*a*lambda)/tau_fat)+((1-p)*(1-a*lambda))/tau_rec;
+            p_dot(i)=(((pmin-pe)*a*lambda)/tau_fat)+((1-pe)*(1-a*lambda))/tau_rec;
 
             % Calcium Dynamics 
             u=ar*q;

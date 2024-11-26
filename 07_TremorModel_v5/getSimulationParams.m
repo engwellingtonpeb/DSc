@@ -88,12 +88,12 @@ if LinStabilityFlag
     %Time
     SimuInfo.Ts=1e-3;
     SimuInfo.Tend=30;
-    SimuInfo.TStim_ON=3; %e-stim initial time on the simulations
+    SimuInfo.TStim_ON=5; %e-stim initial time on the simulations
 
 
     %Plotting 
     SimuInfo.PltFlag='on'; %[on | off]
-    SimuInfo.PltResolution=20;
+    SimuInfo.PltResolution=50;
     
     %Params tuned by optimization
     SimuInfo.ModelParams=ModelParams;
@@ -256,103 +256,4 @@ ResetHandle=@()MyResetFunction(osimModel,osimState,SimuInfo);
 env = rlFunctionEnv(obsInfo,actInfo,StepHandle,ResetHandle)
 
 
-%% Creating DDPG trained agent
-% 
-% obsInfo = getObservationInfo(env);
-% numObs = obsInfo.Dimension(1);
-% actInfo =getActionInfo(env);
-% numAct = actInfo.Dimension(1);
-% 
-% %CRITIC NETWORK
-% L = 5; % number of neurons
-% 
-% 
-% 
-% statePath = [
-%     featureInputLayer(numStatesFromPatient,'Normalization','none','Name','observation')
-%     fullyConnectedLayer(L,'Name','fc1')
-%     reluLayer('Name','relu1')
-%     fullyConnectedLayer(L,'Name','fc2')
-%     additionLayer(2,'Name','add')
-%     reluLayer('Name','relu2')
-%     fullyConnectedLayer(L,'Name','fc3')
-%     reluLayer('Name','relu3')
-%     fullyConnectedLayer(1,'Name','fc4')];
-% 
-% actionPath = [
-%     featureInputLayer(eStimInputs,'Normalization','none','Name','action')
-%     fullyConnectedLayer(L, 'Name', 'fc5')];
-% 
-% criticNetwork = layerGraph(statePath);
-% criticNetwork = addLayers(criticNetwork, actionPath);
-% 
-% criticNetwork = connectLayers(criticNetwork,'fc5','add/in2');
-% 
-% %plot(criticNetwork)
-% 
-% criticOptions = rlRepresentationOptions('LearnRate',1e-3,'GradientThreshold',1,'L2RegularizationFactor',1e-4,'UseDevice',"cpu");
-% 
-% critic = rlQValueRepresentation(criticNetwork,obsInfo,actInfo,...
-%     'Observation',{'observation'},'Action',{'action'},criticOptions);
-% 
-% % ACTOR
-% 
-% 
-% actorNetwork = [
-%     featureInputLayer(numStatesFromPatient,'Normalization','none','Name','observation')
-%     fullyConnectedLayer(L,'Name','fc1')
-%     reluLayer('Name','relu1')
-%     fullyConnectedLayer(L,'Name','fc2')
-%     reluLayer('Name','relu2')
-%     fullyConnectedLayer(L,'Name','fc3')
-%     reluLayer('Name','relu3')
-%     fullyConnectedLayer(eStimInputs,'Name','fc4')
-%     tanhLayer('Name','tanh1')
-%     scalingLayer('Name','ActorScaling1','Scale',(max(actInfo.UpperLimit)),'Bias',.5)];
-% 
-% 
-% 
-% actorOptions = rlRepresentationOptions('LearnRate',1e-3,'GradientThreshold',1,'L2RegularizationFactor',1e-4,'UseDevice',"cpu");
-% actor = rlDeterministicActorRepresentation(actorNetwork,obsInfo,actInfo,...
-%     'Observation',{'observation'},'Action',{'ActorScaling1'},actorOptions);
-% 
-% 
-% 
-% 
-% 
-% % 3) DDPG algorithm for learning
-% 
-% agentOpts = rlDDPGAgentOptions(...
-%     'SampleTime',SimuInfo.Ts,...
-%     'TargetSmoothFactor',1e-1,...
-%     'ExperienceBufferLength',1e6,...
-%     'DiscountFactor',0.95,...
-%     'NumStepsToLookAhead',4,...
-%     'MiniBatchSize',32);
-% agentOpts.NoiseOptions.Variance   = .1 ;
-% agentOpts.NoiseOptions.VarianceDecayRate   = 1e-6;
-% 
-% % effectively creating the agent
-% agent = rlDDPGAgent(actor,critic,agentOpts);
-% 
-% 
-% 
-% 
-% %% Treinamento
-% 
-% % training the agent 
-% 
-% trainOpts = rlTrainingOptions(...
-%     'MaxEpisodes', 5000, ...
-%     'MaxStepsPerEpisode', 2e6, ...
-%     'Verbose', true, ...
-%     'Plots','none',...
-%     'StopTrainingCriteria','AverageReward',...
-%     'StopTrainingValue',66e6,...
-%     'UseParallel',0,...
-%     'SaveAgentCriteria',"EpisodeReward",...
-%     'SaveAgentValue',1e5,...
-%     'SaveAgentDirectory', pwd + "\Agents");
-% 
-% %close all hidden
 end
