@@ -48,7 +48,7 @@ else
             %     SimuInfo.Action(4);... %fcu
             %     SimuInfo.Action(5)];   %pq
 
-            A=[ 0*SimuInfo.Action(1);... %sup
+            A=[ .7*SimuInfo.Action(1);... %sup
                 SimuInfo.Action(2);... %ecrl
                 SimuInfo.Action(2);... %ecrb
                 0*SimuInfo.Action(2);... %ecu
@@ -82,7 +82,7 @@ else
                 1*Ua(4)];   %pq
 
         case 'CC'
-            [Ua, Upw, Uf] = CC_strategy()
+            [Ua, Upw, Uf] = CC_strategy();
 
             freq=Uf;
             pw=Upw;
@@ -97,14 +97,14 @@ else
 
             A=[ 0*Ua(1);... %sup % funcionou legal 
                 1*Ua(2);... %ecrl
-                1*Ua(2);... %ecrb
+                0*Ua(2);... %ecrb
                 0*Ua(2);... %ecu
                 0*Ua(3);... %fcr
                 1*Ua(3);... %fcu
-                1*Ua(4)];   %pq
+                0*Ua(4)];   %pq
 
-        case 'OF'
-            [Ua, Upw, Uf] = OF_strategy(t)
+        case 'OP'
+            [Ua, Upw, Uf] = OF_strategy(t);
 
             freq=Uf;
             pw=Upw;
@@ -119,11 +119,11 @@ else
 
             A=[ 0*Ua(1);... %sup % funcionou legal 
                 1*Ua(2);... %ecrl
-                1*Ua(2);... %ecrb
+                0*Ua(2);... %ecrb
                 0*Ua(2);... %ecu
                 0*Ua(3);... %fcr
-                1*Ua(3);... %fcu
-                1*Ua(4)];   %pq
+                0*Ua(3);... %fcu
+                0*Ua(4)];   %pq
 
         case 'MPC'
             [Ua, Upw, Uf] = MPC_law(t, E, SimuInfo);
