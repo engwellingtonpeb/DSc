@@ -13,17 +13,17 @@ a_fcu=[];
 ij=1;
 
 if strcmp(SimuInfo.FESProtocol,'RL')
-    Phi_simu=[Phi_simu; rad2deg(motionData.data(1000:end,18))]; %~2000 é o numero da amostra onde entra o oscilador
-    Psi_simu=[Psi_simu; rad2deg(motionData.data((1000:end),16))];
-    Phidot_simu=[Phidot_simu; rad2deg(motionData.data((1000:end),38))];
-    Psidot_simu=[Psidot_simu; rad2deg(motionData.data((1000:end),36))];
-    a_ecrl=[a_ecrl; motionData.data((1000:end),44)];  %ativ ECRL
-    a_fcu=[a_fcu; motionData.data((1000:end),52)];  %ativ FCU
+    Phi_simu=[Phi_simu; rad2deg(motionData.data(1000:end-100,18))]; %~2000 é o numero da amostra onde entra o oscilador
+    Psi_simu=[Psi_simu; rad2deg(motionData.data((1000:end-100),16))];
+    Phidot_simu=[Phidot_simu; rad2deg(motionData.data((1000:end-100),38))];
+    Psidot_simu=[Psidot_simu; rad2deg(motionData.data((1000:end-100),36))];
+    a_ecrl=[a_ecrl; motionData.data((1000:end-100),44)];  %ativ ECRL
+    a_fcu=[a_fcu; motionData.data((1000:end-100),52)];  %ativ FCU
 else
-    Phi_simu=[Phi_simu; rad2deg(motionData.data(1000:end,19))]; %~2000 é o numero da amostra onde entra o oscilador
-    Psi_simu=[Psi_simu; rad2deg(motionData.data((1000:end),17))];
-    Phidot_simu=[Phidot_simu; rad2deg(motionData.data((1000:end),39))];
-    Psidot_simu=[Psidot_simu; rad2deg(motionData.data((1000:end),37))];
+    Phi_simu=[Phi_simu; rad2deg(motionData.data(1000:end-100,19))]; %~2000 é o numero da amostra onde entra o oscilador
+    Psi_simu=[Psi_simu; rad2deg(motionData.data((1000:end-100),17))];
+    Phidot_simu=[Phidot_simu; rad2deg(motionData.data((1000:end-100),39))];
+    Psidot_simu=[Psidot_simu; rad2deg(motionData.data((1000:end-100),37))];
     a_ecrl=[a_ecrl; motionData.data((1000:end),44)];  %ativ ECRL
     a_fcu=[a_fcu; motionData.data((1000:end),52)];  %ativ FCU
 
@@ -116,31 +116,103 @@ suppression_pro_mean=100*(1-max(max(s2)));
 metrics_table = table(suppression_flex_mean, suppression_pro_mean, ...
     'VariableNames', {'Percent_Suppress_Flexion', 'Percent_Suppress_Prosup'});
 
+%% Energy applied for suppression
+idx=round(SimuInfo.TStim_ON/SimuInfo.Ts);
+A=motionData.e_stim(idx:end,1:7);
+pw=motionData.e_stim(idx:end,8);
+f=motionData.e_stim(idx:end,9);
+T=1./f;
+% Check for infinite or zero frequencies
+T(isinf(T)) = 1e-6; % Avoid invalid values
+
+%2-Norm per period
+t_inicial= SimuInfo.TStim_ON;
+N=length(pw);
+t_final=(N*SimuInfo.Ts)+t_inicial;
+t_norm=t_inicial:SimuInfo.Ts:t_final;
+
+Nperiodos=floor((t_final-t_inicial)/mean(T));
+norm2_W=[];
+for i=1:Nperiodos
+idx_i=((i-1)*(T(10)/SimuInfo.Ts))+1;
+idx_f=(i)*(T(10)/SimuInfo.Ts);
+
+    norma=[];
+    for ch=1:size(A,2)
+    
+        A_n=mean(A(idx_i:idx_f,ch)); %mean of a constant
+        pw_n=mean(pw(idx_i:idx_f));
+        
+        norm2_win=A_n*(sqrt(2*pw_n));
+        
+        norma=[norma,norm2_win];
+    
+    
+    end
+norm2_W=[norm2_W; norma];
+end
+
+%2-Norm full stim
+norm2_fullStim=mean(A)*sqrt(2*Nperiodos*mean(pw));
+
+
+% Append new metrics to the existing table
+new_metrics = table(norm2_fullStim(1), norm2_fullStim(2), norm2_fullStim(3), norm2_fullStim(4), norm2_fullStim(5), ...
+    norm2_fullStim(6), norm2_fullStim(7), 'VariableNames', ...
+    {'N2_ch1_sup', 'N2_ch2_ecrl', 'N2_ch3_ecrb', 'N2_ch4_ecu', 'N2_ch5_fcr', 'N2_ch6_fcu', 'N2_ch7_pq'});
+metrics_table = [metrics_table, new_metrics];
+
+
+
+%% Activation and Fatigue Metrics
+
+fatigue = motionData.data(1000:end-100, 66:72);
+
+figure;
+set(gcf, 'Color', 'w'); % Configure the figure background color to white
+hold on;
+plot(t_simu, fatigue(:, 1), 'LineWidth', 2);
+plot(t_simu, fatigue(:, 2), 'LineWidth', 2);
+plot(t_simu, fatigue(:, 3), 'LineWidth', 2);
+plot(t_simu, fatigue(:, 4), 'LineWidth', 2);
+plot(t_simu, fatigue(:, 5), 'LineWidth', 2);
+plot(t_simu, fatigue(:, 6), 'LineWidth', 2);
+plot(t_simu, fatigue(:, 7), 'LineWidth', 2);
+hold off;
+
+legend({'SUP', 'ECRL', 'ECRB', 'ECU', 'FCR', 'FCU', 'PQ'});
+xlabel('Time (s)');
+ylabel('Fatigue Level');
+grid on;
+
+
+
+a0=motionData.data(5000:end-100, 48:54); % physiologic base activation perturbed by oscillator
+ae=motionData.data(5000:end-100, 59:65); % activation due to electrical stimulation
+p=motionData.data(5000:end-100, 66:72); % fatigue weighting function
+
+aes=ae.*p;
+a=aes+a0;
+
+
+
+% Append new metrics to the existing table
+new_metrics = table(norm(a(:,1),2), norm(a(:,2),2), norm(a(:,3),2), norm(a(:,4),2), norm(a(:,5),2), ...
+    norm(a(:,6),2), norm(a(:,7),2), 'VariableNames', ...
+    {'N2_asup', 'N2_aecrl', 'N2_aecrb', 'N2_aecu', 'N2_afcr', 'N2_afcu', 'N2_apq'});
+metrics_table = [metrics_table, new_metrics];
+
+
+% Append new metrics to the existing table
+new_metrics = table(norm(aes(:,1),2), norm(aes(:,2),2), norm(aes(:,3),2), norm(aes(:,4),2), norm(aes(:,5),2), ...
+    norm(aes(:,6),2), norm(aes(:,7),2), 'VariableNames', ...
+    {'N2_aessup', 'N2_aesecrl', 'N2_aesecrb', 'N2_aesecu', 'N2_aesfcr', 'N2_aesfcu', 'N2_aespq'});
+metrics_table = [metrics_table, new_metrics];
+
+
 % Display the table
 disp(metrics_table);
-%% Energy applied for suppression
-A=motionData.e_stim(:,1:7);
-pw=motionData.e_stim(:,8);
-f=motionData.e_stim(:,9);
-T=1./f;
-% Initialize energy matrix
-% E_pulse = zeros(length(Phi_simu), 1); % Energy for each row
 
-% Compute the squared amplitudes and sum along the columns for each row
-E_pulse = 2.*(A.^2).*pw; % 1000x1 vector with row-wise sums of squared amplitudes
-
-NumPulse=t_simu(end)/T(7000);
-E_total=NumPulse.*sum(E_pulse,1)
-Pavg=E_pulse/T(7000);
- 
-% Pavg=E_pulse/T
-
-%% Fatigue Indications (state)
-fatigue=motionData.data(1000:end,66);
-
-figure
-
-plot(t_simu,fatigue)
 
 %% Limit Cycles ON/OFF and Time series - ON/OFF
    
@@ -193,3 +265,11 @@ grid on
 set(gca, 'FontSize', fontSize);
 
 %% 
+
+% Save the table with the specified filename format
+paciente = input('Digite o nome do paciente: ', 's');
+time_str = datestr(now, 'YYYY_mm_DD_HHMM');
+tecnica = SimuInfo.FESProtocol;
+filename = sprintf('%s_%s_%s_%s_%s', time_str(1:4), time_str(6:7), time_str(9:10), time_str(12:end), paciente, tecnica);
+filename = strcat(filename, '.mat');
+save(filename, 'metrics_table');

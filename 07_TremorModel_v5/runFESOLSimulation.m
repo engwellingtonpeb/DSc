@@ -18,4 +18,16 @@ tic
     motionData = IntegrateOsimPlant(osimModel,integratorName,SimuInfo,integratorOptions);
 elapsedTime=toc
 
+% Nome do campo a ser verificado
+fieldName = 'StoreStim';
+% Verifica a existência do campo e se o conteúdo é 'on'
+if isfield(SimuInfo, fieldName) && strcmp(SimuInfo.(fieldName), 'on')
+
+    % Declarando a variável global
+    global e_stim E
+    motionData.e_stim=e_stim(:, (1:9));
+    motionData.Energy=e_stim(:, (10:end));
+end
+
+
 SimuInfo.elapsedTime=elapsedTime;

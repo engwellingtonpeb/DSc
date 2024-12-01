@@ -179,7 +179,7 @@ if LinStabilityFlag
       activations=zeros(7,1);
       oscillator=zeros(4,1);
       activationsFES=zeros(7,1);
-      fatigueDynamics=zeros(7,1);
+      fatigueDynamics=ones(7,1);
 
 
       InitStates=[InitStates;...

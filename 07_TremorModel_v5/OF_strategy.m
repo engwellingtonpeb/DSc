@@ -12,21 +12,22 @@
 %=========================================================================%
 function [Ua, Upw, Uf] = OF_strategy(t)
 
-    f=9;
+    f=40;
     theta=[0, pi];
-  
+    A=20e-3;
+
     % Saídas de controle
-    Ua(1)=0;%20e-3*max(square(2*pi*f*t+theta(1)),0);
+    Ua(1)=A*max(square(2*pi*f*t+theta(1)),0);
     
-    Ua(2)=20e-3*max(square(2*pi*f*t+theta(1)),0); %extensor
+    Ua(2)=A*max(square(2*pi*f*t+theta(1)),0); %extensor
 
-    Ua(3)=20e-3*max(square(2*pi*f*t+theta(2)),0); %flexor
+    Ua(3)=A*max(square(2*pi*f*t+theta(2)),0); %flexor
 
-    Ua(4)=0;%20e-3*max(square(2*pi*f*t+theta(1)),0);
+    Ua(4)=A*max(square(2*pi*f*t+theta(2)),0);
     
     
-    Uf = 20;
-    Upw = 250e-6;%pw;
+    Uf = f;
+    Upw = 350e-6;%pw;
 
 
 end

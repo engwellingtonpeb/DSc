@@ -72,6 +72,9 @@ switch opt
 
         % run only tremor simulation PRESET ES inputs
         runFESOLSimulation;
+        
+        %Suppression Metrics
+        e_stimAnalysis
 
     case 4
     % e-stim 2 tremor - Identification Dynamics
@@ -121,6 +124,10 @@ switch opt
         pathconfig
         setFESParamsSimulation
         runFESCLSimulation
+        
+        %Suppression Metrics
+        e_stimAnalysis
+
 
 end
 
