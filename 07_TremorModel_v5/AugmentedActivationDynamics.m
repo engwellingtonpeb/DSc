@@ -73,8 +73,8 @@ switch StatusFES
         pwd=100e-6; %[microsec]
         pws=500e-6; %[microsec]
     
-        tau_fat=18e-3; %[ms]
-        tau_rec=40e-3; %[ms]
+        tau_fat=23; %[ms] [7] According to RIENER, Robert; FUHR, Thomas. 1998
+        tau_rec=30; %[ms] both wrong in Zhang's (2011)
     
 
         beta=0.6;%[dimensionless]

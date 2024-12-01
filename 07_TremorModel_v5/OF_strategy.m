@@ -6,7 +6,11 @@
 % Advisor: Prof. Dr. Luciano L. Menegaldo                                 %
 % Doctoral Candidate: Wellington C. Pinheiro MSc.                         %
 %                                                                         %
-% It implements modeled tremor suppression using co-contraction           %
+% It implements modeled tremor suppression using out of phase             %
+%                                                                         %
+%   [1] Maneski LP, Jorgovanović N, Ilić V, Došen S, Keller T, Popović MB,%
+% et al. Electrical stimulation for the suppression of pathological       %
+% tremor. Med Biol Eng Comput. 2011;49(10):1187–93.                       %
 %                                                                         %
 %                                                                         %
 %=========================================================================%
@@ -27,7 +31,7 @@ function [Ua, Upw, Uf] = OF_strategy(t)
     
     
     Uf = f;
-    Upw = 350e-6;%pw;
+    Upw = 250e-6;%pw;
 
 
 end
