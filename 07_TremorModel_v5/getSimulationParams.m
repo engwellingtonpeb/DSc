@@ -118,11 +118,42 @@ if LinStabilityFlag
     integratorOptions = odeset('RelTol', 1e-3, 'AbsTol', 1e-3,'MaxStep', 10e-3);
     
     
+     %Distribuição de um paciente especíico
+
+
+    % Save the current working directory
+    originalFolder = pwd;
     
+    % Change to the target folder
+    cd(targetFolder);
     
-    %Distribuição de um paciente especíico
-    load('distrib_tremor_paciente01.mat') % paciente
-    SimuInfo.w_tremor=0.1;
+    % Prompt the user to select the tremor distribution .mat file
+    [file2, path2] = uigetfile('*.mat', 'Select the tremor distribution .mat file');
+    
+    % Return to the original directory
+    cd(originalFolder);
+    
+    % Load the selected file if the user didn't cancel the selection
+    if ischar(file2)
+        fullPath2 = fullfile(path2, file2);
+        data2 = load(fullPath2); % Load the tremor distribution file
+    else
+        error('File selection was canceled. Please try again.');
+    end
+    
+    % Assign P field of data2 to SimuInfo.P if it exists
+    if isfield(data2, 'P')
+        SimuInfo.P = data2.P;
+    else
+        error('Field "P" not found in the selected file.');
+    end
+
+
+    SimuInfo.P=data2.P;
+
+
+
+
 
 
     SimuInfo.Kz=c2d(K,SimuInfo.Ts);
@@ -134,9 +165,7 @@ if LinStabilityFlag
     SimuInfo.Ck=Ck;
     SimuInfo.Dk=Dk;
     
-    SimuInfo.P=P;
-    pd = makedist('Uniform','lower',1,'upper',length(P));
-    SimuInfo.pd=pd;
+
     
     
     PhiRef=0;%makedist('Normal','mu',0,'sigma',4);

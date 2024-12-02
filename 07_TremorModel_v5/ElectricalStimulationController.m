@@ -122,7 +122,7 @@ else
                 0*Ua(2);... %ecrb
                 0*Ua(2);... %ecu
                 0*Ua(3);... %fcr
-                0*Ua(3);... %fcu
+                1*Ua(3);... %fcu
                 0*Ua(4)];   %pq
 
         case 'MPC'
